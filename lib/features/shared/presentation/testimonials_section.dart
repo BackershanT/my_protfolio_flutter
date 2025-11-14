@@ -142,6 +142,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
             ),
           ),
           SizedBox(height: isMobile ? 20 : 30),
+
           // Client info
           Row(
             children: [
