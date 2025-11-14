@@ -19,36 +19,36 @@ class ProjectsSection extends StatefulWidget {
 class _ProjectsSectionState extends State<ProjectsSection>
     with SingleTickerProviderStateMixin {
   late ScrollController _scrollController;
-  late AnimationController _autoScrollController;
-  bool _isPaused = false;
-  int _currentIndex = 0;
-  double _scrollProgress = 0.0;
-  
+  late List<Project> _projects;
+
   @override
   void initState() {
     super.initState();
+    _projects = ProjectData.getAllProjects();
     _scrollController = ScrollController();
-    // Remove the auto-scroll controller as we're simplifying the scrolling behavior
-
-    // Remove the delayed start since we're not auto-scrolling
   }
-  
+
   @override
   void dispose() {
     _scrollController.dispose();
-    // Remove autoScrollController dispose since we're not using it
     super.dispose();
+  }
+
+  Future<void> _launchUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final projects = ProjectData.getAllProjects();
-
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width < 850 ? 20 : 
-                    (MediaQuery.of(context).size.width < 1200 ? 40 : 100),
+        horizontal: MediaQuery.of(context).size.width < 850
+            ? 20
+            : (MediaQuery.of(context).size.width < 1200 ? 40 : 100),
         vertical: MediaQuery.of(context).size.width < 850 ? 60 : 100,
       ),
       child: Column(
@@ -56,55 +56,79 @@ class _ProjectsSectionState extends State<ProjectsSection>
           SectionTitle(title: AppTexts.projectsTitle),
           SizedBox(height: MediaQuery.of(context).size.width < 850 ? 40 : 50),
           Responsive(
-            mobile: _buildMobileLayout(context, projects),
-            desktop: _buildDesktopLayout(context, projects),
+            mobile: _buildMobileLayout(context),
+            desktop: _buildDesktopLayout(context),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMobileLayout(BuildContext context, List<Project> projects) {
-    return _buildScrollableProjects(context, projects, isMobile: true);
+  Widget _buildMobileLayout(BuildContext context) {
+    return _buildHorizontalScrollLayout(context, isMobile: true);
   }
 
-  Widget _buildDesktopLayout(BuildContext context, List<Project> projects) {
-    return _buildScrollableProjects(context, projects, isMobile: false);
+  Widget _buildDesktopLayout(BuildContext context) {
+    return _buildHorizontalScrollLayout(context, isMobile: false);
   }
 
-  Widget _buildScrollableProjects(BuildContext context, List<Project> projects, {required bool isMobile}) {
+  Widget _buildHorizontalScrollLayout(
+    BuildContext context, {
+    required bool isMobile,
+  }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = screenWidth >= 850 && screenWidth < 1200;
-    
-    return Container(
-      height: isMobile ? 600 : (isTablet ? 650 : 700),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF0F1822) : const Color(0xFFE5E5E5),
-        borderRadius: BorderRadius.circular(32),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(32),
-        child: ListView.builder(
-          controller: _scrollController,
-          scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(
-            horizontal: isMobile ? 20 : (isTablet ? 40 : 60),
-            vertical: isMobile ? 30 : 40,
-          ),
-          itemCount: projects.length,
-          itemBuilder: (context, index) {
-            return _buildProjectCard(
-              context,
-              projects[index],
-              index,
-              isMobile: isMobile,
-              isTablet: isTablet,
-              isDark: isDark,
-            );
-          },
+
+    return Column(
+      children: [
+        // Project counter aligned to the right side
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              '1/${_projects.length}',
+              style: TextStyle(
+                fontSize: isMobile ? 16 : 18,
+                fontWeight: FontWeight.bold,
+                color: isDark ? AppColors.primaryLight : AppColors.primaryDark,
+              ),
+            ),
+          ],
         ),
-      ),
+        SizedBox(height: isMobile ? 20 : 30),
+        // Horizontal scrollable list
+        SizedBox(
+          height: isMobile ? 500 : 550,
+          child: Scrollbar(
+            controller: _scrollController,
+            child: ListView.builder(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 10 : 30,
+                vertical: isMobile ? 10 : 20,
+              ),
+              itemCount: _projects.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    right: 20, // Space between cards
+                  ),
+                  child: _buildProjectCard(
+                    context,
+                    _projects[index],
+                    index,
+                    isMobile: isMobile,
+                    isTablet: isTablet,
+                    isDark: isDark,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -116,36 +140,46 @@ class _ProjectsSectionState extends State<ProjectsSection>
     required bool isTablet,
     required bool isDark,
   }) {
+    // Responsive sizing based on about section card sizing
+    final screenWidth = MediaQuery.of(context).size.width;
+    final padding = isMobile ? 20.0 : (screenWidth < 1200 ? 24.0 : 30.0);
+    final iconPadding = isMobile ? 12.0 : 16.0;
+    final titleSize = isMobile ? 18.0 : (screenWidth < 1200 ? 20.0 : 24.0);
+    final descSize = isMobile ? 14.0 : 16.0;
+    final imageHeight = isMobile ? 150.0 : 200.0;
+
+    // Limit tech stack to 3 items
+    final limitedTechStack = project.technologies.length > 3
+        ? project.technologies.take(3).toList()
+        : project.technologies;
+
     return Container(
-      margin: EdgeInsets.only(right: isMobile ? 20 : 30),
-      width: isMobile ? 300 : (isTablet ? 350 : 400),
-      height: isMobile ? 500 : (isTablet ? 550 : 600),
+      width: isMobile ? 280.0 : 350.0, // Similar width to about section cards
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E2D3D) : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: isDark 
-                ? Colors.black.withValues(alpha: 0.2) 
-                : Colors.grey.withValues(alpha: 0.1),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white.withOpacity(0.1)
+              : Colors.black.withOpacity(0.05),
+          width: 1,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Project image container
           Container(
-            height: isMobile ? 180 : 200,
+            height: imageHeight,
             width: double.infinity,
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(12),
+              ),
               image: project.imageUrl.isNotEmpty
                   ? DecorationImage(
-                      image: project.imageUrl.startsWith('http') 
-                          ? NetworkImage(project.imageUrl) 
+                      image: project.imageUrl.startsWith('http')
+                          ? NetworkImage(project.imageUrl)
                           : AssetImage(project.imageUrl) as ImageProvider,
                       fit: BoxFit.fill,
                     )
@@ -155,215 +189,143 @@ class _ProjectsSectionState extends State<ProjectsSection>
                   : null,
             ),
             child: project.imageUrl.isEmpty
-                ? Icon(
-                    Icons.folder_rounded,
-                    size: isMobile ? 60 : 80,
-                    color: isDark ? const Color(0xFF64FFDA) : const Color(0xFF0A192F),
+                ? Container(
+                    padding: EdgeInsets.all(iconPadding),
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? AppColors.primaryLight.withOpacity(0.1)
+                          : AppColors.primaryDark.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.folder_rounded,
+                      size: isMobile ? 40.0 : 50.0,
+                      color: isDark
+                          ? AppColors.primaryLight
+                          : AppColors.primaryDark,
+                    ),
                   )
                 : null,
           ),
-          
+
           // Content area
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(isMobile ? 20 : 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Project title
-                  Text(
-                    project.title,
-                    style: TextStyle(
-                      fontSize: isMobile ? 20 : 24,
-                      fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : Colors.black87,
-                    ),
+          Padding(
+            padding: EdgeInsets.all(padding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Project title - limited to one line
+                Text(
+                  project.title,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: titleSize,
                   ),
-                  
-                  const SizedBox(height: 12),
-                  
-                  // Tech stack
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: project.technologies.map((tech) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isDark 
-                              ? const Color(0xFF64FFDA).withValues(alpha: 0.15) 
-                              : const Color(0xFF0A192F).withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          tech,
-                          style: TextStyle(
-                            fontSize: isMobile ? 11 : 13,
-                            fontWeight: FontWeight.w500,
-                            color: isDark ? const Color(0xFF64FFDA) : const Color(0xFF0A192F),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  
-                  const SizedBox(height: 16),
-                  
-                  // Project description
-                  Expanded(
-                    child: Text(
-                      project.description,
-                      style: TextStyle(
-                        fontSize: isMobile ? 13 : 15,
-                        height: 1.5,
-                        color: isDark ? Colors.white70 : Colors.black54,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: isMobile ? 16 : 24),
+
+                // Tech stack - limited to 3 items and each tech name to 5 characters
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: limitedTechStack.map((tech) {
+                    // Limit each tech name to 5 characters
+                    final shortenedTech = tech.length > 5
+                        ? '${tech.substring(0, 5)}...'
+                        : tech;
+
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
                       ),
-                      overflow: TextOverflow.fade,
-                      softWrap: true,
-                    ),
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? AppColors.primaryLight.withOpacity(0.15)
+                            : AppColors.primaryDark.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        shortenedTech,
+                        style: TextStyle(
+                          fontSize: isMobile ? 12 : 14,
+                          fontWeight: FontWeight.w500,
+                          color: isDark
+                              ? AppColors.primaryLight
+                              : AppColors.primaryDark,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+
+                SizedBox(height: isMobile ? 12 : 16),
+
+                // Project description - limited to two lines
+                Text(
+                  project.description,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontSize: descSize,
+                    height: 1.6,
+                    color: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.color?.withOpacity(0.7),
                   ),
-                  
-                  const SizedBox(height: 20),
-                  
-                  // Action buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      if (project.codeUrl != null)
-                        TextButton.icon(
-                          onPressed: () => _launchUrl(project.codeUrl!),
-                          icon: Icon(
-                            Icons.code,
-                            size: isMobile ? 16 : 18,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+
+                SizedBox(height: isMobile ? 20 : 30),
+
+                // Action buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (project.codeUrl != null)
+                      TextButton.icon(
+                        onPressed: () => _launchUrl(project.codeUrl!),
+                        icon: Icon(
+                          Icons.code,
+                          size: isMobile ? 18 : 20,
+                          color: isDark ? Colors.white70 : Colors.black54,
+                        ),
+                        label: Text(
+                          'Code',
+                          style: TextStyle(
+                            fontSize: isMobile ? 14 : 16,
                             color: isDark ? Colors.white70 : Colors.black54,
                           ),
-                          label: Text(
-                            'Code',
-                            style: TextStyle(
-                              fontSize: isMobile ? 13 : 15,
-                              color: isDark ? Colors.white70 : Colors.black54,
-                            ),
+                        ),
+                      ),
+                    if (project.demoUrl != null)
+                      ElevatedButton.icon(
+                        onPressed: () => _launchUrl(project.demoUrl!),
+                        icon: Icon(Icons.open_in_new, size: isMobile ? 18 : 20),
+                        label: Text(
+                          'Demo',
+                          style: TextStyle(fontSize: isMobile ? 14 : 16),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF64FFDA),
+                          foregroundColor: const Color(0xFF0A192F),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isMobile ? 20 : 24,
+                            vertical: isMobile ? 12 : 16,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                      if (project.demoUrl != null)
-                        ElevatedButton.icon(
-                          onPressed: () => _launchUrl(project.demoUrl!),
-                          icon: Icon(
-                            Icons.open_in_new,
-                            size: isMobile ? 16 : 18,
-                          ),
-                          label: Text(
-                            'Demo',
-                            style: TextStyle(
-                              fontSize: isMobile ? 13 : 15,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF64FFDA),
-                            foregroundColor: const Color(0xFF0A192F),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: isMobile ? 16 : 20,
-                              vertical: isMobile ? 10 : 12,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ],
-              ),
+                      ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],
       ),
     );
-  }
-  
-  Widget _buildActionButton(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-    required bool isDark,
-    required bool isMobile,
-    required bool isPrimary,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: EdgeInsets.symmetric(
-          horizontal: isMobile ? 16 : 20,
-          vertical: isMobile ? 10 : 12,
-        ),
-        decoration: BoxDecoration(
-          gradient: isPrimary
-              ? LinearGradient(
-                  colors: [
-                    AppColors.primaryDark,
-                    AppColors.primaryDark.withValues(alpha: 0.8),
-                  ],
-                )
-              : null,
-          color: !isPrimary 
-              ? (isDark 
-                  ? const Color(0xFF4A4A4A).withValues(alpha: 0.7) 
-                  : Colors.white)
-              : null,
-          borderRadius: BorderRadius.circular(12),
-          border: !isPrimary
-              ? Border.all(
-                  color: isDark ? Colors.white38 : Colors.black26,
-                  width: 1.5,
-                )
-              : null,
-          boxShadow: [
-            BoxShadow(
-              color: isPrimary 
-                  ? AppColors.primaryDark.withValues(alpha: 0.3) 
-                  : (isDark ? Colors.black.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.05)),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: isMobile ? 16 : 18,
-              color: isPrimary
-                  ? Colors.white
-                  : (isDark ? Colors.white : Colors.black87),
-            ),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: isMobile ? 13 : 14,
-                fontWeight: FontWeight.w600,
-                color: isPrimary
-                    ? Colors.white
-                    : (isDark ? Colors.white : Colors.black87),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> _launchUrl(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (!await launchUrl(uri)) {
-      throw Exception('Could not launch $url');
-    }
   }
 }

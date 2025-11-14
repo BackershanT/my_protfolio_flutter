@@ -16,7 +16,17 @@ class AppAssets {
   static const String projectReachout = 'assets/projects/reachout.png';
   static const String projectMahathma = 'assets/projects/mahathma.png';
   static const String projectInspector = 'assets/projects/leoinspector.png';
-  static const String projectRigCalculator = 'assets/projects/leocalculator.png';
+  static const String projectRigCalculator =
+      'assets/projects/leocalculator.png';
+  static const String projectMyGame = 'assets/projects/mygames.png';
+  static const String projectMyBus = 'assets/projects/mybus.png';
+  static const String projectCalculator = 'assets/projects/calculator.png';
+  static const String projectCalender = 'assets/projects/calender.png';
+  static const String projectNetflix = 'assets/projects/netflix.png';
+  static const String projectMovieApp = 'assets/projects/movieapp.png';
+  static const String projectYchat = 'assets/projects/ychat.jpeg';
+  static const String projectYachii = 'assets/projects/yachii.png';
 
   static const String profileAvatar = 'assets/images/dp.png';
+  static const String favLogo = 'assets/images/logo.png';
 }
