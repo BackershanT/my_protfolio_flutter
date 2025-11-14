@@ -8,6 +8,7 @@ import 'package:my_protfolio/features/blog/presentation/blog_section.dart';
 import 'package:my_protfolio/features/contact/presentation/contact_section.dart';
 import 'package:my_protfolio/features/shared/presentation/footer_section.dart';
 import 'package:my_protfolio/features/shared/presentation/nav_bar.dart';
+import 'package:my_protfolio/features/shared/presentation/testimonials_section.dart';
 import 'package:provider/provider.dart';
 import 'package:my_protfolio/features/shared/core/theme/app_theme.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
@@ -23,7 +24,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  final List<GlobalKey> _sectionKeys = List.generate(8, (index) => GlobalKey());
+  final List<GlobalKey> _sectionKeys = List.generate(9, (index) => GlobalKey());
   int _currentIndex = 0;
   late AnimationController _chainController;
   late Animation<double> _chainAnimation;
@@ -36,8 +37,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     // Initialize the theme state based on the current theme mode
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     setState(() {
-      _isDarkMode = themeProvider.themeMode == ThemeMode.dark || 
-                   (themeProvider.themeMode == ThemeMode.system && MediaQuery.of(context).platformBrightness == Brightness.dark);
+      _isDarkMode =
+          themeProvider.themeMode == ThemeMode.dark ||
+          (themeProvider.themeMode == ThemeMode.system &&
+              MediaQuery.of(context).platformBrightness == Brightness.dark);
     });
   }
 
@@ -45,7 +48,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    
+
     // Initialize animation controller for the chain
     _chainController = AnimationController(
       duration: const Duration(milliseconds: 500),
@@ -89,7 +92,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         final sectionTop = position.dy;
         final sectionBottom = sectionTop + renderBox.size.height;
 
-        if (sectionTop <= screenHeight / 2 && sectionBottom >= screenHeight / 2) {
+        if (sectionTop <= screenHeight / 2 &&
+            sectionBottom >= screenHeight / 2) {
           if (_currentIndex != i) {
             setState(() {
               _currentIndex = i;
@@ -116,14 +120,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void _toggleTheme() {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-    
+
     // Animate the chain pull
     if (_chainController.isCompleted) {
       _chainController.reverse();
     } else {
       _chainController.forward();
     }
-    
+
     // Toggle theme after a short delay to simulate the pull action
     Future.delayed(const Duration(milliseconds: 300), () {
       final newThemeMode = !_isDarkMode;
@@ -142,10 +146,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         children: [
           Column(
             children: [
-              NavBar(
-                onNavTap: _scrollToSection,
-                currentIndex: _currentIndex,
-              ),
+              NavBar(onNavTap: _scrollToSection, currentIndex: _currentIndex),
               Expanded(
                 child: SingleChildScrollView(
                   controller: _scrollController,
@@ -159,8 +160,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       SkillsSection(key: _sectionKeys[2]),
                       TechnologiesSection(key: _sectionKeys[3]),
                       ProjectsSection(key: _sectionKeys[4]),
-                      BlogSection(key: _sectionKeys[5]),
-                      ContactSection(key: _sectionKeys[6]),
+                      TestimonialsSection(key: _sectionKeys[5]),
+                      BlogSection(key: _sectionKeys[6]),
+                      ContactSection(key: _sectionKeys[7]),
                       const FooterSection(),
                     ],
                   ),
@@ -169,11 +171,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ],
           ),
           // Light bulb pull chain mechanism
-          Positioned(
-            top: 100,
-            right: 20,
-            child: _buildLightBulbChain(),
-          ),
+          Positioned(top: 100, right: 20, child: _buildLightBulbChain()),
           // Scroll to top button
           if (_showScrollToTop)
             Positioned(
@@ -210,6 +208,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       AppTexts.navSkills,
       AppTexts.navTechnologies,
       AppTexts.navProjects,
+      AppTexts.navTestimonials,
       AppTexts.navBlog,
       AppTexts.navContact,
     ];
@@ -237,8 +236,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       padding: const EdgeInsets.only(left: 15),
                       child: Text(
                         AppTexts.heroName,
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                              color: Theme.of(context).brightness == Brightness.dark 
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(
+                              color:
+                                  Theme.of(context).brightness ==
+                                      Brightness.dark
                                   ? AppColors.primaryLight
                                   : AppColors.primaryDark,
                               fontWeight: FontWeight.bold,
@@ -249,7 +251,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   IconButton(
                     icon: Icon(
                       Icons.close,
-                      color: Theme.of(context).brightness == Brightness.dark 
+                      color: Theme.of(context).brightness == Brightness.dark
                           ? AppColors.primaryLight
                           : AppColors.primaryDark,
                     ),
@@ -271,9 +273,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       navItems[index],
                       style: TextStyle(
                         color: _currentIndex == index
-                            ? (Theme.of(context).brightness == Brightness.dark 
-                                ? AppColors.primaryLight
-                                : AppColors.primaryDark)
+                            ? (Theme.of(context).brightness == Brightness.dark
+                                  ? AppColors.primaryLight
+                                  : AppColors.primaryDark)
                             : Theme.of(context).textTheme.bodyLarge?.color,
                         fontWeight: _currentIndex == index
                             ? FontWeight.bold
@@ -333,11 +335,11 @@ class ZigzagChainPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final path = Path();
-    
+
     // Draw the chain line
     path.moveTo(size.width / 2, 0);
     path.lineTo(size.width / 2, size.height - 20);
-    
+
     // Draw the zigzag needle at the bottom
     final needleY = size.height - 20;
     path.moveTo(size.width / 2, needleY);
@@ -345,7 +347,7 @@ class ZigzagChainPainter extends CustomPainter {
     path.lineTo(size.width / 2 + 5, needleY + 10);
     path.lineTo(size.width / 2 - 5, needleY + 15);
     path.lineTo(size.width / 2 + 5, needleY + 20);
-    
+
     canvas.drawPath(path, paint);
   }
 

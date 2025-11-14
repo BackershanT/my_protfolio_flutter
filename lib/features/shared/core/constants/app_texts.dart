@@ -5,7 +5,7 @@ class AppTexts {
     'Frontend Developer',
     'Flutter Specialist',
     'React Developer',
-    'UI/UX Enthusiast'
+    'UI/UX Enthusiast',
   ];
   static const String heroDescription =
       'Frontend developer specialized in Flutter with expertise in React. I create beautiful, responsive, and performant user interfaces that deliver exceptional digital experiences across all platforms.';
@@ -29,6 +29,9 @@ class AppTexts {
   static const String viewCode = 'View Code';
   static const String liveDemo = 'Live Demo';
 
+  // Testimonials section
+  static const String testimonialsTitle = 'Testimonials';
+
   // Contact section
   static const String contactTitle = 'Contact';
   static const String contactDescription =
@@ -48,5 +51,6 @@ class AppTexts {
   static const String navSkills = 'Skills';
   static const String navProjects = 'Projects';
   static const String navBlog = 'Blog';
+  static const String navTestimonials = 'Testimonials';
   static const String navContact = 'Contact';
 }

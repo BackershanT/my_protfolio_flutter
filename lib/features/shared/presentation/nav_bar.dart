@@ -10,11 +10,7 @@ class NavBar extends StatefulWidget {
   final Function(int) onNavTap;
   final int currentIndex;
 
-  const NavBar({
-    super.key,
-    required this.onNavTap,
-    required this.currentIndex,
-  });
+  const NavBar({super.key, required this.onNavTap, required this.currentIndex});
 
   @override
   State<NavBar> createState() => _NavBarState();
@@ -37,11 +33,11 @@ class _NavBarState extends State<NavBar> {
             Text(
               AppTexts.heroName,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Theme.of(context).brightness == Brightness.dark 
-                        ? AppColors.primaryLight
-                        : AppColors.primaryDark,
-                    fontWeight: FontWeight.bold,
-                  ),
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.primaryLight
+                    : AppColors.primaryDark,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             // Navigation Items (Responsive)
             if (Responsive.isDesktop(context))
@@ -56,7 +52,7 @@ class _NavBarState extends State<NavBar> {
               IconButton(
                 icon: Icon(
                   Icons.menu,
-                  color: Theme.of(context).brightness == Brightness.dark 
+                  color: Theme.of(context).brightness == Brightness.dark
                       ? AppColors.primaryLight
                       : AppColors.primaryDark,
                 ),
@@ -90,6 +86,7 @@ class ResponsiveNavigation extends StatelessWidget {
       AppTexts.navSkills,
       AppTexts.navTechnologies,
       AppTexts.navProjects,
+      AppTexts.navTestimonials,
       AppTexts.navBlog,
       AppTexts.navContact,
     ];
@@ -97,7 +94,8 @@ class ResponsiveNavigation extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         // Check if all items fit in a row
-        final totalWidth = navItems.length * 100.0; // Approximate width per item
+        final totalWidth =
+            navItems.length * 100.0; // Approximate width per item
         if (totalWidth < constraints.maxWidth) {
           // Items fit in a row
           return Row(
@@ -112,9 +110,9 @@ class ResponsiveNavigation extends StatelessWidget {
                     navItems[index],
                     style: TextStyle(
                       color: currentIndex == index
-                          ? (Theme.of(context).brightness == Brightness.dark 
-                              ? AppColors.primaryLight
-                              : AppColors.primaryDark)
+                          ? (Theme.of(context).brightness == Brightness.dark
+                                ? AppColors.primaryLight
+                                : AppColors.primaryDark)
                           : Theme.of(context).textTheme.bodyLarge?.color,
                       fontWeight: currentIndex == index
                           ? FontWeight.bold
@@ -141,9 +139,9 @@ class ResponsiveNavigation extends StatelessWidget {
                       navItems[index],
                       style: TextStyle(
                         color: currentIndex == index
-                            ? (Theme.of(context).brightness == Brightness.dark 
-                                ? AppColors.primaryLight
-                                : AppColors.primaryDark)
+                            ? (Theme.of(context).brightness == Brightness.dark
+                                  ? AppColors.primaryLight
+                                  : AppColors.primaryDark)
                             : Theme.of(context).textTheme.bodyLarge?.color,
                         fontWeight: currentIndex == index
                             ? FontWeight.bold

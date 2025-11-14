@@ -6,6 +6,7 @@ import 'package:my_protfolio/features/projects/presentation/projects_section.dar
 import 'package:my_protfolio/features/contact/presentation/contact_section.dart';
 import 'package:my_protfolio/features/shared/presentation/footer_section.dart';
 import 'package:my_protfolio/features/shared/presentation/nav_bar.dart';
+import 'package:my_protfolio/features/shared/presentation/testimonials_section.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
-  final List<GlobalKey> _sectionKeys = List.generate(6, (index) => GlobalKey());
+  final List<GlobalKey> _sectionKeys = List.generate(7, (index) => GlobalKey());
   int _currentIndex = 0;
 
   @override
@@ -88,7 +89,8 @@ class _HomePageState extends State<HomePage> {
                   AboutSection(key: _sectionKeys[1]),
                   SkillsSection(key: _sectionKeys[2]),
                   ProjectsSection(key: _sectionKeys[3]),
-                  ContactSection(key: _sectionKeys[4]),
+                  TestimonialsSection(key: _sectionKeys[4]),
+                  ContactSection(key: _sectionKeys[5]),
                   const FooterSection(),
                 ],
               ),
