@@ -10,7 +10,7 @@ class TestimonialData {
         company: 'Alisons Pvt Ltd',
         content:
             'Working with Backershan was an absolute pleasure. Their attention to detail and ability to translate our requirements into a beautiful, functional interface exceeded our expectations. The project was delivered on time and within budget.',
-        avatarUrl: '',
+        avatarUrl: 'assets/testimonial/testSalman.JPG',
       ),
       Testimonial(
         id: '2',
@@ -19,7 +19,7 @@ class TestimonialData {
         company: 'Clan LEO Pvt Ltd',
         content:
             'Backershan transformed our digital presence with their Flutter expertise. The mobile application they developed for us has received outstanding feedback from our users. Their technical skills combined with creative problem-solving are impressive.',
-        avatarUrl: '',
+        avatarUrl: 'assets/testimonial/testDipesh.jpg',
       ),
       Testimonial(
         id: '3',
@@ -31,7 +31,7 @@ class TestimonialData {
         avatarUrl: '',
       ),
       Testimonial(
-        id: '4 ',
+        id: '4',
         name: 'Yasin',
         role: 'CEO',
         company: 'Yachii',

@@ -129,7 +129,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
           // Client info (avatar, name, role, company) - ABOVE content
           Row(
             children: [
-              // Avatar placeholder
+              // Avatar with image
               Container(
                 width: isMobile ? 50 : 60,
                 height: isMobile ? 50 : 60,
@@ -138,12 +138,20 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                       ? Colors.white.withOpacity(0.1)
                       : Colors.black.withOpacity(0.05),
                   borderRadius: BorderRadius.circular(30),
+                  image: testimonial.avatarUrl.isNotEmpty
+                      ? DecorationImage(
+                          image: AssetImage(testimonial.avatarUrl),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
                 ),
-                child: Icon(
-                  Icons.person,
-                  size: isMobile ? 24 : 30,
-                  color: isDark ? Colors.white70 : Colors.black54,
-                ),
+                child: testimonial.avatarUrl.isEmpty
+                    ? Icon(
+                        Icons.person,
+                        size: isMobile ? 24 : 30,
+                        color: isDark ? Colors.white70 : Colors.black54,
+                      )
+                    : null,
               ),
               SizedBox(width: 15),
               Expanded(
@@ -170,7 +178,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                     ).animate().fadeIn(delay: 400.ms, duration: 600.ms),
                     SizedBox(height: 2),
                     Text(
-                      '${testimonial.company}',
+                      ' ${testimonial.company}',
                       style: TextStyle(
                         fontSize: roleSize,
                         color: isDark
