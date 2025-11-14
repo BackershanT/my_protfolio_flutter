@@ -126,24 +126,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Testimonial content
-          SizedBox(
-            height: 150,
-            child: SingleChildScrollView(
-              child: Text(
-                testimonial.content,
-                style: TextStyle(
-                  fontSize: contentSize,
-                  height: 1.6,
-                  fontStyle: FontStyle.italic,
-                  color: Theme.of(context).textTheme.bodyMedium?.color,
-                ),
-              ).animate().fadeIn(duration: 600.ms),
-            ),
-          ),
-          SizedBox(height: isMobile ? 20 : 30),
-
-          // Client info
+          // Client info (avatar, name, role, company) - ABOVE content
           Row(
             children: [
               // Avatar placeholder
@@ -186,9 +169,8 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                       ),
                     ).animate().fadeIn(delay: 400.ms, duration: 600.ms),
                     SizedBox(height: 2),
-
                     Text(
-                      ' ${testimonial.company}',
+                      '${testimonial.company}',
                       style: TextStyle(
                         fontSize: roleSize,
                         color: isDark
@@ -200,6 +182,22 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                 ),
               ),
             ],
+          ),
+          SizedBox(height: isMobile ? 20 : 30),
+
+          // Testimonial content - BELOW client info
+          Expanded(
+            child: SingleChildScrollView(
+              child: Text(
+                testimonial.content,
+                style: TextStyle(
+                  fontSize: contentSize,
+                  height: 1.6,
+                  fontStyle: FontStyle.italic,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                ),
+              ).animate().fadeIn(duration: 600.ms),
+            ),
           ),
         ],
       ),
