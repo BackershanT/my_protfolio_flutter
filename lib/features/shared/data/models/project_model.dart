@@ -4,6 +4,8 @@ class Project {
   final String description;
   final String imageUrl;
   final List<String> technologies;
+  final List<String> screenshots;
+  final String? readmeContent;
   final String? demoUrl;
   final String? codeUrl;
 
@@ -13,6 +15,8 @@ class Project {
     required this.description,
     required this.imageUrl,
     required this.technologies,
+    this.screenshots = const [],
+    this.readmeContent,
     this.demoUrl,
     this.codeUrl,
   });
@@ -24,6 +28,10 @@ class Project {
       description: json['description'] as String,
       imageUrl: json['imageUrl'] as String,
       technologies: List<String>.from(json['technologies'] as List),
+      screenshots: json['screenshots'] != null
+          ? List<String>.from(json['screenshots'] as List)
+          : [],
+      readmeContent: json['readmeContent'] as String?,
       demoUrl: json['demoUrl'] as String?,
       codeUrl: json['codeUrl'] as String?,
     );
@@ -36,6 +44,8 @@ class Project {
       'description': description,
       'imageUrl': imageUrl,
       'technologies': technologies,
+      'screenshots': screenshots,
+      'readmeContent': readmeContent,
       'demoUrl': demoUrl,
       'codeUrl': codeUrl,
     };
