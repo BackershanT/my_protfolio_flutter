@@ -1,3 +1,5 @@
+import 'package:my_protfolio/features/shared/core/constants/app_assets.dart';
+
 import 'testimonial_model.dart';
 
 class TestimonialData {
@@ -10,7 +12,7 @@ class TestimonialData {
         company: 'Alisons Pvt Ltd',
         content:
             'Working with Backershan was an absolute pleasure. Their attention to detail and ability to translate our requirements into a beautiful, functional interface exceeded our expectations. The project was delivered on time and within budget.',
-        avatarUrl: 'assets/testimonial/testSalman.JPG',
+        avatarUrl: AppAssets.testSalma,
       ),
       Testimonial(
         id: '2',
@@ -19,7 +21,7 @@ class TestimonialData {
         company: 'Clan LEO Pvt Ltd',
         content:
             'Backershan transformed our digital presence with their Flutter expertise. The mobile application they developed for us has received outstanding feedback from our users. Their technical skills combined with creative problem-solving are impressive.',
-        avatarUrl: 'assets/testimonial/testDipesh.jpg',
+        avatarUrl: AppAssets.testDipesh,
       ),
       Testimonial(
         id: '3',

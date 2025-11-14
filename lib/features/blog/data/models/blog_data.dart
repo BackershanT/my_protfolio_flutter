@@ -256,7 +256,7 @@ Game development doesn't have to be complex — and Flame proves it.
       publishedDate: DateTime.now(),
       readTime: 3,
       externalUrl: null,
-      tags: ['Flutter', 'Flame', 'Game Development', '2D Games'],
+      tags: ['Flutter', 'Flame', '2D Games', 'Game Development'],
     ),
   ];
 

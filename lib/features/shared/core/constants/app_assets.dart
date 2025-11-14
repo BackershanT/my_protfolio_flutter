@@ -29,4 +29,7 @@ class AppAssets {
 
   static const String profileAvatar = 'assets/images/dp.png';
   static const String favLogo = 'assets/images/logo.png';
+
+  static const String testDipesh = 'assets/testimonial/testDipes.jpg';
+  static const String testSalma = 'assets/testimonial/testSalma.JPG';
 }

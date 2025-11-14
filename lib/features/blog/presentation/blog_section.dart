@@ -157,21 +157,26 @@ class _BlogSectionState extends State<BlogSection> {
     );
   }
 
-  Widget _buildBlogCard(BuildContext context, BlogPost post, bool isMobile, bool isDark) {
+  Widget _buildBlogCard(
+    BuildContext context,
+    BlogPost post,
+    bool isMobile,
+    bool isDark,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E2D3D) : const Color(0xFFFEF7FF),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark 
-              ? Colors.white.withValues(alpha: 0.1) 
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.1)
               : Colors.black.withValues(alpha: 0.05),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: isDark 
-                ? Colors.black.withValues(alpha: 0.2) 
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.2)
                 : Colors.grey.withValues(alpha: 0.1),
             blurRadius: 15,
             offset: const Offset(0, 5),
@@ -186,7 +191,9 @@ class _BlogSectionState extends State<BlogSection> {
             height: isMobile ? 180 : 200,
             width: double.infinity,
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16),
+              ),
               image: post.imageUrl.isNotEmpty
                   ? DecorationImage(
                       image: NetworkImage(post.imageUrl),
@@ -201,11 +208,13 @@ class _BlogSectionState extends State<BlogSection> {
                 ? Icon(
                     _getCategoryIcon(post.category),
                     size: isMobile ? 60 : 80,
-                    color: isDark ? const Color(0xFF64FFDA) : const Color(0xFF0A192F),
+                    color: isDark
+                        ? const Color(0xFF64FFDA)
+                        : const Color(0xFF0A192F),
                   )
                 : null,
           ),
-          
+
           // Content area
           Expanded(
             child: Padding(
@@ -224,22 +233,22 @@ class _BlogSectionState extends State<BlogSection> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  
+
                   const SizedBox(height: 12),
-                  
+
                   // Tags
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: post.tags.map((tag) {
+                    children: post.tags.take(3).map((tag) {
                       return Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,
                           vertical: 5,
                         ),
                         decoration: BoxDecoration(
-                          color: isDark 
-                              ? const Color(0xFF64FFDA).withValues(alpha: 0.15) 
+                          color: isDark
+                              ? const Color(0xFF64FFDA).withValues(alpha: 0.15)
                               : const Color(0xFF0A192F).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -248,15 +257,17 @@ class _BlogSectionState extends State<BlogSection> {
                           style: TextStyle(
                             fontSize: isMobile ? 11 : 13,
                             fontWeight: FontWeight.w500,
-                            color: isDark ? const Color(0xFF64FFDA) : const Color(0xFF0A192F),
+                            color: isDark
+                                ? const Color(0xFF64FFDA)
+                                : const Color(0xFF0A192F),
                           ),
                         ),
                       );
                     }).toList(),
                   ),
-                  
-                  const SizedBox(height: 16),
-                  
+
+                  const SizedBox(height: 10),
+
                   // Blog excerpt
                   Flexible(
                     child: Text(
@@ -270,9 +281,9 @@ class _BlogSectionState extends State<BlogSection> {
                       softWrap: true,
                     ),
                   ),
-                  
-                  const SizedBox(height: 20),
-                  
+
+                  const SizedBox(height: 10),
+
                   // Action buttons and metadata
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,11 +293,18 @@ class _BlogSectionState extends State<BlogSection> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
                             decoration: BoxDecoration(
-                              color: isDark 
-                                  ? const Color(0xFF64FFDA).withValues(alpha: 0.15) 
-                                  : const Color(0xFF0A192F).withValues(alpha: 0.1),
+                              color: isDark
+                                  ? const Color(
+                                      0xFF64FFDA,
+                                    ).withValues(alpha: 0.15)
+                                  : const Color(
+                                      0xFF0A192F,
+                                    ).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
@@ -294,7 +312,9 @@ class _BlogSectionState extends State<BlogSection> {
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
-                                color: isDark ? const Color(0xFF64FFDA) : const Color(0xFF0A192F),
+                                color: isDark
+                                    ? const Color(0xFF64FFDA)
+                                    : const Color(0xFF0A192F),
                               ),
                             ),
                           ),
@@ -307,9 +327,9 @@ class _BlogSectionState extends State<BlogSection> {
                           ),
                         ],
                       ),
-                      
-                      const SizedBox(height: 12),
-                      
+
+                      const SizedBox(height: 8),
+
                       Text(
                         _formatDate(post.publishedDate),
                         style: TextStyle(
@@ -317,25 +337,28 @@ class _BlogSectionState extends State<BlogSection> {
                           color: isDark ? Colors.white54 : Colors.black38,
                         ),
                       ),
-                      
-                      const SizedBox(height: 16),
-                      
+
+                      const SizedBox(height: 10),
+
                       // Action button
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton.icon(
                           onPressed: () {
-                            if (post.externalUrl != null && post.externalUrl!.isNotEmpty) {
+                            if (post.externalUrl != null &&
+                                post.externalUrl!.isNotEmpty) {
                               _launchUrl(post.externalUrl!);
                             } else {
                               // Show blog detail dialog
-                              _showBlogDetailDialog(context, post, isMobile, isDark);
+                              _showBlogDetailDialog(
+                                context,
+                                post,
+                                isMobile,
+                                isDark,
+                              );
                             }
                           },
-                          icon: const Icon(
-                            Icons.open_in_new,
-                            size: 18,
-                          ),
+                          icon: const Icon(Icons.open_in_new, size: 18),
                           label: const Text('Read Article'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF64FFDA),
@@ -510,7 +533,7 @@ class _BlogSectionState extends State<BlogSection> {
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          children: post.tags.map((tag) {
+                          children: post.tags.take(3).map((tag) {
                             return Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 12,
