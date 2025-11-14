@@ -5,7 +5,8 @@ class BlogData {
   static final List<BlogPost> posts = [
     BlogPost(
       id: '1',
-      title: 'Mastering Socket.IO in Flutter — Smooth Real-Time Connections with Auto-Reconnect',
+      title:
+          'Mastering Socket.IO in Flutter — Smooth Real-Time Connections with Auto-Reconnect',
       excerpt:
           'Build a robust real-time connection system for your Flutter app using Socket.IO — with smart reconnection, transport optimization, and clean lifecycle management.',
       content: '''
@@ -109,35 +110,153 @@ You improve app performance and user trust.
 Socket.IO + Flutter = real-time power, simplified ⚡
 ''',
       category: 'Flutter',
-      imageUrl: 'https://ik.imagekit.io/ably/ghost/prod/2021/03/socket-io-logo-1.jpeg?tr=w-1728,q-50',
+      imageUrl:
+          'https://ik.imagekit.io/ably/ghost/prod/2021/03/socket-io-logo-1.jpeg?tr=w-1728,q-50',
       publishedDate: DateTime(2024, 11, 18),
       readTime: 5,
       externalUrl: null,
-      tags: ['Flutter', 'Socket.IO', 'Realtime',],
+      tags: ['Flutter', 'Socket.IO', 'Realtime'],
     ),
     BlogPost(
-      id: '3',
-      title: 'State Management in React: A Complete Guide',
+      id: '2',
+      title: 'Getting Started with Game Development Using Flutter & Flame',
       excerpt:
-          'Explore different state management solutions in React including Redux, Context API, and modern hooks for building scalable applications.',
-      content: '',
-      category: 'React',
-      imageUrl: '',
-      publishedDate: DateTime(2024, 11, 8),
-      readTime: 12,
-      tags: ['React', 'JavaScript', ],
-    ),
-    BlogPost(
-      id: '4',
-      title: 'UI/UX Best Practices for Modern Web Apps',
-      excerpt:
-          'Discover essential UI/UX principles and design patterns that will help you create intuitive and engaging user interfaces.',
-      content: '',
-      category: 'Design',
-      imageUrl: '',
-      publishedDate: DateTime(2024, 10, 28),
-      readTime: 6,
-      tags: ['UI/UX', 'Design', 'Frontend'],
+          'Learn how to build 2D games using Flutter and the Flame game engine - a powerful combination for casual and indie game development.',
+      content: '''
+Most people know Flutter for building apps. But what many developers still don't realize is that Flutter can also be used to build 2D games — thanks to a lightweight game engine called Flame.
+
+If you already know Flutter, you can start building games much faster than you think. This article explains what Flame is, why it's useful, and how you can begin creating simple and fun games with Flutter.
+
+What Is Flame?
+Flame is a 2D game engine built on top of Flutter.
+Flutter's normal widget system is great for apps, but not ideal for games. Games need things like:
+
+A constant game loop
+Fast rendering
+Sprite animations
+Collision detection
+Physics
+Player input handling
+Flame provides all of this — while still letting you use Flutter for UI like menus, scoreboards, and buttons.
+
+Why Use Flutter + Flame for Games?
+1. Easy to learn
+If you know Flutter, Flame feels familiar. You don't have to learn a complicated engine like Unity.
+
+2. Perfect for 2D games
+Casual games, puzzles, platformers, runners, mini-games — all work great.
+
+3. Fast cross-platform support
+One codebase → Android, iOS, Web, Desktop.
+
+4. Flutter UI + Flame gameplay
+Game world using Flame.
+Menus, settings, profile screens using Flutter.
+The combination is smooth and fast.
+
+How Flame Works (Very Simple Explanation)
+Flame replaces the "widget rebuild system" with a game loop:
+
+update → render → repeat
+update() — game logic (movement, collisions, timers)
+render() — drawing sprites on the screen
+dt — time difference between frames (keeps movement smooth)
+That's it. This loop runs every frame (60–120 FPS).
+
+A Basic Example
+Here's what a simple Flame game looks like:
+
+class MyGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    add(Player());
+  }
+}
+And a basic player component:
+
+class Player extends SpriteComponent {
+  @override
+  void update(double dt) {
+    position.x += 200 * dt; // move smoothly
+  }
+}
+You get:
+
+Movement
+Animation
+Physics
+Input handling
+by adding small components like this.
+What You Can Build with Flame
+✔ Endless runner
+(T-rex game, subway runner type)
+
+✔ Platformer
+(Mario-style side scroller)
+
+✔ Tap/Swipe games
+(Flappy bird, fruit slicing)
+
+✔ Puzzle games
+(Grid/board logic)
+
+✔ Mini-games inside apps
+(Rewards, learning games)
+
+Become a member
+If your idea is 2D, Flame can probably handle it.
+
+Performance Notes (Simple Truth)
+Flame is fast.
+It runs smoothly on most devices if you code properly.
+
+Just avoid:
+
+Loading images inside the game loop
+Very large image files
+Heavy logic inside render()
+Too many new objects created every frame
+For normal 2D games, Flame handles performance extremely well.
+
+Common Beginner Mistakes
+❌ Using Flutter widgets for every game element
+✔ Use Flame components for game objects.
+
+❌ Not preloading assets
+✔ Load all images/sounds in onLoad().
+
+❌ Skipping delta time
+✔ Always multiply movement by dt.
+
+❌ No fixed viewport
+✔ Set a virtual game size to support all screen resolutions.
+
+Should You Choose Flame for Your Game?
+Choose Flame if:
+
+You want to build a simple or medium-complexity 2D game
+You prefer Flutter instead of Unity/Godot
+You want quick development and clean UI
+You want to publish to Android, iOS, Web easily
+Don't choose Flame if you want:
+
+3D games
+Very advanced physics
+AAA-style graphics
+For most indie or casual mobile games, Flame is more than enough.
+
+Conclusion
+Flutter + Flame is a powerful, simple, and enjoyable way to build 2D games. You get Flutter's UI strengths plus Flame's game engine features, all in one codebase. If you're a Flutter developer, you already have most of the skills needed to start building games.
+
+Game development doesn't have to be complex — and Flame proves it.
+''',
+      category: 'Flutter',
+      imageUrl:
+          'https://miro.medium.com/v2/resize:fit:1400/1*Qyyvx52AjpBRuI8MeZ7cAg.png',
+      publishedDate: DateTime.now(),
+      readTime: 3,
+      externalUrl: null,
+      tags: ['Flutter', 'Flame', 'Game Development', '2D Games'],
     ),
   ];
 

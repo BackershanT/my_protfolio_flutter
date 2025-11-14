@@ -146,9 +146,7 @@ class _BlogSectionState extends State<BlogSection> {
           itemBuilder: (context, index) {
             final post = _posts[index];
             return Container(
-              margin: EdgeInsets.only(
-                right: isMobile ? 20 : 30,
-              ),
+              margin: EdgeInsets.only(right: isMobile ? 20 : 30),
               width: isMobile ? 300 : (isMobile ? 350 : 400),
               height: isMobile ? 500 : (isMobile ? 550 : 600),
               child: _buildBlogCard(context, post, isMobile, isDark),
@@ -162,8 +160,14 @@ class _BlogSectionState extends State<BlogSection> {
   Widget _buildBlogCard(BuildContext context, BlogPost post, bool isMobile, bool isDark) {
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E2D3D) : Colors.white,
+        color: isDark ? const Color(0xFF1E2D3D) : const Color(0xFFFEF7FF),
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isDark 
+              ? Colors.white.withValues(alpha: 0.1) 
+              : Colors.black.withValues(alpha: 0.05),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
             color: isDark 
@@ -357,7 +361,12 @@ class _BlogSectionState extends State<BlogSection> {
     );
   }
 
-  void _showBlogDetailDialog(BuildContext context, BlogPost post, bool isMobile, bool isDark) {
+  void _showBlogDetailDialog(
+    BuildContext context,
+    BlogPost post,
+    bool isMobile,
+    bool isDark,
+  ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -378,8 +387,12 @@ class _BlogSectionState extends State<BlogSection> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF1E2D3D) : const Color(0xFFEFEFEF),
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                      color: isDark
+                          ? const Color(0xFF1E2D3D)
+                          : const Color(0xFFEFEFEF),
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -389,7 +402,9 @@ class _BlogSectionState extends State<BlogSection> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? const Color(0xFF64FFDA) : const Color(0xFF0A192F),
+                            color: isDark
+                                ? const Color(0xFF64FFDA)
+                                : const Color(0xFF0A192F),
                           ),
                         ),
                         IconButton(
@@ -402,7 +417,7 @@ class _BlogSectionState extends State<BlogSection> {
                       ],
                     ),
                   ),
-                  
+
                   // Blog image
                   if (post.imageUrl.isNotEmpty)
                     Container(
@@ -419,14 +434,18 @@ class _BlogSectionState extends State<BlogSection> {
                     Container(
                       height: isMobile ? 200 : 300,
                       width: double.infinity,
-                      color: isDark ? const Color(0xFF2A3D4F) : const Color(0xFFEFEFEF),
+                      color: isDark
+                          ? const Color(0xFF2A3D4F)
+                          : const Color(0xFFEFEFEF),
                       child: Icon(
                         _getCategoryIcon(post.category),
                         size: isMobile ? 80 : 120,
-                        color: isDark ? const Color(0xFF64FFDA) : const Color(0xFF0A192F),
+                        color: isDark
+                            ? const Color(0xFF64FFDA)
+                            : const Color(0xFF0A192F),
                       ),
                     ),
-                  
+
                   // Content
                   Padding(
                     padding: EdgeInsets.all(isMobile ? 20 : 30),
@@ -442,18 +461,25 @@ class _BlogSectionState extends State<BlogSection> {
                             color: isDark ? Colors.white : Colors.black87,
                           ),
                         ),
-                        
+
                         const SizedBox(height: 16),
-                        
+
                         // Metadata
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
                               decoration: BoxDecoration(
-                                color: isDark 
-                                    ? const Color(0xFF64FFDA).withValues(alpha: 0.15) 
-                                    : const Color(0xFF0A192F).withValues(alpha: 0.1),
+                                color: isDark
+                                    ? const Color(
+                                        0xFF64FFDA,
+                                      ).withValues(alpha: 0.15)
+                                    : const Color(
+                                        0xFF0A192F,
+                                      ).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
@@ -461,7 +487,9 @@ class _BlogSectionState extends State<BlogSection> {
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
-                                  color: isDark ? const Color(0xFF64FFDA) : const Color(0xFF0A192F),
+                                  color: isDark
+                                      ? const Color(0xFF64FFDA)
+                                      : const Color(0xFF0A192F),
                                 ),
                               ),
                             ),
@@ -475,35 +503,44 @@ class _BlogSectionState extends State<BlogSection> {
                             ),
                           ],
                         ),
-                        
+
                         const SizedBox(height: 20),
-                        
+
                         // Tags
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
                           children: post.tags.map((tag) {
                             return Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
                               decoration: BoxDecoration(
-                                color: isDark 
-                                    ? const Color(0xFF64FFDA).withValues(alpha: 0.15) 
-                                    : const Color(0xFF0A192F).withValues(alpha: 0.1),
+                                color: isDark
+                                    ? const Color(
+                                        0xFF64FFDA,
+                                      ).withValues(alpha: 0.15)
+                                    : const Color(
+                                        0xFF0A192F,
+                                      ).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
                                 '#$tag',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: isDark ? const Color(0xFF64FFDA) : const Color(0xFF0A192F),
+                                  color: isDark
+                                      ? const Color(0xFF64FFDA)
+                                      : const Color(0xFF0A192F),
                                 ),
                               ),
                             );
                           }).toList(),
                         ),
-                        
+
                         const SizedBox(height: 24),
-                        
+
                         // Content
                         Text(
                           post.content.isNotEmpty ? post.content : post.excerpt,
@@ -513,11 +550,12 @@ class _BlogSectionState extends State<BlogSection> {
                             color: isDark ? Colors.white70 : Colors.black87,
                           ),
                         ),
-                        
+
                         const SizedBox(height: 30),
-                        
+
                         // External link button (if available)
-                        if (post.externalUrl != null && post.externalUrl!.isNotEmpty)
+                        if (post.externalUrl != null &&
+                            post.externalUrl!.isNotEmpty)
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton.icon(
@@ -527,7 +565,9 @@ class _BlogSectionState extends State<BlogSection> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF64FFDA),
                                 foregroundColor: const Color(0xFF0A192F),
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
