@@ -6,6 +6,7 @@ import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
 import 'package:my_protfolio/features/shared/presentation/section_title.dart';
 import 'package:my_protfolio/features/shared/data/models/project_model.dart';
 import 'package:my_protfolio/features/projects/data/models/project_data.dart';
+import 'package:my_protfolio/features/projects/presentation/project_details_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math' as math;
 
@@ -279,47 +280,38 @@ class _ProjectsSectionState extends State<ProjectsSection>
 
                 SizedBox(height: isMobile ? 20 : 30),
 
-                // Action buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (project.codeUrl != null)
-                      TextButton.icon(
-                        onPressed: () => _launchUrl(project.codeUrl!),
-                        icon: Icon(
-                          Icons.code,
-                          size: isMobile ? 18 : 20,
-                          color: isDark ? Colors.white70 : Colors.black54,
+                // Show Details button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProjectDetailsPage(project: project),
                         ),
-                        label: Text(
-                          'Code',
-                          style: TextStyle(
-                            fontSize: isMobile ? 14 : 16,
-                            color: isDark ? Colors.white70 : Colors.black54,
-                          ),
-                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF64FFDA),
+                      foregroundColor: const Color(0xFF0A192F),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 20 : 24,
+                        vertical: isMobile ? 12 : 16,
                       ),
-                    if (project.demoUrl != null)
-                      ElevatedButton.icon(
-                        onPressed: () => _launchUrl(project.demoUrl!),
-                        icon: Icon(Icons.open_in_new, size: isMobile ? 18 : 20),
-                        label: Text(
-                          'Demo',
-                          style: TextStyle(fontSize: isMobile ? 14 : 16),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF64FFDA),
-                          foregroundColor: const Color(0xFF0A192F),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: isMobile ? 20 : 24,
-                            vertical: isMobile ? 12 : 16,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                  ],
+                    ),
+                    child: Text(
+                      'Show Details',
+                      style: TextStyle(
+                        fontSize: isMobile ? 14 : 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
