@@ -68,17 +68,22 @@ class _ContactSectionState extends State<ContactSection> {
         // Provide more specific error messages based on the error type
         if (e.toString().contains('timeout')) {
           errorMessage +=
-              'Request timed out. Please check your internet connection.';
+              'Request timed out. This usually means the Firebase configuration is incorrect or the Firestore database rules don\'t allow writes. Please verify your Firebase setup and database rules.';
         } else if (e.toString().contains('permission-denied')) {
           errorMessage +=
-              'Permission denied. Please contact the site administrator.';
+              'Permission denied. Please check your Firestore database rules at the Firebase Console.';
+        } else if (e.toString().contains('unauthenticated')) {
+          errorMessage +=
+              'Authentication required. Please check your Firebase configuration at the Firebase Console.';
         } else if (e.toString().contains('unavailable')) {
-          errorMessage += 'Service unavailable. Please try again later.';
+          errorMessage +=
+              'Service unavailable. Please check your internet connection and try again later.';
         } else if (e.toString().contains('Firebase')) {
           errorMessage +=
-              'Please check your internet connection and try again.';
+              'Please check your Firebase configuration and internet connection. You may need to set up Firestore database rules.';
         } else {
-          errorMessage += 'Please try again later.';
+          errorMessage +=
+              'Please try again later. If the problem persists, check your internet connection and Firebase setup.';
         }
 
         if (mounted) {
@@ -86,7 +91,7 @@ class _ContactSectionState extends State<ContactSection> {
             SnackBar(
               content: Text(errorMessage),
               backgroundColor: Colors.red,
-              duration: const Duration(seconds: 5),
+              duration: const Duration(seconds: 8),
             ),
           );
         }

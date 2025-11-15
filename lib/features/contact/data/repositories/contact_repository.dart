@@ -40,11 +40,15 @@ class ContactRepository {
       print('Firebase error: ${e.code} - ${e.message}');
       if (e.code == 'permission-denied') {
         throw Exception(
-          'Firebase permission denied. Please check your Firebase configuration.',
+          'Firebase permission denied. Please check your Firestore database rules.',
         );
       } else if (e.code == 'unavailable') {
         throw Exception(
           'Firebase service unavailable. Please check your internet connection.',
+        );
+      } else if (e.code == 'unauthenticated') {
+        throw Exception(
+          'Firebase authentication required. Please check your Firebase configuration.',
         );
       } else {
         throw Exception('Failed to send message: ${e.message}');
@@ -57,7 +61,7 @@ class ContactRepository {
     } catch (e) {
       print('Unknown error: $e');
       throw Exception(
-        'Failed to send message. Please verify your Firebase configuration and internet connection.',
+        'Failed to send message. Please verify your Firebase configuration and internet connection. Error details: ${e.toString()}',
       );
     }
   }
