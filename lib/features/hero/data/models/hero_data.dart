@@ -1,5 +1,5 @@
+import 'package:my_protfolio/features/shared/core/constants/app_assets.dart';
+
 class HeroData {
-  static const String resumeUrl = 'https://example.com/resume.pdf';
-  
-  static String getResumeUrl() => resumeUrl;
+  static String getResumeUrl() => AppAssets.resume;
 }

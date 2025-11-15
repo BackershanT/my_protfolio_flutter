@@ -2,6 +2,7 @@ class AppTexts {
   // Hero section
   static const String heroName = 'Backershan T';
   static const List<String> heroRoles = [
+    'Software Developer',
     'Frontend Developer',
     'Flutter Specialist',
     'React Developer',

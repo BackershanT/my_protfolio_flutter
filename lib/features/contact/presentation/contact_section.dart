@@ -8,6 +8,7 @@ import 'package:my_protfolio/features/contact/data/repositories/contact_reposito
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:async';
 
 class ContactSection extends StatefulWidget {
   const ContactSection({super.key});
@@ -60,12 +61,32 @@ class _ContactSectionState extends State<ContactSection> {
           _messageController.clear();
         }
       } catch (e) {
-        // Show error message
+        print('Error sending message: $e');
+        // Show user-friendly error message
+        String errorMessage = 'Failed to send message. ';
+
+        // Provide more specific error messages based on the error type
+        if (e.toString().contains('timeout')) {
+          errorMessage +=
+              'Request timed out. Please check your internet connection.';
+        } else if (e.toString().contains('permission-denied')) {
+          errorMessage +=
+              'Permission denied. Please contact the site administrator.';
+        } else if (e.toString().contains('unavailable')) {
+          errorMessage += 'Service unavailable. Please try again later.';
+        } else if (e.toString().contains('Firebase')) {
+          errorMessage +=
+              'Please check your internet connection and try again.';
+        } else {
+          errorMessage += 'Please try again later.';
+        }
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Failed to send message. Please try again.'),
+            SnackBar(
+              content: Text(errorMessage),
               backgroundColor: Colors.red,
+              duration: const Duration(seconds: 5),
             ),
           );
         }
@@ -82,7 +103,7 @@ class _ContactSectionState extends State<ContactSection> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
@@ -119,19 +140,13 @@ class _ContactSectionState extends State<ContactSection> {
   Widget _buildDesktopLayout(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final spacing = screenWidth < 1400 ? 60.0 : 80.0;
-    
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          flex: 3,
-          child: _buildContactForm(context),
-        ),
+        Expanded(flex: 3, child: _buildContactForm(context)),
         SizedBox(width: spacing),
-        Expanded(
-          flex: 2,
-          child: _buildSocialLinks(context),
-        ),
+        Expanded(flex: 2, child: _buildSocialLinks(context)),
       ],
     );
   }
@@ -152,7 +167,7 @@ class _ContactSectionState extends State<ContactSection> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Sizes.borderRadiusMedium),
                 borderSide: BorderSide(
-                  color: Theme.of(context).brightness == Brightness.dark 
+                  color: Theme.of(context).brightness == Brightness.dark
                       ? AppColors.primaryLight
                       : AppColors.primaryDark,
                 ),
@@ -177,7 +192,7 @@ class _ContactSectionState extends State<ContactSection> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Sizes.borderRadiusMedium),
                 borderSide: BorderSide(
-                  color: Theme.of(context).brightness == Brightness.dark 
+                  color: Theme.of(context).brightness == Brightness.dark
                       ? AppColors.primaryLight
                       : AppColors.primaryDark,
                 ),
@@ -207,7 +222,7 @@ class _ContactSectionState extends State<ContactSection> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Sizes.borderRadiusMedium),
                 borderSide: BorderSide(
-                  color: Theme.of(context).brightness == Brightness.dark 
+                  color: Theme.of(context).brightness == Brightness.dark
                       ? AppColors.primaryLight
                       : AppColors.primaryDark,
                 ),
@@ -246,22 +261,22 @@ class _ContactSectionState extends State<ContactSection> {
   Widget _buildSocialLinks(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 850;
-    
+
     final socialLinks = [
       SocialLink(
         icon: FontAwesomeIcons.linkedin,
         color: AppColors.linkedIn,
-        url: 'https://linkedin.com/in/yourprofile',
+        url: 'https://www.linkedin.com/in/backershan-t-166aa078/',
       ),
       SocialLink(
         icon: FontAwesomeIcons.github,
         color: AppColors.github,
-        url: 'https://github.com/yourprofile',
+        url: 'https://github.com/BackershanT',
       ),
       SocialLink(
-        icon: FontAwesomeIcons.twitter,
-        color: AppColors.twitter,
-        url: 'https://twitter.com/yourprofile',
+        icon: FontAwesomeIcons.instagram,
+        color: Color(0xFFE1306C),
+        url: 'https://www.instagram.com/backershan.t.2025/',
       ),
     ];
 
@@ -272,9 +287,9 @@ class _ContactSectionState extends State<ContactSection> {
           child: Text(
             'Connect with me:',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: isMobile ? 18 : 20,
-                ),
+              fontWeight: FontWeight.bold,
+              fontSize: isMobile ? 18 : 20,
+            ),
           ).animate().fadeIn(delay: 200.ms, duration: 600.ms),
         ),
         SizedBox(height: isMobile ? 20 : 30),
@@ -345,17 +360,13 @@ class _SocialLinkState extends State<SocialLink> {
           curve: Curves.easeOutCubic,
           height: size,
           width: size,
-          transform: Matrix4.identity()
-            ..scale(_isHovered ? 1.1 : 1.0),
+          transform: Matrix4.identity()..scale(_isHovered ? 1.1 : 1.0),
           decoration: BoxDecoration(
             gradient: _isHovered
                 ? LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      widget.color,
-                      widget.color.withValues(alpha: 0.7),
-                    ],
+                    colors: [widget.color, widget.color.withValues(alpha: 0.7)],
                   )
                 : null,
             color: !_isHovered ? widget.color : null,
@@ -369,11 +380,7 @@ class _SocialLinkState extends State<SocialLink> {
               ),
             ],
           ),
-          child: Icon(
-            widget.icon,
-            color: Colors.white,
-            size: iconSize,
-          ),
+          child: Icon(widget.icon, color: Colors.white, size: iconSize),
         ),
       ),
     );

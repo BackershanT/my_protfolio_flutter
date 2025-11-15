@@ -38,7 +38,7 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final sections = TechnologyData.getAllSections();
-    
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
@@ -79,13 +79,15 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
     );
   }
 
-  Widget _buildMobileLayout(
-    BuildContext context,
-    TechnologySection section,
-  ) {
+  Widget _buildMobileLayout(BuildContext context, TechnologySection section) {
     return Column(
       children: [
-        _buildIconCircle(context, section.centerAsset, section.technologies, isMobile: true),
+        _buildIconCircle(
+          context,
+          section.centerAsset,
+          section.technologies,
+          isMobile: true,
+        ),
         const SizedBox(height: 60),
         _buildTextContent(
           context,
@@ -105,10 +107,10 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
     final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = screenWidth >= 850 && screenWidth < 1200;
     final isLargeDesktop = screenWidth >= 1400;
-    
+
     final spacing = isTablet ? 30.0 : (isLargeDesktop ? 80.0 : 60.0);
     final flexRatio = isTablet ? 1 : 2;
-    
+
     final iconWidget = Flexible(
       flex: flexRatio,
       child: Center(
@@ -120,7 +122,7 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
         ),
       ),
     );
-    
+
     final textWidget = Expanded(
       flex: 3,
       child: _buildTextContent(
@@ -130,7 +132,7 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
         section.description,
       ),
     );
-    
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: isFirst
@@ -149,38 +151,47 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
     final isMobile = screenWidth < 850;
     final isTablet = screenWidth >= 850 && screenWidth < 1200;
     final isDesktop = screenWidth >= 1200;
-    
+
     final smallTitleSize = isMobile ? 14.0 : (isTablet ? 15.0 : 16.0);
     final headlineSize = isMobile ? 24.0 : (isTablet ? 32.0 : 42.0);
     final bodySize = isMobile ? 14.0 : (isTablet ? 16.0 : 18.0);
     final titleSpacing = isMobile ? 15.0 : 20.0;
     final headlineSpacing = isMobile ? 16.0 : (isTablet ? 20.0 : 24.0);
-    
+
     return Column(
-      crossAxisAlignment: isDesktop ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+      crossAxisAlignment: isDesktop
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.center,
       children: [
         Text(
           subtitle,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? AppColors.primaryLight
-                    : AppColors.primaryDark,
-                fontSize: smallTitleSize,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 1.2,
-              ),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? AppColors.primaryLight
+                : AppColors.primaryDark,
+            fontSize: smallTitleSize,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 1.2,
+          ),
           textAlign: isDesktop ? TextAlign.left : TextAlign.center,
         ).animate().fadeIn(delay: 200.ms, duration: 600.ms),
         SizedBox(height: titleSpacing),
         Text(
-          headline,
-          style: Theme.of(context).textTheme.displayMedium?.copyWith(
+              headline,
+              style: Theme.of(context).textTheme.displayMedium?.copyWith(
                 fontSize: headlineSize,
                 fontWeight: FontWeight.bold,
                 height: 1.2,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? AppColors
+                          .primaryLight // Cyan color for dark mode
+                    : null, // Use default color for light mode
               ),
-          textAlign: isDesktop ? TextAlign.left : TextAlign.center,
-        ).animate().fadeIn(delay: 400.ms, duration: 600.ms).slide(
+              textAlign: isDesktop ? TextAlign.left : TextAlign.center,
+            )
+            .animate()
+            .fadeIn(delay: 400.ms, duration: 600.ms)
+            .slide(
               begin: const Offset(0, 0.2),
               duration: 600.ms,
               curve: Curves.easeOutCubic,
@@ -189,14 +200,12 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
         Text(
           description,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontSize: bodySize,
-                height: 1.7,
-                color: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.color
-                    ?.withValues(alpha: 0.7),
-              ),
+            fontSize: bodySize,
+            height: 1.7,
+            color: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
+          ),
           textAlign: isDesktop ? TextAlign.left : TextAlign.center,
         ).animate().fadeIn(delay: 600.ms, duration: 600.ms),
       ],
@@ -211,7 +220,7 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
   }) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = screenWidth >= 850 && screenWidth < 1200;
-    
+
     // Responsive sizing
     final radius = isMobile ? 120.0 : (isTablet ? 140.0 : 180.0);
     final iconSize = isMobile ? 50.0 : (isTablet ? 55.0 : 60.0);
@@ -240,10 +249,11 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
               ),
               boxShadow: [
                 BoxShadow(
-                  color: (Theme.of(context).brightness == Brightness.dark
-                          ? AppColors.primaryLight
-                          : AppColors.primaryDark)
-                      .withValues(alpha: 0.3),
+                  color:
+                      (Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.primaryLight
+                              : AppColors.primaryDark)
+                          .withValues(alpha: 0.3),
                   blurRadius: 20,
                   spreadRadius: 2,
                 ),
@@ -266,10 +276,10 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
               ),
             ),
           ).animate().scale(
-                delay: 200.ms,
-                duration: 800.ms,
-                curve: Curves.elasticOut,
-              ),
+            delay: 200.ms,
+            duration: 800.ms,
+            curve: Curves.elasticOut,
+          ),
           // Surrounding tech icons
           ...List.generate(technologies.length, (index) {
             final angle = (2 * math.pi / technologies.length) * index;
@@ -279,12 +289,9 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
             return AnimatedBuilder(
               animation: _rotationController,
               builder: (context, child) {
-                final rotationAngle =
-                    _rotationController.value * 2 * math.pi;
-                final newX =
-                    radius * math.cos(angle + rotationAngle);
-                final newY =
-                    radius * math.sin(angle + rotationAngle);
+                final rotationAngle = _rotationController.value * 2 * math.pi;
+                final newX = radius * math.cos(angle + rotationAngle);
+                final newY = radius * math.sin(angle + rotationAngle);
 
                 return Transform.translate(
                   offset: Offset(newX, newY),
@@ -310,16 +317,17 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
               builder: (context, child) {
                 final angle =
                     (2 * math.pi / technologies.length) * index +
-                        _rotationController.value * 2 * math.pi;
+                    _rotationController.value * 2 * math.pi;
                 return CustomPaint(
                   size: Size(radius * 2, radius * 2),
                   painter: _ConnectionLinePainter(
                     angle: angle,
                     radius: radius,
-                    color: (Theme.of(context).brightness == Brightness.dark
-                            ? AppColors.primaryLight
-                            : AppColors.primaryDark)
-                        .withValues(alpha: 0.2),
+                    color:
+                        (Theme.of(context).brightness == Brightness.dark
+                                ? AppColors.primaryLight
+                                : AppColors.primaryDark)
+                            .withValues(alpha: 0.2),
                   ),
                 );
               },
@@ -339,51 +347,57 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
     final isHovered = _hoveredIndex == index;
 
     return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: isHovered
-              ? tech.color
-              : (Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black)
-                  .withValues(alpha: 0.1),
-          width: 2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isHovered
-                ? tech.color.withValues(alpha: 0.4)
-                : Colors.black.withValues(alpha: 0.1),
-            blurRadius: isHovered ? 15 : 10,
-            spreadRadius: isHovered ? 2 : 0,
-          ),
-        ],
-      ),
-      child: tech.assetPath != null
-          ? Padding(
-              padding: EdgeInsets.all(size * 0.25),
-              child: Image.asset(
-                tech.assetPath!,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(
-                    tech.iconData ?? Icons.code_rounded,
-                    size: size * 0.5,
-                    color: isHovered ? tech.color : tech.color.withValues(alpha: 0.7),
-                  );
-                },
-              ),
-            )
-          : Icon(
-              tech.iconData ?? Icons.code_rounded,
-              size: size * 0.5,
-              color: isHovered ? tech.color : tech.color.withValues(alpha: 0.7),
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: isHovered
+                  ? tech.color
+                  : (Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black)
+                        .withValues(alpha: 0.1),
+              width: 2,
             ),
-    ).animate(target: isHovered ? 1 : 0).scale(
+            boxShadow: [
+              BoxShadow(
+                color: isHovered
+                    ? tech.color.withValues(alpha: 0.4)
+                    : Colors.black.withValues(alpha: 0.1),
+                blurRadius: isHovered ? 15 : 10,
+                spreadRadius: isHovered ? 2 : 0,
+              ),
+            ],
+          ),
+          child: tech.assetPath != null
+              ? Padding(
+                  padding: EdgeInsets.all(size * 0.25),
+                  child: Image.asset(
+                    tech.assetPath!,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(
+                        tech.iconData ?? Icons.code_rounded,
+                        size: size * 0.5,
+                        color: isHovered
+                            ? tech.color
+                            : tech.color.withValues(alpha: 0.7),
+                      );
+                    },
+                  ),
+                )
+              : Icon(
+                  tech.iconData ?? Icons.code_rounded,
+                  size: size * 0.5,
+                  color: isHovered
+                      ? tech.color
+                      : tech.color.withValues(alpha: 0.7),
+                ),
+        )
+        .animate(target: isHovered ? 1 : 0)
+        .scale(
           begin: const Offset(1, 1),
           end: const Offset(1.2, 1.2),
           duration: 300.ms,
