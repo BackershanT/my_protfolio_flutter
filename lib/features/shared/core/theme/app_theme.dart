@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
 
 class ThemeProvider with ChangeNotifier {
-  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode = ThemeMode.light;
 
   ThemeMode get themeMode => _themeMode;
 
