@@ -85,8 +85,8 @@ You can listen to lifecycle events to update your app UI or state:
 
 _socket.onConnect((_) => print('🔗 Connected'));
 _socket.onDisconnect((_) => print('🚫 Disconnected'));
-_socket.onReconnect((data) => print('🔁 Trying to reconnect... (\$data)'));
-_socket.onError((error) => print('⚠️ Socket Error: \$error'));
+_socket.onReconnect((data) => print('🔁 Trying to reconnect... (' + data.toString() + ')'));
+_socket.onError((error) => print('⚠️ Socket Error: ' + error.toString()));
 This gives you full visibility into your socket's behavior in real time.
 
 📈 Step 5: Test Your Connection
@@ -257,6 +257,196 @@ Game development doesn't have to be complex — and Flame proves it.
       readTime: 3,
       externalUrl: null,
       tags: ['Flutter', 'Flame', '2D Games', 'Game Development'],
+    ),
+    BlogPost(
+      id: '3',
+      title:
+          'Fastlane for Flutter: The Missing Piece You Didn\'t Know You Needed',
+      excerpt:
+          'Discover why Fastlane is essential for professional Flutter app deployment and how it transforms your release workflow.',
+      content: '''
+Most Flutter developers think their job ends when the UI is done.
+
+They're wrong.
+
+Shipping the app — properly, repeatedly, without breaking things — is harder than writing widgets.
+
+That's where Fastlane comes in.
+
+This blog breaks down:
+
+What Fastlane actually is
+Why Flutter developers need it
+How it changes your release workflow
+How it fits into a real CI/CD system
+No marketing talk. Only reality.
+
+Flutter builds apps. Fastlane ships them.
+
+Flutter handles:
+
+UI rendering
+Business logic
+App packaging
+Fastlane handles:
+
+App Store & Play Store automation
+Signing, certificates, provisioning
+Versioning, builds, and deployments
+Think of it like this:
+
+Flutter → Builds the app  
+Fastlane → Gets the app to users
+
+You can build a Ferrari,
+but if you don't know how to get it onto the road… what's the point?
+
+Why Flutter developers struggle with releases
+
+Let's be brutally honest.
+
+Most Flutter devs:
+
+Manually upload APK/AAB files
+Forget to increment version codes
+Break signing every few months
+Share certificates insecurely
+Waste time on repetitive release steps
+And the worst part?
+
+They think that's normal.
+
+It's not.
+
+It's amateur workflow.
+
+What Fastlane actually does for your Flutter app
+
+Fastlane automates everything around releasing your app:
+
+1. One command releases your app
+
+Instead of 15 manual steps:
+
+fastlane deploy
+
+And your app:
+
+Builds
+Signs
+Uploads
+Submits to stores
+2. Versioning without human error
+
+Fastlane auto-increments:
+
+Android versionCode
+iOS CFBundleVersion
+No more "why is Play Store rejecting this build?" moments.
+
+3. Signing without daily suffering
+
+Certificates and keystores are a nightmare.
+
+Become a member
+
+Fastlane manages them using:
+
+Secure storage
+match for team access
+Automatic renewal flows
+You stop worrying about lost certificates.
+
+4. Works perfectly with CI/CD
+
+When using GitHub Actions:
+
+Push to main → GitHub Actions → Fastlane → App Stores
+
+Zero manual effort.
+Zero forgotten steps.
+
+How Fastlane fits into a real Flutter pipeline
+
+Here's what a professional pipeline looks like:
+
+Developer writes code
+
+       ↓
+
+Pushes to GitHub
+
+       ↓
+
+GitHub Actions triggers
+
+       ↓
+
+Flutter builds the app
+
+       ↓
+
+Fastlane executes release
+
+       ↓
+
+App Store & Play Store receive the build
+
+This is how real teams ship apps weekly or daily — not once in 3 months.
+
+Does Fastlane affect Flutter code?
+
+No.
+
+Fastlane doesn't touch:
+
+Widgets
+State management
+Performance
+App logic
+It only affects how your app moves from your machine to your users' devices.
+
+That's a critical layer Flutter doesn't handle.
+
+Real talk: Should every Flutter dev use Fastlane?
+
+If you are:
+
+✅ Working on real production apps
+✅ Wanting proper CI/CD
+✅ Planning to work in teams
+✅ Interested in scalable workflow
+
+Then yes — you absolutely should.
+
+If you're just doing hobby apps or college projects?
+
+Probably not yet.
+
+Final thought
+
+Flutter helps you build fast.
+Fastlane helps you ship smart.
+
+Without Fastlane, you'll always be:
+
+Slow
+Error-prone
+Manual
+With Fastlane, your releases become:
+
+Automated
+Consistent
+Professional
+That's the difference between a coder and an engineer.
+''',
+      category: 'Flutter',
+      imageUrl: 'https://miro.medium.com/1*Uyc-j33p4oE4s4-Zjn5--g.png',
+      publishedDate: DateTime.now(),
+      readTime: 3,
+      externalUrl:
+          'https://medium.com/@akkuakku394/fastlane-for-flutter-the-missing-piece-you-didnt-know-you-needed-8f52d188c732?postPublishedType=initial',
+      tags: ['Flutter', 'Fastlane', 'CI/CD', 'Deployment'],
     ),
   ];
 
