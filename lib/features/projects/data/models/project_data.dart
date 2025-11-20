@@ -52,6 +52,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: '',
     ),
+
     Project(
       id: '2',
       title: 'YChat',
@@ -63,6 +64,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: '',
     ),
+
     Project(
       id: '3',
       title: 'Door to Door',
@@ -74,6 +76,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: '',
     ),
+
     Project(
       id: '4',
       title: 'Yachii',
@@ -213,6 +216,7 @@ This project is proprietary and confidential. All rights reserved.
 Created with passion for modern web experiences.
 ''',
     ),
+
     Project(
       id: '5',
       title: 'My Games',
@@ -360,6 +364,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
       codeUrl: '',
       demoUrl: '',
     ),
+
     Project(
       id: '7',
       title: 'Calculator',
@@ -370,6 +375,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
       codeUrl: '',
       demoUrl: '',
     ),
+
     Project(
       id: '8',
       title: 'Calendar',
@@ -767,6 +773,7 @@ This project is currently maintained by ClanLEO. For major changes, please conta
 Current version: 1.0.0+1
 ''',
     ),
+
     Project(
       id: '12',
       title: 'Leo Inspector Admin',
@@ -979,6 +986,7 @@ This project is currently maintained by ClanLEO. For major changes, please conta
 Current version: 1.0.0+1
 ''',
     ),
+
     Project(
       id: '13',
       title: 'Reachout',
@@ -990,6 +998,7 @@ Current version: 1.0.0+1
       codeUrl: '',
       demoUrl: '',
     ),
+
     Project(
       id: '14',
       title: 'Movie App',
@@ -1000,6 +1009,7 @@ Current version: 1.0.0+1
       codeUrl: '',
       demoUrl: '',
     ),
+
     Project(
       id: '15',
       title: 'Netflix Clone',

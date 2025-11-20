@@ -9,7 +9,7 @@ class TestimonialData {
         id: '1',
         name: 'Sayyid Salman',
         role: 'Founder',
-        company: 'Alisons Pvt Ltd',
+        company: 'Alison Tech Lab',
         content:
             'Working with Backershan was an absolute pleasure. Their attention to detail and ability to translate our requirements into a beautiful, functional interface exceeded our expectations. The project was delivered on time and within budget.',
         avatarUrl: AppAssets.testSalma,
