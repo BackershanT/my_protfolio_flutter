@@ -61,8 +61,9 @@ class _HeroSectionState extends State<HeroSection>
   Future<void> _downloadResume() async {
     try {
       if (kIsWeb) {
-        // For web, open the file in a new tab for download
+        // For web, we'll use the asset URL directly
         final url = HeroData.getResumeUrl();
+        // Create an anchor element to trigger download
         final anchor = html.AnchorElement(href: url);
         anchor.setAttribute('download', 'BACKERSHAN_T.pdf');
         anchor.click();
