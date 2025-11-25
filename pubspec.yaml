@@ -48,6 +48,8 @@ dependencies:
   provider: ^6.1.2
   http: ^1.2.0
   xml: ^6.5.0
+  dio: ^5.7.0
+  path_provider: ^2.1.4
 
 dev_dependencies:
   flutter_test:

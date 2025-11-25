@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:my_protfolio/features/hero/data/models/hero_data.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
@@ -7,6 +8,11 @@ import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_assets.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:html' as html show AnchorElement;
+import 'dart:typed_data';
+import 'dart:io' show Platform, File;
 
 class HeroSection extends StatefulWidget {
   final VoidCallback? onViewProjects;
@@ -54,10 +60,56 @@ class _HeroSectionState extends State<HeroSection>
 
   Future<void> _downloadResume() async {
     try {
-      // For web, we'll open the local file in a new tab
-      final url = HeroData.getResumeUrl();
-      if (!await launchUrl(Uri.parse(url))) {
-        throw Exception('Could not open resume');
+      if (kIsWeb) {
+        // For web, open the file in a new tab for download
+        final url = HeroData.getResumeUrl();
+        final anchor = html.AnchorElement(href: url);
+        anchor.setAttribute('download', 'BACKERSHAN_T.pdf');
+        anchor.click();
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Resume download started!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } else {
+        // For mobile/desktop, download the file to device storage
+        final dir = await getApplicationDocumentsDirectory();
+        final savePath = '${dir.path}/BACKERSHAN_T.pdf';
+
+        // Create Dio instance
+        final dio = Dio();
+
+        // Download the file
+        await dio.download(HeroData.getResumeUrl(), savePath);
+
+        // Show success message
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                'Resume downloaded successfully! Check your documents folder.',
+              ),
+              backgroundColor: Colors.green,
+              action: SnackBarAction(
+                label: 'Open',
+                onPressed: () {
+                  // On mobile/desktop, we can't directly open the file without additional plugins
+                  // So we'll just show the file path
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('File saved to: $savePath'),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        }
       }
     } catch (e) {
       // Show error message
