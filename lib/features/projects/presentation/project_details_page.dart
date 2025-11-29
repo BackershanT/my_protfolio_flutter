@@ -113,9 +113,7 @@ class ProjectDetailsPage extends StatelessWidget {
                               // Project Description
                               Text(
                                 project.description,
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.bodyLarge?.copyWith(height: 1.6),
+                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.6),
                               ),
                               const SizedBox(height: 30),
 
@@ -281,35 +279,12 @@ class ProjectDetailsPage extends StatelessWidget {
                               const SizedBox(height: 15),
                               if (project.screenshots.isNotEmpty)
                                 Expanded(
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: project.screenshots.length,
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        width: 300,
-                                        margin: const EdgeInsets.only(
-                                          right: 15,
+                                  child: project.type == ProjectType.website
+                                      ? _buildScreenshotGallery(context)
+                                      : SizedBox(
+                                          height: double.infinity,
+                                          child: _buildScreenshotGallery(context),
                                         ),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                          image: DecorationImage(
-                                            image:
-                                                project.screenshots[index]
-                                                    .startsWith('http')
-                                                ? NetworkImage(
-                                                    project.screenshots[index],
-                                                  )
-                                                : AssetImage(
-                                                    project.screenshots[index],
-                                                  ),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
                                 )
                               else
                                 Expanded(
@@ -344,7 +319,7 @@ class ProjectDetailsPage extends StatelessWidget {
               ],
             );
           } else {
-            // Mobile layout (unchanged)
+            // Mobile layout
             return Column(
               children: [
                 Expanded(
@@ -408,9 +383,7 @@ class ProjectDetailsPage extends StatelessWidget {
                         // Project Description
                         Text(
                           project.description,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyLarge?.copyWith(height: 1.6),
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.6),
                         ),
                         const SizedBox(height: 30),
 
@@ -459,34 +432,10 @@ class ProjectDetailsPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 15),
                         if (project.screenshots.isNotEmpty)
+                          // For websites, show with fixed height; for mobile apps, use horizontal carousel
                           SizedBox(
-                            height: 200,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: project.screenshots.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  width: 300,
-                                  margin: const EdgeInsets.only(right: 15),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    image: DecorationImage(
-                                      image:
-                                          project.screenshots[index].startsWith(
-                                            'http',
-                                          )
-                                          ? NetworkImage(
-                                              project.screenshots[index],
-                                            )
-                                          : AssetImage(
-                                              project.screenshots[index],
-                                            ),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                            height: 300, // Fixed height for both types
+                            child: _buildScreenshotGallery(context),
                           )
                         else
                           Container(
@@ -569,7 +518,7 @@ class ProjectDetailsPage extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 24,
                                   vertical: 16,
-                                ),
+                                  ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -619,5 +568,91 @@ class ProjectDetailsPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  /// Builds the screenshot gallery with different display modes based on project type
+  Widget _buildScreenshotGallery(BuildContext context) {
+    // Limit the number of screenshots to prevent performance issues
+    final int screenshotCount = project.screenshots.length > 10 ? 10 : project.screenshots.length;
+    
+    // For websites, show screenshots with actual size
+    if (project.type == ProjectType.website) {
+      return ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: screenshotCount, // Limit screenshots for better performance
+        cacheExtent: 1000, // Cache widgets for better performance
+        physics: const BouncingScrollPhysics(), // Add smooth scrolling
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image(
+                image: project.screenshots[index].startsWith('http')
+                    ? NetworkImage(project.screenshots[index])
+                    : AssetImage(project.screenshots[index]),
+                fit: BoxFit.contain,
+                alignment: Alignment.center,
+                width: 600, // Limit width for better performance
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey[300],
+                    child: const Icon(
+                      Icons.broken_image,
+                      size: 50,
+                      color: Colors.grey,
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      // For mobile apps, show horizontal scrolling carousel
+      return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: screenshotCount, // Limit screenshots for better performance
+        cacheExtent: 1000, // Cache widgets for better performance
+        physics: const BouncingScrollPhysics(), // Add smooth scrolling
+        itemBuilder: (context, index) {
+          return Container(
+            width: 300,
+            margin: const EdgeInsets.only(right: 15),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              image: DecorationImage(
+                image: project.screenshots[index].startsWith('http')
+                    ? NetworkImage(project.screenshots[index])
+                    : AssetImage(project.screenshots[index]),
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        },
+      );
+    }
   }
 }
