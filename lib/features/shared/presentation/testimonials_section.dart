@@ -31,7 +31,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
 
   void _startAutoScroll() {
     if (_testimonials.length <= 1) return;
-    
+
     _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       if (_pageController.hasClients) {
         int nextPage = (_currentPage + 1) % _testimonials.length;
@@ -103,8 +103,8 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
               height: 8,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _currentPage == index 
-                    ? Theme.of(context).colorScheme.primary 
+                color: _currentPage == index
+                    ? Theme.of(context).colorScheme.primary
                     : Theme.of(context).colorScheme.primary.withOpacity(0.3),
               ),
             );

@@ -59,20 +59,83 @@ class ProjectDetailsPage extends StatelessWidget {
                                 children: [
                                   // Project Avatar
                                   if (project.imageUrl.isNotEmpty)
-                                    Container(
-                                      width: 80,
-                                      height: 80,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        image: DecorationImage(
-                                          image:
-                                              project.imageUrl.startsWith(
-                                                'http',
-                                              )
-                                              ? NetworkImage(project.imageUrl)
-                                              : AssetImage(project.imageUrl),
-                                          fit: BoxFit.cover,
-                                        ),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image(
+                                        image:
+                                            project.imageUrl.startsWith('http')
+                                            ? NetworkImage(project.imageUrl)
+                                            : AssetImage(project.imageUrl),
+                                        width: 80,
+                                        height: 80,
+                                        fit: BoxFit.cover,
+                                        loadingBuilder: (context, child, loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return Container(
+                                            width: 80,
+                                            height: 80,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              color: isDark
+                                                  ? const Color(0xFF2A3D4F)
+                                                  : const Color(0xFFEFEFEF),
+                                            ),
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                value:
+                                                    loadingProgress
+                                                            .expectedTotalBytes !=
+                                                        null
+                                                    ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
+                                                    : null,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                              return Container(
+                                                width: 80,
+                                                height: 80,
+                                                decoration: BoxDecoration(
+                                                  color: isDark
+                                                      ? const Color(0xFF2A3D4F)
+                                                      : const Color(0xFFEFEFEF),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: Icon(
+                                                  Icons.folder_rounded,
+                                                  size: 40,
+                                                  color: isDark
+                                                      ? AppColors.primaryLight
+                                                      : AppColors.primaryDark,
+                                                ),
+                                              );
+                                            },
+                                        frameBuilder:
+                                            (
+                                              context,
+                                              child,
+                                              frame,
+                                              wasSynchronouslyLoaded,
+                                            ) {
+                                              if (wasSynchronouslyLoaded)
+                                                return child;
+                                              return AnimatedOpacity(
+                                                opacity: frame == null ? 0 : 1,
+                                                duration: const Duration(
+                                                  milliseconds: 300,
+                                                ),
+                                                curve: Curves.easeOut,
+                                                child: child,
+                                              );
+                                            },
                                       ),
                                     )
                                   else
@@ -338,17 +401,82 @@ class ProjectDetailsPage extends StatelessWidget {
                           children: [
                             // Project Avatar
                             if (project.imageUrl.isNotEmpty)
-                              Container(
-                                width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  image: DecorationImage(
-                                    image: project.imageUrl.startsWith('http')
-                                        ? NetworkImage(project.imageUrl)
-                                        : AssetImage(project.imageUrl),
-                                    fit: BoxFit.cover,
-                                  ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image(
+                                  image: project.imageUrl.startsWith('http')
+                                      ? NetworkImage(project.imageUrl)
+                                      : AssetImage(project.imageUrl),
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                        if (loadingProgress == null)
+                                          return child;
+                                        return Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                            color: isDark
+                                                ? const Color(0xFF2A3D4F)
+                                                : const Color(0xFFEFEFEF),
+                                          ),
+                                          child: Center(
+                                            child: CircularProgressIndicator(
+                                              value:
+                                                  loadingProgress
+                                                          .expectedTotalBytes !=
+                                                      null
+                                                  ? loadingProgress
+                                                            .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes!
+                                                  : null,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      width: 80,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: isDark
+                                            ? const Color(0xFF2A3D4F)
+                                            : const Color(0xFFEFEFEF),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Icon(
+                                        Icons.folder_rounded,
+                                        size: 40,
+                                        color: isDark
+                                            ? AppColors.primaryLight
+                                            : AppColors.primaryDark,
+                                      ),
+                                    );
+                                  },
+                                  frameBuilder:
+                                      (
+                                        context,
+                                        child,
+                                        frame,
+                                        wasSynchronouslyLoaded,
+                                      ) {
+                                        if (wasSynchronouslyLoaded)
+                                          return child;
+                                        return AnimatedOpacity(
+                                          opacity: frame == null ? 0 : 1,
+                                          duration: const Duration(
+                                            milliseconds: 300,
+                                          ),
+                                          curve: Curves.easeOut,
+                                          child: child,
+                                        );
+                                      },
                                 ),
                               )
                             else
@@ -611,26 +739,71 @@ class ProjectDetailsPage extends StatelessWidget {
                     : AssetImage(project.screenshots[index]),
                 fit: BoxFit.contain,
                 alignment: Alignment.center,
-                width: 600, // Limit width for better performance
+                width: 600,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
                   return Center(
-                    child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                          : null,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                        if (loadingProgress.expectedTotalBytes != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              '${(loadingProgress.cumulativeBytesLoaded / 1024).round()} KB / ${(loadingProgress.expectedTotalBytes! / 1024).round()} KB',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ),
+                      ],
                     ),
                   );
                 },
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
-                    color: Colors.grey[300],
-                    child: const Icon(
-                      Icons.broken_image,
-                      size: 50,
-                      color: Colors.grey,
+                    height: 200,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(12),
                     ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.broken_image,
+                          size: 50,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'Failed to load image',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Force rebuild to retry loading
+                            (context as Element).reassemble();
+                          },
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  if (wasSynchronouslyLoaded) return child;
+                  return AnimatedOpacity(
+                    opacity: frame == null ? 0 : 1,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                    child: child,
                   );
                 },
               ),
@@ -649,13 +822,80 @@ class ProjectDetailsPage extends StatelessWidget {
           return Container(
             width: 300,
             margin: const EdgeInsets.only(right: 15),
-            decoration: BoxDecoration(
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
+              child: Image(
                 image: project.screenshots[index].startsWith('http')
                     ? NetworkImage(project.screenshots[index])
                     : AssetImage(project.screenshots[index]),
                 fit: BoxFit.cover,
+                width: 300,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                        if (loadingProgress.expectedTotalBytes != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              '${(loadingProgress.cumulativeBytesLoaded / 1024).round()} KB / ${(loadingProgress.expectedTotalBytes! / 1024).round()} KB',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ),
+                      ],
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 200,
+                    width: 300,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.broken_image,
+                          size: 50,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'Failed to load image',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Force rebuild to retry loading
+                            (context as Element).reassemble();
+                          },
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  if (wasSynchronouslyLoaded) return child;
+                  return AnimatedOpacity(
+                    opacity: frame == null ? 0 : 1,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                    child: child,
+                  );
+                },
               ),
             ),
           );
