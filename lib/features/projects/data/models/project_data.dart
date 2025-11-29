@@ -4168,13 +4168,14 @@ For support and questions:
 ''',
     ),
 
+    // E-commerce Platform Project
     Project(
       id: '15',
       title: 'E-Commerce Platform',
       description:
           'Full-featured e-commerce platform with product catalog, shopping cart, and payment processing',
       technologies: ['Flutter', 'Firebase', 'Stripe', 'Provider'],
-      imageUrl: AppAssets.projectClanLogo,
+      imageUrl: AppAssets.projectEcommerce,
       screenshots: [
         AppAssets.projectEcommerce01,
         AppAssets.projectEcommerce02,

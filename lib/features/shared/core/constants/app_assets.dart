@@ -27,6 +27,7 @@ class AppAssets {
   static const String projectMovieApp = 'assets/projects/movieapp.png';
   static const String projectYchat = 'assets/projects/ychat.jpeg';
   static const String projectYachii = 'assets/projects/yachii.png';
+  static const String projectEcommerce = 'assets/projects/ecommerce.png';
 
   // Additional project images
   static const String projectClanLogo = 'assets/projects/clan_logo.png';
