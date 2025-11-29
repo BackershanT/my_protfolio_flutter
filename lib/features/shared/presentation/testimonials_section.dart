@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
 import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
@@ -15,15 +16,38 @@ class TestimonialsSection extends StatefulWidget {
 
 class _TestimonialsSectionState extends State<TestimonialsSection> {
   late List<Testimonial> _testimonials;
+  PageController _pageController = PageController();
+  int _currentPage = 0;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     _testimonials = TestimonialData.getAllTestimonials();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _startAutoScroll();
+    });
+  }
+
+  void _startAutoScroll() {
+    if (_testimonials.length <= 1) return;
+    
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (_pageController.hasClients) {
+        int nextPage = (_currentPage + 1) % _testimonials.length;
+        _pageController.animateToPage(
+          nextPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
   }
 
   @override
   void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -56,14 +80,35 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
         SizedBox(
           height: 350,
           child: PageView.builder(
+            controller: _pageController,
             onPageChanged: (index) {
-              // We could add indicator logic here if needed
+              setState(() {
+                _currentPage = index;
+              });
             },
             itemCount: _testimonials.length,
             itemBuilder: (context, index) {
               return _buildTestimonialCard(context, _testimonials[index], true);
             },
           ),
+        ),
+        SizedBox(height: 20),
+        // Page indicator
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(_testimonials.length, (index) {
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _currentPage == index 
+                    ? Theme.of(context).colorScheme.primary 
+                    : Theme.of(context).colorScheme.primary.withOpacity(0.3),
+              ),
+            );
+          }),
         ),
       ],
     );
