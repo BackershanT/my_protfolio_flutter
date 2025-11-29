@@ -78,7 +78,20 @@ flutter:
     - assets/images/
     - assets/lottie/
     - assets/skills/
+    - assets/projects/ychat_admin/
+    - assets/projects/ychat/
+    - assets/projects/mybus/
     - assets/projects/
+    - assets/projects/calculator/
+    - assets/projects/ecommerce/
+    - assets/projects/mahathma/
+    - assets/projects/movie_app/
+    - assets/projects/netflix/
+    - assets/projects/yachii/
+    - assets/projects/mygame/
+
+
+
     - assets/resume/
     - assets/testimonial/
 

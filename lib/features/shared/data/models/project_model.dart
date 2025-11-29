@@ -1,3 +1,5 @@
+enum ProjectType { mobile, website }
+
 class Project {
   final String id;
   final String title;
@@ -8,6 +10,7 @@ class Project {
   final String? readmeContent;
   final String? demoUrl;
   final String? codeUrl;
+  final ProjectType type;
 
   Project({
     required this.id,
@@ -19,6 +22,7 @@ class Project {
     this.readmeContent,
     this.demoUrl,
     this.codeUrl,
+    this.type = ProjectType.mobile,
   });
 
   factory Project.fromJson(Map<String, dynamic> json) {
@@ -34,6 +38,12 @@ class Project {
       readmeContent: json['readmeContent'] as String?,
       demoUrl: json['demoUrl'] as String?,
       codeUrl: json['codeUrl'] as String?,
+      type: json['type'] != null
+          ? ProjectType.values.firstWhere(
+              (e) => e.name == json['type'],
+              orElse: () => ProjectType.mobile,
+            )
+          : ProjectType.mobile,
     );
   }
 
@@ -48,6 +58,7 @@ class Project {
       'readmeContent': readmeContent,
       'demoUrl': demoUrl,
       'codeUrl': codeUrl,
+      'type': type.name,
     };
   }
 }
