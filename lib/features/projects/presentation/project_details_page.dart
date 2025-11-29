@@ -113,7 +113,9 @@ class ProjectDetailsPage extends StatelessWidget {
                               // Project Description
                               Text(
                                 project.description,
-                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.6),
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.bodyLarge?.copyWith(height: 1.6),
                               ),
                               const SizedBox(height: 30),
 
@@ -283,7 +285,9 @@ class ProjectDetailsPage extends StatelessWidget {
                                       ? _buildScreenshotGallery(context)
                                       : SizedBox(
                                           height: double.infinity,
-                                          child: _buildScreenshotGallery(context),
+                                          child: _buildScreenshotGallery(
+                                            context,
+                                          ),
                                         ),
                                 )
                               else
@@ -383,7 +387,9 @@ class ProjectDetailsPage extends StatelessWidget {
                         // Project Description
                         Text(
                           project.description,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.6),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyLarge?.copyWith(height: 1.6),
                         ),
                         const SizedBox(height: 30),
 
@@ -518,7 +524,7 @@ class ProjectDetailsPage extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 24,
                                   vertical: 16,
-                                  ),
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -573,8 +579,10 @@ class ProjectDetailsPage extends StatelessWidget {
   /// Builds the screenshot gallery with different display modes based on project type
   Widget _buildScreenshotGallery(BuildContext context) {
     // Limit the number of screenshots to prevent performance issues
-    final int screenshotCount = project.screenshots.length > 10 ? 10 : project.screenshots.length;
-    
+    final int screenshotCount = project.screenshots.length > 10
+        ? 10
+        : project.screenshots.length;
+
     // For websites, show screenshots with actual size
     if (project.type == ProjectType.website) {
       return ListView.builder(
@@ -610,7 +618,7 @@ class ProjectDetailsPage extends StatelessWidget {
                     child: CircularProgressIndicator(
                       value: loadingProgress.expectedTotalBytes != null
                           ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
+                                loadingProgress.expectedTotalBytes!
                           : null,
                     ),
                   );
