@@ -60,22 +60,22 @@ flutter run -d windows
 
 #### Android
 ```bash
-flutter build apk
+flutter build apk --release
 ```
 
 #### iOS
 ```bash
-flutter build ios
+flutter build ios --release
 ```
 
 #### Web
 ```bash
-flutter build web
+flutter build web --release
 ```
 
 #### Desktop
 ```bash
-flutter build windows
+flutter build windows --release
 ```
 
 ## Project Structure

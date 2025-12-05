@@ -28,6 +28,7 @@ class AppAssets {
   static const String projectYchat = 'assets/projects/ychat.jpeg';
   static const String projectYachii = 'assets/projects/yachii.png';
   static const String projectEcommerce = 'assets/projects/ecommerce.png';
+  static const String projectCkBeton = 'assets/projects/ckbeton.jpg';
 
   // Additional project images
   static const String projectClanLogo = 'assets/projects/clan_logo.png';
@@ -237,6 +238,16 @@ class AppAssets {
       'assets/projects/calculator/calculator02.jpeg';
   static const String projectCalculator03 =
       'assets/projects/calculator/calculator03.jpeg';
+
+  // CK Beton project images
+  static const String projectCkBetonHome =
+      'assets/projects/ck/ckbeton.bizonline.ae_.png';
+  static const String projectCkBetonAbout =
+      'assets/projects/ck/ckbeton.bizonline.ae_about-us_.png';
+  static const String projectCkBetonServices =
+      'assets/projects/ck/ckbeton.bizonline.ae_services_.png';
+  static const String projectCkBetonContact =
+      'assets/projects/ck/ckbeton.bizonline.ae_contact-us_.png';
 
   // Profile and logo images
   static const String profileAvatar = 'assets/images/dp.png';

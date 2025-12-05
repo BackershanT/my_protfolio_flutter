@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart' show rootBundle;
+
 enum ProjectType { mobile, website }
 
 class Project {
@@ -8,6 +10,7 @@ class Project {
   final List<String> technologies;
   final List<String> screenshots;
   final String? readmeContent;
+  final String? readmeFilePath; // New field for README file path
   final String? demoUrl;
   final String? codeUrl;
   final ProjectType type;
@@ -20,10 +23,24 @@ class Project {
     required this.technologies,
     this.screenshots = const [],
     this.readmeContent,
+    this.readmeFilePath, // New parameter
     this.demoUrl,
     this.codeUrl,
     this.type = ProjectType.mobile,
   });
+
+  // Method to load README content from file
+  Future<String?> loadReadmeContent() async {
+    if (readmeFilePath != null) {
+      try {
+        return await rootBundle.loadString(readmeFilePath!);
+      } catch (e) {
+        // Return null if file cannot be loaded
+        return null;
+      }
+    }
+    return readmeContent;
+  }
 
   factory Project.fromJson(Map<String, dynamic> json) {
     return Project(
@@ -36,6 +53,7 @@ class Project {
           ? List<String>.from(json['screenshots'] as List)
           : [],
       readmeContent: json['readmeContent'] as String?,
+      readmeFilePath: json['readmeFilePath'] as String?, // New field
       demoUrl: json['demoUrl'] as String?,
       codeUrl: json['codeUrl'] as String?,
       type: json['type'] != null
@@ -56,6 +74,7 @@ class Project {
       'technologies': technologies,
       'screenshots': screenshots,
       'readmeContent': readmeContent,
+      'readmeFilePath': readmeFilePath, // New field
       'demoUrl': demoUrl,
       'codeUrl': codeUrl,
       'type': type.name,
