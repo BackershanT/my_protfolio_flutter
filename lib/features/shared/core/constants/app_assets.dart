@@ -196,12 +196,7 @@ class AppAssets {
       'assets/projects/netflix/netflix02.jpeg';
 
   // Yachii project images
-  static const String projectYachii01 = 'assets/projects/yachii/yachii01.jpeg';
-  static const String projectYachii02 = 'assets/projects/yachii/yachii02.jpeg';
-  static const String projectYachii03 = 'assets/projects/yachii/yachii03.jpeg';
-  static const String projectYachii04 = 'assets/projects/yachii/yachii04.jpeg';
-  static const String projectYachii05 = 'assets/projects/yachii/yachii05.jpeg';
-  static const String projectYachii06 = 'assets/projects/yachii/yachii06.jpeg';
+  static const String projectYachii01 = 'assets/projects/yachii/yachii.png';
 
   // Movie App project images
   static const String projectMovieApp01 =
