@@ -9,15 +9,13 @@ class AppTexts {
     'UI/UX Enthusiast',
   ];
   static const String heroDescription =
-      'Frontend developer specialized in Flutter with expertise in React. I create beautiful, responsive, and performant user interfaces that deliver exceptional digital experiences across all platforms.';
+      'Flutter Engineer with strong frontend expertise in Flutter and React, focused on building scalable, high-performance mobile and web applications. Experienced in delivering clean, responsive user interfaces backed by robust state management, API integration, and well-structured architecture for E-commerce, SaaS, and real-time systems across diverse business requirements.';
   static const String resumeButtonText = 'Download Resume';
 
   // About section
   static const String aboutTitle = 'About Me';
   static const String aboutDescription =
-      'Hello! I\'m a Frontend Developer specialized in Flutter with strong knowledge of React. I\'m passionate about creating beautiful, intuitive user interfaces that work seamlessly across mobile, web, and desktop platforms.\n\n'
-      'With expertise in Flutter and React, I build modern applications with clean architecture, smooth animations, and pixel-perfect designs. I focus on delivering high-quality code that\'s maintainable, scalable, and performant.\n\n'
-      'When I\'m not coding, you can find me exploring new frontend technologies, contributing to open-source projects, or staying up-to-date with the latest UI/UX design trends.';
+      'Flutter Engineer with strong frontend expertise in Flutter and React, focused on building scalable, high-performance mobile and web applications. Experienced in developing cross-platform solutions using clean architecture, robust state management, and efficient API integration for real-world business use cases, with an emphasis on maintainability, performance, and reliability across mobile, web, and desktop platforms.';
 
   // Skills section
   static const String skillsTitle = 'Skills';
