@@ -9,6 +9,8 @@ import 'package:my_protfolio/features/contact/presentation/contact_section.dart'
 import 'package:my_protfolio/features/shared/presentation/footer_section.dart';
 import 'package:my_protfolio/features/shared/presentation/nav_bar.dart';
 import 'package:my_protfolio/features/shared/presentation/testimonials_section.dart';
+import 'package:my_protfolio/features/shared/presentation/certifications_section.dart';
+import 'package:my_protfolio/features/shared/data/models/certification_data.dart';
 import 'package:provider/provider.dart';
 import 'package:my_protfolio/features/shared/core/theme/app_theme.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
@@ -24,7 +26,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  final List<GlobalKey> _sectionKeys = List.generate(9, (index) => GlobalKey());
+  late final List<GlobalKey> _sectionKeys;
+  bool _hasCertifications = false;
+
   int _currentIndex = 0;
   late AnimationController _chainController;
   late Animation<double> _chainAnimation;
@@ -47,6 +51,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _hasCertifications = CertificationData.getAllCertifications().isNotEmpty;
+    _sectionKeys = List.generate(
+      _hasCertifications ? 9 : 8,
+      (index) => GlobalKey(),
+    );
     _scrollController.addListener(_scrollListener);
 
     // Initialize animation controller for the chain
@@ -146,7 +155,27 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         children: [
           Column(
             children: [
-              NavBar(onNavTap: _scrollToSection, currentIndex: _currentIndex),
+              NavBar(
+                onNavTap: (index) {
+                  if (_hasCertifications) {
+                    // Logic when Certifications exist (it is skipped in Desktop NavBar)
+                    if (index >= 5) {
+                      _scrollToSection(index + 1);
+                    } else {
+                      _scrollToSection(index);
+                    }
+                  } else {
+                    // Simple mapping when Certifications are removed
+                    _scrollToSection(index);
+                  }
+                },
+                currentIndex: _hasCertifications
+                    ? (_currentIndex >= 5
+                          ? (_currentIndex == 5 ? 4 : _currentIndex - 1)
+                          : _currentIndex)
+                    : _currentIndex,
+              ),
+
               Expanded(
                 child: SingleChildScrollView(
                   controller: _scrollController,
@@ -160,9 +189,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       SkillsSection(key: _sectionKeys[2]),
                       TechnologiesSection(key: _sectionKeys[3]),
                       ProjectsSection(key: _sectionKeys[4]),
-                      TestimonialsSection(key: _sectionKeys[5]),
-                      BlogSection(key: _sectionKeys[6]),
-                      ContactSection(key: _sectionKeys[7]),
+                      if (_hasCertifications)
+                        CertificationsSection(key: _sectionKeys[5]),
+                      TestimonialsSection(
+                        key: _sectionKeys[_hasCertifications ? 6 : 5],
+                      ),
+                      BlogSection(
+                        key: _sectionKeys[_hasCertifications ? 7 : 6],
+                      ),
+                      ContactSection(
+                        key: _sectionKeys[_hasCertifications ? 8 : 7],
+                      ),
                       const FooterSection(),
                     ],
                   ),
@@ -208,6 +245,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       AppTexts.navSkills,
       AppTexts.navTechnologies,
       AppTexts.navProjects,
+      if (_hasCertifications) AppTexts.navCertifications,
       AppTexts.navTestimonials,
       AppTexts.navBlog,
       AppTexts.navContact,

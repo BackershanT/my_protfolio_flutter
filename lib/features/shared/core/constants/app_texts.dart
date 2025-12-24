@@ -28,6 +28,9 @@ class AppTexts {
   static const String viewCode = 'View Code';
   static const String liveDemo = 'Live Demo';
 
+  // Certifications section
+  static const String certificationsTitle = 'Certifications';
+
   // Testimonials section
   static const String testimonialsTitle = 'Testimonials';
 
@@ -49,6 +52,7 @@ class AppTexts {
   static const String navTechnologies = 'Technologies';
   static const String navSkills = 'Skills';
   static const String navProjects = 'Projects';
+  static const String navCertifications = 'Certifications';
   static const String navBlog = 'Blog';
   static const String navTestimonials = 'Testimonials';
   static const String navContact = 'Contact';
