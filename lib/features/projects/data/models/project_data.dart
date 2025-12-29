@@ -208,7 +208,7 @@ class ProjectData {
       description:
           'Door to Door Application for Delivering groceries and other essentials from your doorstep.',
       technologies: ['Flutter', 'Getx', 'Flutter Maps', 'Rest Apis'],
-      imageUrl: '',
+      imageUrl: AppAssets.projectDorToDor24,
       screenshots: [
         // AppAssets.projectYchat01,
         // AppAssets.projectYchat02,

@@ -29,6 +29,7 @@ class AppAssets {
   static const String projectYachii = 'assets/projects/yachii.png';
   static const String projectEcommerce = 'assets/projects/ecommerce.png';
   static const String projectCkBeton = 'assets/projects/ckbeton.jpg';
+  static const String projectDorToDor24 = 'assets/projects/dor_to_dor24.png';
 
   // Additional project images
   static const String projectClanLogo = 'assets/projects/clan_logo.png';
