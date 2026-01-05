@@ -384,7 +384,7 @@ class _HeroSectionState extends State<HeroSection>
                 ),
               ),
               child: Text(
-                'View Projects',
+                AppTexts.viewProjects,
                 style: TextStyle(
                   fontSize: isMobile ? 14 : 16,
                   fontWeight: FontWeight.w600,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
@@ -40,27 +41,45 @@ class _NavBarState extends State<NavBar> {
               ),
             ),
             // Navigation Items (Responsive)
-            if (Responsive.isDesktop(context))
-              Expanded(
-                child: ResponsiveNavigation(
-                  onNavTap: widget.onNavTap,
-                  currentIndex: widget.currentIndex,
-                ),
-              )
-            else
-              // Hamburger menu for mobile and tablet
-              IconButton(
-                icon: Icon(
-                  Icons.menu,
+            Row(
+              children: [
+                if (Responsive.isDesktop(context))
+                  ResponsiveNavigation(
+                    onNavTap: widget.onNavTap,
+                    currentIndex: widget.currentIndex,
+                  ),
+                const SizedBox(width: 10),
+                // Language Toggle Icon
+                IconButton(
+                  icon: const Icon(Icons.language),
+                  tooltip: context.locale.languageCode == 'en'
+                      ? 'Switch to Arabic'
+                      : 'التغيير إلى الإنجليزية',
                   color: Theme.of(context).brightness == Brightness.dark
                       ? AppColors.primaryLight
                       : AppColors.primaryDark,
+                  onPressed: () {
+                    if (context.locale.languageCode == 'en') {
+                      context.setLocale(const Locale('ar'));
+                    } else {
+                      context.setLocale(const Locale('en'));
+                    }
+                  },
                 ),
-                onPressed: () {
-                  // Open the end drawer
-                  Scaffold.of(context).openEndDrawer();
-                },
-              ),
+                if (!Responsive.isDesktop(context))
+                  IconButton(
+                    icon: Icon(
+                      Icons.menu,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.primaryLight
+                          : AppColors.primaryDark,
+                    ),
+                    onPressed: () {
+                      Scaffold.of(context).openEndDrawer();
+                    },
+                  ),
+              ],
+            ),
           ],
         ),
       ),

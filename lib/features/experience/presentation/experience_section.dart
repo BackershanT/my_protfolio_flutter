@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
 import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
@@ -22,7 +23,7 @@ class ExperienceSection extends StatelessWidget {
       ),
       child: Column(
         children: [
-          SectionTitle(title: 'Experience'),
+          SectionTitle(title: 'experienceTitle'.tr()),
           SizedBox(height: screenWidth < 850 ? 50 : 60),
           Responsive(
             mobile: _buildMobileLayout(context, experiences),
@@ -33,7 +34,10 @@ class ExperienceSection extends StatelessWidget {
     );
   }
 
-  Widget _buildMobileLayout(BuildContext context, List<Experience> experiences) {
+  Widget _buildMobileLayout(
+    BuildContext context,
+    List<Experience> experiences,
+  ) {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -44,7 +48,10 @@ class ExperienceSection extends StatelessWidget {
     );
   }
 
-  Widget _buildDesktopLayout(BuildContext context, List<Experience> experiences) {
+  Widget _buildDesktopLayout(
+    BuildContext context,
+    List<Experience> experiences,
+  ) {
     return SizedBox(
       width: double.infinity,
       child: ListView.builder(
@@ -73,8 +80,8 @@ class ExperienceSection extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: exp.isCurrentJob
                       ? (Theme.of(context).brightness == Brightness.dark
-                          ? AppColors.primaryLight
-                          : AppColors.primaryDark)
+                            ? AppColors.primaryLight
+                            : AppColors.primaryDark)
                       : Theme.of(context).cardColor,
                   shape: BoxShape.circle,
                   border: Border.all(
@@ -94,168 +101,182 @@ class ExperienceSection extends StatelessWidget {
                       )
                     : null,
               ).animate().scale(
-                    delay: (index * 200).ms,
-                    duration: 600.ms,
-                    curve: Curves.elasticOut,
-                  ),
+                delay: (index * 200).ms,
+                duration: 600.ms,
+                curve: Curves.elasticOut,
+              ),
               if (index < _getExperiences().length - 1)
                 Container(
                   width: 3.w,
                   height: 100.h,
-                  color: (Theme.of(context).brightness == Brightness.dark
-                          ? AppColors.primaryLight
-                          : AppColors.primaryDark)
-                      .withOpacity(0.3),
+                  color:
+                      (Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.primaryLight
+                              : AppColors.primaryDark)
+                          .withOpacity(0.3),
                 ).animate().fadeIn(
-                      delay: (index * 200 + 300).ms,
-                      duration: 600.ms,
-                    ),
+                  delay: (index * 200 + 300).ms,
+                  duration: 600.ms,
+                ),
             ],
           ),
           SizedBox(width: 30.w),
           // Content
           Expanded(
-            child: Container(
-              padding: EdgeInsets.all(24.r),
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(16.r),
-                border: Border.all(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white.withOpacity(0.1)
-                      : Colors.black.withOpacity(0.05),
-                  width: 1,
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Company and duration
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          exp.company,
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22.sp,
-                                color: Theme.of(context).brightness == Brightness.dark
-                                    ? AppColors.primaryLight
-                                    : AppColors.primaryDark,
-                              ),
+            child:
+                Container(
+                      padding: EdgeInsets.all(24.r),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(16.r),
+                        border: Border.all(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white.withOpacity(0.1)
+                              : Colors.black.withOpacity(0.05),
+                          width: 1,
                         ),
                       ),
-                      if (exp.isCurrentJob)
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 12.w,
-                            vertical: 6.h,
-                          ),
-                          decoration: BoxDecoration(
-                            color: (Theme.of(context).brightness == Brightness.dark
-                                    ? AppColors.primaryLight
-                                    : AppColors.primaryDark)
-                                .withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(20.r),
-                          ),
-                          child: Text(
-                            'Current',
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600,
-                              color: Theme.of(context).brightness == Brightness.dark
-                                  ? AppColors.primaryLight
-                                  : AppColors.primaryDark,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                  SizedBox(height: 8.h),
-                  // Role
-                  Text(
-                    exp.role,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                  SizedBox(height: 8.h),
-                  // Duration
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today,
-                        size: 16.sp,
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.color
-                            ?.withOpacity(0.6),
-                      ),
-                      SizedBox(width: 8.w),
-                      Text(
-                        exp.duration,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontSize: 14.sp,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.color
-                                  ?.withOpacity(0.6),
-                            ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16.h),
-                  // Description
-                  Text(
-                    exp.description,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontSize: 15.sp,
-                          height: 1.6,
-                        ),
-                  ),
-                  SizedBox(height: 16.h),
-                  // Achievements
-                  ...exp.achievements.map(
-                    (achievement) => Padding(
-                      padding: EdgeInsets.only(bottom: 8.h),
-                      child: Row(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
-                            Icons.check_circle,
-                            size: 18.sp,
-                            color: Theme.of(context).brightness == Brightness.dark
-                                ? AppColors.primaryLight
-                                : AppColors.primaryDark,
-                          ),
-                          SizedBox(width: 12.w),
-                          Expanded(
-                            child: Text(
-                              achievement,
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontSize: 14.sp,
-                                    height: 1.5,
+                          // Company and duration
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  exp.company,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22.sp,
+                                        color:
+                                            Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? AppColors.primaryLight
+                                            : AppColors.primaryDark,
+                                      ),
+                                ),
+                              ),
+                              if (exp.isCurrentJob)
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 12.w,
+                                    vertical: 6.h,
                                   ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        (Theme.of(context).brightness ==
+                                                    Brightness.dark
+                                                ? AppColors.primaryLight
+                                                : AppColors.primaryDark)
+                                            .withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(20.r),
+                                  ),
+                                  child: Text(
+                                    'current'.tr(),
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color:
+                                          Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? AppColors.primaryLight
+                                          : AppColors.primaryDark,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          SizedBox(height: 8.h),
+                          // Role
+                          Text(
+                            exp.role,
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                          SizedBox(height: 8.h),
+                          // Duration
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_today,
+                                size: 16.sp,
+                                color: Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium?.color?.withOpacity(0.6),
+                              ),
+                              SizedBox(width: 8.w),
+                              Text(
+                                exp.duration,
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      fontSize: 14.sp,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color
+                                          ?.withOpacity(0.6),
+                                    ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16.h),
+                          // Description
+                          Text(
+                            exp.description,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(fontSize: 15.sp, height: 1.6),
+                          ),
+                          SizedBox(height: 16.h),
+                          // Achievements
+                          ...exp.achievements.map(
+                            (achievement) => Padding(
+                              padding: EdgeInsets.only(bottom: 8.h),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.check_circle,
+                                    size: 18.sp,
+                                    color:
+                                        Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? AppColors.primaryLight
+                                        : AppColors.primaryDark,
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Expanded(
+                                    child: Text(
+                                      achievement,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            fontSize: 14.sp,
+                                            height: 1.5,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ),
+                    )
+                    .animate()
+                    .fadeIn(delay: (index * 200 + 200).ms, duration: 600.ms)
+                    .slide(
+                      begin: const Offset(0.2, 0),
+                      duration: 600.ms,
+                      curve: Curves.easeOutCubic,
                     ),
-                  ),
-                ],
-              ),
-            ).animate().fadeIn(
-                  delay: (index * 200 + 200).ms,
-                  duration: 600.ms,
-                ).slide(
-                  begin: const Offset(0.2, 0),
-                  duration: 600.ms,
-                  curve: Curves.easeOutCubic,
-                ),
           ),
         ],
       ),

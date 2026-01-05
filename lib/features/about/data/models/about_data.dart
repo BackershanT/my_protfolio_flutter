@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
 
 class FeatureCard {
   final IconData icon;
@@ -15,26 +16,23 @@ class FeatureCard {
 }
 
 class AboutData {
-  static const features = [
+  static List<FeatureCard> get features => [
     FeatureCard(
       icon: Icons.phone_android,
-      title: 'Flutter Developer',
-      description:
-          'Building beautiful, natively compiled applications for mobile, web, and desktop from a single codebase with Flutter.',
+      title: AppTexts.flutterDevTitle,
+      description: AppTexts.flutterDevDesc,
       delay: 200,
     ),
     FeatureCard(
       icon: Icons.code,
-      title: 'React Developer',
-      description:
-          'Creating dynamic and responsive web applications using React, with expertise in modern frontend frameworks and libraries.',
+      title: AppTexts.reactDevTitle,
+      description: AppTexts.reactDevDesc,
       delay: 400,
     ),
     FeatureCard(
       icon: Icons.palette,
-      title: 'UI/UX Focus',
-      description:
-          'Passionate about creating intuitive, pixel-perfect interfaces with attention to detail, smooth animations, and excellent user experience.',
+      title: AppTexts.uiuxTitle,
+      description: AppTexts.uiuxDesc,
       delay: 600,
     ),
   ];

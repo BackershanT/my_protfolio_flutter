@@ -7,11 +7,20 @@ import 'features/shared/presentation/home_page.dart';
 import 'features/shared/config/firebase_options.dart';
 
 import 'package:my_protfolio/features/shared/core/providers/cursor_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -33,8 +42,11 @@ class MyApp extends StatelessWidget {
             builder: (context, child) {
               return MaterialApp(
                 title: 'Backer Shan - Portfolio',
-                theme: AppTheme.lightTheme,
-                darkTheme: AppTheme.darkTheme,
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                theme: AppTheme.getTheme(context, false),
+                darkTheme: AppTheme.getTheme(context, true),
                 themeMode: themeProvider.themeMode,
                 debugShowCheckedModeBanner: false,
                 home: const HomePage(),

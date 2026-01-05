@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
@@ -324,10 +325,10 @@ class _CertificationsSectionState extends State<CertificationsSection> {
                       ),
                     ],
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
-                      'View Credential',
-                      style: TextStyle(
+                      'viewCredential'.tr(),
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Color(

@@ -1,60 +1,67 @@
+import 'package:easy_localization/easy_localization.dart';
+
 class AppTexts {
   // Hero section
-  static const String heroName = 'Backershan T';
-  static const List<String> heroRoles = [
-    'Software Developer',
-    'Frontend Developer',
-    'Flutter Specialist',
-    'React Developer',
-    'UI/UX Enthusiast',
-  ];
-  static const String heroDescription =
-      'Flutter Engineer with strong frontend expertise in Flutter and React, focused on building scalable, high-performance mobile and web applications. Experienced in delivering clean, responsive user interfaces backed by robust state management, API integration, and well-structured architecture for E-commerce, SaaS, and real-time systems across diverse business requirements.';
-  static const String resumeButtonText = 'Download Resume';
+  static String get heroName => 'heroName'.tr();
+  static List<String> get heroRoles => 'heroRoles'.tr().split(',');
+  // Note: I'll update the JSON to use a comma-separated string or just handle it differently.
+  // Actually easy_localization has trList but it's easier to just use a key that returns a list if we use it correctly.
+  // Wait, easy_localization's .tr() returns a string.
+
+  static String get heroDescription => 'heroDescription'.tr();
+  static String get resumeButtonText => 'resumeButtonText'.tr();
+  static String get viewProjects => 'viewProjects'.tr();
 
   // About section
-  static const String aboutTitle = 'About Me';
-  static const String aboutDescription =
-      'Flutter Engineer with strong frontend expertise in Flutter and React, focused on building scalable, high-performance mobile and web applications. Experienced in developing cross-platform solutions using clean architecture, robust state management, and efficient API integration for real-world business use cases, with an emphasis on maintainability, performance, and reliability across mobile, web, and desktop platforms.';
+  static String get aboutTitle => 'aboutTitle'.tr();
+  static String get aboutDescription => 'aboutDescription'.tr();
+  static String get flutterDevTitle => 'flutterDevTitle'.tr();
+  static String get flutterDevDesc => 'flutterDevDesc'.tr();
+  static String get reactDevTitle => 'reactDevTitle'.tr();
+  static String get reactDevDesc => 'reactDevDesc'.tr();
+  static String get uiuxTitle => 'uiuxTitle'.tr();
+  static String get uiuxDesc => 'uiuxDesc'.tr();
 
   // Skills section
-  static const String skillsTitle = 'Skills';
+  static String get skillsTitle => 'skillsTitle'.tr();
 
   // Technologies section
-  static const String technologiesTitle = 'Technologies';
+  static String get technologiesTitle => 'technologiesTitle'.tr();
+
+  // Experience section
+  static String get experienceTitle => 'experienceTitle'.tr();
 
   // Projects section
-  static const String projectsTitle = 'Projects';
-  static const String viewCode = 'View Code';
-  static const String liveDemo = 'Live Demo';
+  static String get projectsTitle => 'projectsTitle'.tr();
+  static String get viewCode => 'viewCode'.tr();
+  static String get liveDemo => 'liveDemo'.tr();
 
   // Certifications section
-  static const String certificationsTitle = 'Certifications';
+  static String get certificationsTitle => 'certificationsTitle'.tr();
 
   // Testimonials section
-  static const String testimonialsTitle = 'Testimonials';
+  static String get testimonialsTitle => 'testimonialsTitle'.tr();
 
   // Contact section
-  static const String contactTitle = 'Contact';
-  static const String contactDescription =
-      'Have a project in mind or want to discuss potential opportunities? Feel free to reach out! I\'m available for frontend development work, specializing in Flutter and React projects.';
-  static const String contactNameHint = 'Name';
-  static const String contactEmailHint = 'Email';
-  static const String contactMessageHint = 'Message';
-  static const String contactSendButton = 'Send Message';
+  static String get contactTitle => 'contactTitle'.tr();
+  static String get contactDescription => 'contactDescription'.tr();
+  static String get contactNameHint => 'contactNameHint'.tr();
+  static String get contactEmailHint => 'contactEmailHint'.tr();
+  static String get contactMessageHint => 'contactMessageHint'.tr();
+  static String get contactSendButton => 'contactSendButton'.tr();
 
   // Footer
-  static const String footerText = 'Built with Flutter 💙 Backershan T © 2025';
+  static String get footerText => 'footerText'.tr();
 
   // Navigation
-  static const String navHome = 'Home';
-  static const String navAbout = 'About';
-  static const String navTechnologies = 'Technologies';
-  static const String navSkills = 'Skills';
-  static const String navProjects = 'Projects';
-  static const String navProfiles = 'Profiles';
-  static const String navCertifications = 'Certifications';
-  static const String navBlog = 'Blog';
-  static const String navTestimonials = 'Testimonials';
-  static const String navContact = 'Contact';
+  static String get navHome => 'navHome'.tr();
+  static String get navAbout => 'navAbout'.tr();
+  static String get navTechnologies => 'navTechnologies'.tr();
+  static String get navSkills => 'navSkills'.tr();
+  static String get navProjects => 'navProjects'.tr();
+  static String get navProfiles => 'navProfiles'.tr();
+  static String get navCertifications => 'navCertifications'.tr();
+  static String get navBlog => 'navBlog'.tr();
+  static String get navTestimonials => 'navTestimonials'.tr();
+  static String get navContact => 'navContact'.tr();
 }
