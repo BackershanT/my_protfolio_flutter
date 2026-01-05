@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
 import 'package:my_protfolio/features/shared/presentation/section_title.dart';
 import 'package:my_protfolio/features/shared/data/models/github_stats_model.dart';
@@ -77,7 +79,7 @@ class _ProfilesSectionState extends State<ProfilesSection> {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 0),
-            child: const SectionTitle(title: 'Profiles'),
+            child: SectionTitle(title: AppTexts.navProfiles),
           ),
           const SizedBox(height: 60),
 
@@ -319,7 +321,7 @@ class _ProfilesSectionState extends State<ProfilesSection> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'View Profile',
+                        'viewProfile'.tr(),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: brandColor,
