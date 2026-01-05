@@ -114,7 +114,8 @@ class ProjectData {
       imageUrl: AppAssets.projectRigCalculator,
       screenshots: [AppAssets.projectRigCalculator],
       codeUrl: '',
-      demoUrl: '',
+      demoUrl:
+          'https://play.google.com/store/search?q=leo+rigging+calculator&c=apps&hl=en_IN',
       type: ProjectType.mobile,
       readmeFilePath:
           'assets/projects/leo_rigging_calculator/leo_rigging_calculator_readme.md',
@@ -129,7 +130,8 @@ class ProjectData {
       imageUrl: AppAssets.projectReachout,
       screenshots: [AppAssets.projectReachout],
       codeUrl: '',
-      demoUrl: '',
+      demoUrl:
+          'https://play.google.com/store/apps/details?id=in.reachout_mobile&hl=en_IN',
       type: ProjectType.mobile,
       readmeFilePath: 'assets/projects/reachout/reachout_readme.md',
     ),
@@ -225,7 +227,8 @@ class ProjectData {
         AppAssets.projectDorToDor24CartEmpty,
       ],
       codeUrl: '',
-      demoUrl: '',
+      demoUrl:
+          'https://play.google.com/store/apps/details?id=com.irshad.dortodor&hl=en_IN',
       type: ProjectType.mobile,
       readmeFilePath: 'assets/projects/dortodor24/door_to_door_readme.md',
     ),
