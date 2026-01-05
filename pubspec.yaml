@@ -82,7 +82,6 @@ flutter:
     - assets/projects/ychat/
     - assets/projects/mybus/
     - assets/projects/ck/
-    - assets/projects/
     - assets/projects/calculator/
     - assets/projects/ecommerce/
     - assets/projects/mahathma/
@@ -91,6 +90,13 @@ flutter:
     - assets/projects/yachii/
     - assets/projects/mygame/
     - assets/projects/dortodor24/
+    - assets/projects/leo_inspector/
+    - assets/projects/leo_inspector_admin/
+    - assets/projects/leo_rigging_calculator/
+    - assets/projects/reachout/
+    - assets/projects/calender/
+    - assets/projects/clan_logo/
+    - assets/projects/
 
 
 

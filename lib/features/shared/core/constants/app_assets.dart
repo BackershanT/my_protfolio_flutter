@@ -14,25 +14,31 @@ class AppAssets {
   static const String skillsXd = 'assets/skills/xd.png';
 
   // Project images
-  static const String projectReachout = 'assets/projects/reachout.png';
-  static const String projectMahathma = 'assets/projects/mahathma.png';
-  static const String projectInspector = 'assets/projects/leoinspector.png';
+  static const String projectReachout = 'assets/projects/reachout/reachout.png';
+  static const String projectMahathma = 'assets/projects/mahathma/mahathma.png';
+  static const String projectInspector =
+      'assets/projects/leo_inspector/leoinspector.png';
   static const String projectRigCalculator =
-      'assets/projects/leocalculator.png';
-  static const String projectMyGame = 'assets/projects/mygames.png';
-  static const String projectMyBus = 'assets/projects/mybus.png';
-  static const String projectCalculator = 'assets/projects/calculator.png';
-  static const String projectCalender = 'assets/projects/calender.png';
-  static const String projectNetflix = 'assets/projects/netflix.png';
-  static const String projectMovieApp = 'assets/projects/movieapp.png';
-  static const String projectYchat = 'assets/projects/ychat.jpeg';
-  static const String projectYachii = 'assets/projects/yachii.png';
-  static const String projectEcommerce = 'assets/projects/ecommerce.png';
-  static const String projectCkBeton = 'assets/projects/ckbeton.jpg';
-  static const String projectDorToDor24 = 'assets/projects/dor_to_dor24.png';
+      'assets/projects/leo_rigging_calculator/leocalculator.png';
+  static const String projectMyGame = 'assets/projects/mygame/mygames.png';
+  static const String projectMyBus = 'assets/projects/mybus/mybus.png';
+  static const String projectCalculator =
+      'assets/projects/calculator/calculator.png';
+  static const String projectCalender = 'assets/projects/calender/calender.png';
+  static const String projectNetflix = 'assets/projects/netflix/netflix.png';
+  static const String projectMovieApp =
+      'assets/projects/movie_app/movieapp.png';
+  static const String projectYchat = 'assets/projects/ychat/ychat.jpeg';
+  static const String projectYachii = 'assets/projects/yachii/yachii.png';
+  static const String projectEcommerce =
+      'assets/projects/ecommerce/ecommerce.png';
+  static const String projectCkBeton = 'assets/projects/ck/ckbeton.jpg';
+  static const String projectDorToDor24 =
+      'assets/projects/dortodor24/dor_to_dor24.png';
 
   // Additional project images
-  static const String projectClanLogo = 'assets/projects/clan_logo.png';
+  static const String projectClanLogo =
+      'assets/projects/clan_logo/clan_logo.png';
 
   // Ecommerce project images
   static const String projectEcommerce01 =
@@ -162,7 +168,7 @@ class AppAssets {
 
   // YChat Admin project images
   static const String projectYchatAdminBanner =
-      'assets/projects/ychat_admin/ychat-admin_banner.png';
+      'assets/projects/ychat_admin/ychat_admin_banner.png';
   static const String projectYchatAdmin02 =
       'assets/projects/ychat_admin/ychat_admin_2.png';
   static const String projectYchatAdminManagement =
@@ -247,11 +253,11 @@ class AppAssets {
   static const String projectCkBetonHome =
       'assets/projects/ck/ckbeton.bizonline.ae_.png';
   static const String projectCkBetonAbout =
-      'assets/projects/ck/ckbeton.bizonline.ae_about-us_.png';
+      'assets/projects/ck/ckbeton.bizonline.ae_about_us_.png';
   static const String projectCkBetonServices =
       'assets/projects/ck/ckbeton.bizonline.ae_services_.png';
   static const String projectCkBetonContact =
-      'assets/projects/ck/ckbeton.bizonline.ae_contact-us_.png';
+      'assets/projects/ck/ckbeton.bizonline.ae_contact_us_.png';
 
   // DorToDor24 project images
   static const String projectDorToDor24Cart =

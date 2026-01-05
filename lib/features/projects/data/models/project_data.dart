@@ -88,7 +88,8 @@ class ProjectData {
       codeUrl: '',
       demoUrl: '',
       type: ProjectType.mobile,
-      readmeFilePath: 'assets/projects/leo_inspector_admin_readme.md',
+      readmeFilePath:
+          'assets/projects/leo_inspector_admin/leo_inspector_admin_readme.md',
     ),
 
     Project(
@@ -102,7 +103,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: '',
       type: ProjectType.mobile,
-      readmeFilePath: 'assets/projects/leo_inspector_readme.md',
+      readmeFilePath: 'assets/projects/leo_inspector/leo_inspector_readme.md',
     ),
 
     Project(
@@ -115,7 +116,8 @@ class ProjectData {
       codeUrl: '',
       demoUrl: '',
       type: ProjectType.mobile,
-      readmeFilePath: 'assets/projects/leo_rigging_calculator_readme.md',
+      readmeFilePath:
+          'assets/projects/leo_rigging_calculator/leo_rigging_calculator_readme.md',
     ),
 
     Project(
@@ -129,6 +131,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: '',
       type: ProjectType.mobile,
+      readmeFilePath: 'assets/projects/reachout/reachout_readme.md',
     ),
 
     Project(
@@ -145,7 +148,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: '',
       type: ProjectType.mobile,
-      readmeFilePath: 'assets/projects/calculator_readme.md',
+      readmeFilePath: 'assets/projects/calculator/calculator_readme.md',
     ),
 
     Project(
@@ -164,7 +167,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: 'https://ckbeton.bizonline.ae',
       type: ProjectType.website,
-      readmeFilePath: 'assets/projects/ckbeton_readme.md',
+      readmeFilePath: 'assets/projects/ck/ckbeton_readme.md',
     ),
     Project(
       id: '9',
@@ -176,7 +179,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: 'https://mahathmavkdtests.netlify.app/',
       type: ProjectType.website,
-      readmeFilePath: 'assets/projects/mahathma_readme.md',
+      readmeFilePath: 'assets/projects/mahathma/mahathma_readme.md',
     ),
 
     Project(
@@ -199,7 +202,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: '',
       type: ProjectType.mobile,
-      readmeFilePath: 'assets/projects/my_games_readme.md',
+      readmeFilePath: 'assets/projects/mygame/my_games_readme.md',
     ),
 
     Project(
@@ -224,7 +227,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: '',
       type: ProjectType.mobile,
-      readmeFilePath: 'assets/projects/door_to_door_readme.md',
+      readmeFilePath: 'assets/projects/dortodor24/door_to_door_readme.md',
     ),
 
     Project(
@@ -237,7 +240,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: 'https://yachii.com/',
       type: ProjectType.website,
-      readmeFilePath: 'assets/projects/yachii_readme.md',
+      readmeFilePath: 'assets/projects/yachii/yachii_readme.md',
     ),
 
     Project(
@@ -259,7 +262,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: '',
       type: ProjectType.mobile,
-      readmeFilePath: 'assets/projects/my_bus_readme.md',
+      readmeFilePath: 'assets/projects/mybus/my_bus_readme.md',
     ),
 
     Project(
@@ -313,7 +316,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: '',
       type: ProjectType.mobile,
-      readmeFilePath: 'assets/projects/ychat_readme.md',
+      readmeFilePath: 'assets/projects/ychat/ychat_readme.md',
     ),
 
     Project(
@@ -341,7 +344,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: 'https://ychat-admin.netlify.app/#/login',
       type: ProjectType.website,
-      readmeFilePath: 'assets/projects/ychat_admin_readme.md',
+      readmeFilePath: 'assets/projects/ychat_admin/ychat_admin_readme.md',
     ),
 
     // E-commerce Platform Project
@@ -394,7 +397,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl: '',
       type: ProjectType.mobile,
-      readmeFilePath: 'assets/projects/ecommerce_platform_readme.md',
+      readmeFilePath: 'assets/projects/ecommerce/ecommerce_platform_readme.md',
     ),
   ];
 
