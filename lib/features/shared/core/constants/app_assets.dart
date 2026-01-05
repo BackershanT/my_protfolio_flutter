@@ -161,26 +161,34 @@ class AppAssets {
   static const String projectYchat39 = 'assets/projects/ychat/ychat039.png';
 
   // YChat Admin project images
-  static const String projectYchatAdmin01 =
-      'assets/projects/ychat_admin/ychat_admin01.png';
+  static const String projectYchatAdminBanner =
+      'assets/projects/ychat_admin/ychat-admin_banner.png';
   static const String projectYchatAdmin02 =
-      'assets/projects/ychat_admin/ychat_admin02.png';
-  static const String projectYchatAdmin03 =
-      'assets/projects/ychat_admin/ychat_admin03.png';
-  static const String projectYchatAdmin04 =
-      'assets/projects/ychat_admin/ychat_admin04.png';
-  static const String projectYchatAdmin05 =
-      'assets/projects/ychat_admin/ychat_admin05.png';
-  static const String projectYchatAdmin06 =
-      'assets/projects/ychat_admin/ychat_admin06.png';
-  static const String projectYchatAdmin07 =
-      'assets/projects/ychat_admin/ychat_admin07.png';
-  static const String projectYchatAdmin08 =
-      'assets/projects/ychat_admin/ychat_admin08.png';
-  static const String projectYchatAdmin09 =
-      'assets/projects/ychat_admin/ychat_admin09.png';
-  static const String projectYchatAdmin10 =
-      'assets/projects/ychat_admin/ychat_admin010.png';
+      'assets/projects/ychat_admin/ychat_admin_2.png';
+  static const String projectYchatAdminManagement =
+      'assets/projects/ychat_admin/ychat_admin_admin_management.png';
+  static const String projectYchatAdminAppsHome =
+      'assets/projects/ychat_admin/ychat_admin_appshome.png';
+  static const String projectYchatAdminAppsHomeDetails =
+      'assets/projects/ychat_admin/ychat_admin_appshome_details.png';
+  static const String projectYchatAdminForgetPassword =
+      'assets/projects/ychat_admin/ychat_admin_forget_password.png';
+  static const String projectYchatAdminHome =
+      'assets/projects/ychat_admin/ychat_admin_home.png';
+  static const String projectYchatAdminHome1 =
+      'assets/projects/ychat_admin/ychat_admin_home1.png';
+  static const String projectYchatAdminLogin =
+      'assets/projects/ychat_admin/ychat_admin_login.png';
+  static const String projectYchatAdminNotifications =
+      'assets/projects/ychat_admin/ychat_admin_notifications.png';
+  static const String projectYchatAdminSettings =
+      'assets/projects/ychat_admin/ychat_admin_settings.png';
+  static const String projectYchatAdminSignup =
+      'assets/projects/ychat_admin/ychat_admin_signup.png';
+  static const String projectYchatAdminTicketing =
+      'assets/projects/ychat_admin/ychat_admin_ticketing.png';
+  static const String projectYchatAdminUserManagement =
+      'assets/projects/ychat_admin/ychat_admin_user_management.png';
 
   // Mahathma project images
   static const String projectMahathma01 =
@@ -244,6 +252,28 @@ class AppAssets {
       'assets/projects/ck/ckbeton.bizonline.ae_services_.png';
   static const String projectCkBetonContact =
       'assets/projects/ck/ckbeton.bizonline.ae_contact-us_.png';
+
+  // DorToDor24 project images
+  static const String projectDorToDor24Cart =
+      'assets/projects/dortodor24/dor24_cart.png';
+  static const String projectDorToDor24CartEmpty =
+      'assets/projects/dortodor24/dor24_cartempty.png';
+  static const String projectDorToDor24Home =
+      'assets/projects/dortodor24/dor24_home.png';
+  static const String projectDorToDor24Language =
+      'assets/projects/dortodor24/dor24_language.png';
+  static const String projectDorToDor24Location =
+      'assets/projects/dortodor24/dor24_location.png';
+  static const String projectDorToDor24Login =
+      'assets/projects/dortodor24/dor24_login.png';
+  static const String projectDorToDor24Menu =
+      'assets/projects/dortodor24/dor24_menu.png';
+  static const String projectDorToDor24Product =
+      'assets/projects/dortodor24/dor24_product.png';
+  static const String projectDorToDor24Signup =
+      'assets/projects/dortodor24/dor24_signup.png';
+  static const String projectDorToDor24Splash =
+      'assets/projects/dortodor24/dor24_splash.png';
 
   // Profile and logo images
   static const String profileAvatar = 'assets/images/dp.png';

@@ -3,11 +3,48 @@ import 'package:my_protfolio/features/shared/data/models/project_model.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
 import 'package:my_protfolio/features/shared/presentation/footer_section.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:math';
 
-class ProjectDetailsPage extends StatelessWidget {
+class ProjectDetailsPage extends StatefulWidget {
   final Project project;
 
   const ProjectDetailsPage({super.key, required this.project});
+
+  @override
+  State<ProjectDetailsPage> createState() => _ProjectDetailsPageState();
+}
+
+class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
+  late int _visibleCount;
+  bool _isLoadingMore = false;
+  final int _batchSize = 10;
+
+  @override
+  void initState() {
+    super.initState();
+    _visibleCount = min(_batchSize, widget.project.screenshots.length);
+  }
+
+  Future<void> _loadMore() async {
+    if (_isLoadingMore) return;
+
+    setState(() {
+      _isLoadingMore = true;
+    });
+
+    // Simulate a brief loading delay for premium feel
+    await Future.delayed(const Duration(milliseconds: 800));
+
+    if (mounted) {
+      setState(() {
+        _visibleCount = min(
+          _visibleCount + _batchSize,
+          widget.project.screenshots.length,
+        );
+        _isLoadingMore = false;
+      });
+    }
+  }
 
   Future<void> _launchUrl(String url) async {
     final Uri uri = Uri.parse(url);
@@ -71,7 +108,7 @@ class ProjectDetailsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(project.title),
+        title: Text(widget.project.title),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
@@ -107,20 +144,27 @@ class ProjectDetailsPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // Project Avatar
-                                  if (project.imageUrl.isNotEmpty)
+                                  if (widget.project.imageUrl.isNotEmpty)
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(8),
                                       child: Image(
                                         image:
-                                            project.imageUrl.startsWith('http')
-                                            ? NetworkImage(project.imageUrl)
-                                            : AssetImage(project.imageUrl),
+                                            widget.project.imageUrl.startsWith(
+                                              'http',
+                                            )
+                                            ? NetworkImage(
+                                                widget.project.imageUrl,
+                                              )
+                                            : AssetImage(
+                                                widget.project.imageUrl,
+                                              ),
                                         width: 80,
                                         height: 80,
                                         fit: BoxFit.cover,
                                         loadingBuilder: (context, child, loadingProgress) {
-                                          if (loadingProgress == null)
+                                          if (loadingProgress == null) {
                                             return child;
+                                          }
                                           return Container(
                                             width: 80,
                                             height: 80,
@@ -174,8 +218,9 @@ class ProjectDetailsPage extends StatelessWidget {
                                               frame,
                                               wasSynchronouslyLoaded,
                                             ) {
-                                              if (wasSynchronouslyLoaded)
+                                              if (wasSynchronouslyLoaded) {
                                                 return child;
+                                              }
                                               return AnimatedOpacity(
                                                 opacity: frame == null ? 0 : 1,
                                                 duration: const Duration(
@@ -209,7 +254,7 @@ class ProjectDetailsPage extends StatelessWidget {
                                   // Project Title
                                   Expanded(
                                     child: Text(
-                                      project.title,
+                                      widget.project.title,
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineMedium
@@ -224,7 +269,7 @@ class ProjectDetailsPage extends StatelessWidget {
 
                               // Project Description
                               Text(
-                                project.description,
+                                widget.project.description,
                                 style: Theme.of(
                                   context,
                                 ).textTheme.bodyLarge?.copyWith(height: 1.6),
@@ -241,7 +286,9 @@ class ProjectDetailsPage extends StatelessWidget {
                               Wrap(
                                 spacing: 10,
                                 runSpacing: 10,
-                                children: project.technologies.map((tech) {
+                                children: widget.project.technologies.map((
+                                  tech,
+                                ) {
                                   return Container(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 16,
@@ -279,12 +326,12 @@ class ProjectDetailsPage extends StatelessWidget {
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 15),
-                              _buildReadmeSection(project, isDark),
+                              _buildReadmeSection(widget.project, isDark),
                               const SizedBox(height: 30),
 
                               // Links
-                              if (project.demoUrl != null &&
-                                  project.demoUrl!.isNotEmpty) ...[
+                              if (widget.project.demoUrl != null &&
+                                  widget.project.demoUrl!.isNotEmpty) ...[
                                 Text(
                                   'Links',
                                   style: Theme.of(context)
@@ -297,7 +344,7 @@ class ProjectDetailsPage extends StatelessWidget {
                                   width: double.infinity,
                                   child: ElevatedButton.icon(
                                     onPressed: () =>
-                                        _launchUrl(project.demoUrl!),
+                                        _launchUrl(widget.project.demoUrl!),
                                     icon: const Icon(Icons.open_in_new),
                                     label: const Text('View Demo'),
                                     style: ElevatedButton.styleFrom(
@@ -315,14 +362,14 @@ class ProjectDetailsPage extends StatelessWidget {
                                 ),
                               ],
 
-                              if (project.codeUrl != null &&
-                                  project.codeUrl!.isNotEmpty) ...[
+                              if (widget.project.codeUrl != null &&
+                                  widget.project.codeUrl!.isNotEmpty) ...[
                                 const SizedBox(height: 15),
                                 SizedBox(
                                   width: double.infinity,
                                   child: OutlinedButton.icon(
                                     onPressed: () =>
-                                        _launchUrl(project.codeUrl!),
+                                        _launchUrl(widget.project.codeUrl!),
                                     icon: const Icon(Icons.code),
                                     label: const Text('View Source Code'),
                                     style: OutlinedButton.styleFrom(
@@ -364,16 +411,12 @@ class ProjectDetailsPage extends StatelessWidget {
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 15),
-                              if (project.screenshots.isNotEmpty)
+                              if (widget.project.screenshots.isNotEmpty)
                                 Expanded(
-                                  child: project.type == ProjectType.website
+                                  child:
+                                      widget.project.type == ProjectType.website
                                       ? _buildScreenshotGallery(context)
-                                      : SizedBox(
-                                          height: double.infinity,
-                                          child: _buildScreenshotGallery(
-                                            context,
-                                          ),
-                                        ),
+                                      : _buildScreenshotGallery(context),
                                 )
                               else
                                 Expanded(
@@ -422,13 +465,14 @@ class ProjectDetailsPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Project Avatar
-                            if (project.imageUrl.isNotEmpty)
+                            if (widget.project.imageUrl.isNotEmpty)
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
                                 child: Image(
-                                  image: project.imageUrl.startsWith('http')
-                                      ? NetworkImage(project.imageUrl)
-                                      : AssetImage(project.imageUrl),
+                                  image:
+                                      widget.project.imageUrl.startsWith('http')
+                                      ? NetworkImage(widget.project.imageUrl)
+                                      : AssetImage(widget.project.imageUrl),
                                   width: 80,
                                   height: 80,
                                   fit: BoxFit.cover,
@@ -523,7 +567,7 @@ class ProjectDetailsPage extends StatelessWidget {
                             // Project Title
                             Expanded(
                               child: Text(
-                                project.title,
+                                widget.project.title,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineMedium
@@ -536,7 +580,7 @@ class ProjectDetailsPage extends StatelessWidget {
 
                         // Project Description
                         Text(
-                          project.description,
+                          widget.project.description,
                           style: Theme.of(
                             context,
                           ).textTheme.bodyLarge?.copyWith(height: 1.6),
@@ -553,7 +597,7 @@ class ProjectDetailsPage extends StatelessWidget {
                         Wrap(
                           spacing: 10,
                           runSpacing: 10,
-                          children: project.technologies.map((tech) {
+                          children: widget.project.technologies.map((tech) {
                             return Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
@@ -587,7 +631,7 @@ class ProjectDetailsPage extends StatelessWidget {
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 15),
-                        if (project.screenshots.isNotEmpty)
+                        if (widget.project.screenshots.isNotEmpty)
                           // For websites, show with fixed height; for mobile apps, use horizontal carousel
                           SizedBox(
                             height: 300, // Fixed height for both types
@@ -623,12 +667,12 @@ class ProjectDetailsPage extends StatelessWidget {
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 15),
-                        _buildReadmeSection(project, isDark),
+                        _buildReadmeSection(widget.project, isDark),
                         const SizedBox(height: 30),
 
                         // Links
-                        if (project.demoUrl != null &&
-                            project.demoUrl!.isNotEmpty) ...[
+                        if (widget.project.demoUrl != null &&
+                            widget.project.demoUrl!.isNotEmpty) ...[
                           Text(
                             'Links',
                             style: Theme.of(context).textTheme.headlineSmall
@@ -638,7 +682,8 @@ class ProjectDetailsPage extends StatelessWidget {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton.icon(
-                              onPressed: () => _launchUrl(project.demoUrl!),
+                              onPressed: () =>
+                                  _launchUrl(widget.project.demoUrl!),
                               icon: const Icon(Icons.open_in_new),
                               label: const Text('View Demo'),
                               style: ElevatedButton.styleFrom(
@@ -656,13 +701,14 @@ class ProjectDetailsPage extends StatelessWidget {
                           ),
                         ],
 
-                        if (project.codeUrl != null &&
-                            project.codeUrl!.isNotEmpty) ...[
+                        if (widget.project.codeUrl != null &&
+                            widget.project.codeUrl!.isNotEmpty) ...[
                           const SizedBox(height: 15),
                           SizedBox(
                             width: double.infinity,
                             child: OutlinedButton.icon(
-                              onPressed: () => _launchUrl(project.codeUrl!),
+                              onPressed: () =>
+                                  _launchUrl(widget.project.codeUrl!),
                               icon: const Icon(Icons.code),
                               label: const Text('View Source Code'),
                               style: OutlinedButton.styleFrom(
@@ -701,19 +747,20 @@ class ProjectDetailsPage extends StatelessWidget {
 
   /// Builds the screenshot gallery with different display modes based on project type
   Widget _buildScreenshotGallery(BuildContext context) {
-    // Limit the number of screenshots to prevent performance issues
-    final int screenshotCount = project.screenshots.length > 10
-        ? 10
-        : project.screenshots.length;
+    final bool hasMore = _visibleCount < widget.project.screenshots.length;
 
-    // For websites, show screenshots with actual size
-    if (project.type == ProjectType.website) {
+    // For websites, show screenshots with actual size in a vertical list
+    if (widget.project.type == ProjectType.website) {
       return ListView.builder(
         scrollDirection: Axis.vertical,
-        itemCount: screenshotCount, // Limit screenshots for better performance
-        cacheExtent: 1000, // Cache widgets for better performance
-        physics: const BouncingScrollPhysics(), // Add smooth scrolling
+        itemCount: _visibleCount + (hasMore ? 1 : 0),
+        cacheExtent: 1000,
+        physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) {
+          if (index == _visibleCount) {
+            return _buildLoadMoreWidget();
+          }
+
           return Container(
             margin: const EdgeInsets.only(bottom: 20),
             decoration: BoxDecoration(
@@ -729,68 +776,18 @@ class ProjectDetailsPage extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image(
-                image: project.screenshots[index].startsWith('http')
-                    ? NetworkImage(project.screenshots[index])
-                    : AssetImage(project.screenshots[index]),
+                image: widget.project.screenshots[index].startsWith('http')
+                    ? NetworkImage(widget.project.screenshots[index])
+                    : AssetImage(widget.project.screenshots[index]),
                 fit: BoxFit.contain,
                 alignment: Alignment.center,
                 width: 600,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                        if (loadingProgress.expectedTotalBytes != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              '${(loadingProgress.cumulativeBytesLoaded / 1024).round()} KB / ${(loadingProgress.expectedTotalBytes! / 1024).round()} KB',
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ),
-                      ],
-                    ),
-                  );
+                  return _buildImageLoadingIndicator(loadingProgress);
                 },
                 errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: 200,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.broken_image,
-                          size: 50,
-                          color: Colors.grey,
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Failed to load image',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Force rebuild to retry loading
-                            (context as Element).reassemble();
-                          },
-                          child: const Text('Retry'),
-                        ),
-                      ],
-                    ),
-                  );
+                  return _buildImageErrorWidget(context);
                 },
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                   if (wasSynchronouslyLoaded) return child;
@@ -810,77 +807,31 @@ class ProjectDetailsPage extends StatelessWidget {
       // For mobile apps, show horizontal scrolling carousel
       return ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: screenshotCount, // Limit screenshots for better performance
-        cacheExtent: 1000, // Cache widgets for better performance
-        physics: const BouncingScrollPhysics(), // Add smooth scrolling
+        itemCount: _visibleCount + (hasMore ? 1 : 0),
+        cacheExtent: 1000,
+        physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) {
+          if (index == _visibleCount) {
+            return _buildLoadMoreWidget(isHorizontal: true);
+          }
+
           return Container(
             width: 300,
             margin: const EdgeInsets.only(right: 15),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image(
-                image: project.screenshots[index].startsWith('http')
-                    ? NetworkImage(project.screenshots[index])
-                    : AssetImage(project.screenshots[index]),
+                image: widget.project.screenshots[index].startsWith('http')
+                    ? NetworkImage(widget.project.screenshots[index])
+                    : AssetImage(widget.project.screenshots[index]),
                 fit: BoxFit.cover,
                 width: 300,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                        if (loadingProgress.expectedTotalBytes != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              '${(loadingProgress.cumulativeBytesLoaded / 1024).round()} KB / ${(loadingProgress.expectedTotalBytes! / 1024).round()} KB',
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ),
-                      ],
-                    ),
-                  );
+                  return _buildImageLoadingIndicator(loadingProgress);
                 },
                 errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: 200,
-                    width: 300,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.broken_image,
-                          size: 50,
-                          color: Colors.grey,
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Failed to load image',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Force rebuild to retry loading
-                            (context as Element).reassemble();
-                          },
-                          child: const Text('Retry'),
-                        ),
-                      ],
-                    ),
-                  );
+                  return _buildImageErrorWidget(context, width: 300);
                 },
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                   if (wasSynchronouslyLoaded) return child;
@@ -897,5 +848,83 @@ class ProjectDetailsPage extends StatelessWidget {
         },
       );
     }
+  }
+
+  Widget _buildLoadMoreWidget({bool isHorizontal = false}) {
+    // Trigger load more automatically when this widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_isLoadingMore) {
+        _loadMore();
+      }
+    });
+
+    return Container(
+      width: isHorizontal ? 120 : double.infinity,
+      height: isHorizontal ? double.infinity : 100,
+      margin: EdgeInsets.only(
+        right: isHorizontal ? 15 : 0,
+        bottom: isHorizontal ? 0 : 20,
+      ),
+      child: const Center(
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImageLoadingIndicator(ImageChunkEvent loadingProgress) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(
+            value: loadingProgress.expectedTotalBytes != null
+                ? loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes!
+                : null,
+          ),
+          if (loadingProgress.expectedTotalBytes != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                '${(loadingProgress.cumulativeBytesLoaded / 1024).round()} KB / ${(loadingProgress.expectedTotalBytes! / 1024).round()} KB',
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildImageErrorWidget(BuildContext context, {double? width}) {
+    return Container(
+      height: 200,
+      width: width ?? double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+          const SizedBox(height: 10),
+          const Text(
+            'Failed to load image',
+            style: TextStyle(color: Colors.grey),
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              (context as Element).reassemble();
+            },
+            child: const Text('Retry'),
+          ),
+        ],
+      ),
+    );
   }
 }
