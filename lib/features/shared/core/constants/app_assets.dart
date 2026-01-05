@@ -283,7 +283,7 @@ class AppAssets {
       'assets/projects/dortodor24/dor24_splash.png';
 
   // Profile and logo images
-  static const String profileAvatar = 'assets/images/dp.png';
+  static const String profileAvatar = 'assets/images/dp.jpeg';
   static const String favLogo = 'assets/images/logo.png';
   static const String resume = 'assets/resume/BACKERSHAN T.pdf';
 
