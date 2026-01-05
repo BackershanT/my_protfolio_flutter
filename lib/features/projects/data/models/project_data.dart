@@ -139,7 +139,7 @@ class ProjectData {
     Project(
       id: '7',
       title: 'Calculator',
-      description: 'Calculator App built with Flutter.',
+      description: 'A fast, lightweight Calculator App built using Flutter, combining both Simple and Scientific calculation modes in a single application. The app is designed with a clean UI, smooth interactions, and accurate mathematical operations.',
       technologies: ['Flutter', 'stateManagement'],
       imageUrl: AppAssets.projectCalculator,
       screenshots: [
@@ -325,7 +325,7 @@ class ProjectData {
     Project(
       id: '15',
       title: 'YChat Admin',
-      description: 'Admin App for YChat App',
+      description: 'The YChat Admin App is a dedicated administration and moderation panel built to manage and control the YChat messaging platform. It enables administrators to monitor users, enforce policies, and maintain platform integrity through real-time oversight and management tools.',
       technologies: ['flutter', 'firebase', 'RestApi'],
       imageUrl: AppAssets.projectYchat,
       screenshots: [
