@@ -18,6 +18,7 @@ import 'package:my_protfolio/features/shared/core/theme/app_theme.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_assets.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -154,89 +155,94 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Scaffold(
       endDrawer: _buildEndDrawer(),
       body: CustomCursor(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                NavBar(
-                  onNavTap: (index) {
-                    if (_hasCertifications) {
-                      if (index >= 6) {
-                        _scrollToSection(index + 1);
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 800),
+          switchInCurve: Curves.easeInQuad,
+          switchOutCurve: Curves.easeOutQuad,
+          child: Stack(
+            key: ValueKey(context.locale.languageCode),
+            children: [
+              Column(
+                children: [
+                  NavBar(
+                    onNavTap: (index) {
+                      if (_hasCertifications) {
+                        if (index >= 6) {
+                          _scrollToSection(index + 1);
+                        } else {
+                          _scrollToSection(index);
+                        }
                       } else {
                         _scrollToSection(index);
                       }
-                    } else {
-                      _scrollToSection(index);
-                    }
-                  },
-                  currentIndex: _hasCertifications
-                      ? (_currentIndex <= 5
-                            ? _currentIndex
-                            : (_currentIndex == 6 ? 5 : _currentIndex - 1))
-                      : _currentIndex,
-                ).withCursorHover(context),
-
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    child: Column(
-                      children: [
-                        HeroSection(
-                          key: _sectionKeys[0],
-                          onViewProjects: () => _scrollToSection(4),
-                        ),
-                        AboutSection(key: _sectionKeys[1]),
-                        SkillsSection(key: _sectionKeys[2]),
-                        TechnologiesSection(key: _sectionKeys[3]),
-                        ProjectsSection(key: _sectionKeys[4]),
-                        ProfilesSection(key: _sectionKeys[5]),
-                        if (_hasCertifications)
-                          CertificationsSection(key: _sectionKeys[6]),
-                        TestimonialsSection(
-                          key: _sectionKeys[_hasCertifications ? 7 : 6],
-                        ),
-                        BlogSection(
-                          key: _sectionKeys[_hasCertifications ? 8 : 7],
-                        ),
-                        ContactSection(
-                          key: _sectionKeys[_hasCertifications ? 9 : 8],
-                        ),
-                        const FooterSection(),
-                      ],
+                    },
+                    currentIndex: _hasCertifications
+                        ? (_currentIndex <= 5
+                              ? _currentIndex
+                              : (_currentIndex == 6 ? 5 : _currentIndex - 1))
+                        : _currentIndex,
+                  ).withCursorHover(context),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Column(
+                        children: [
+                          HeroSection(
+                            key: _sectionKeys[0],
+                            onViewProjects: () => _scrollToSection(4),
+                          ),
+                          AboutSection(key: _sectionKeys[1]),
+                          SkillsSection(key: _sectionKeys[2]),
+                          TechnologiesSection(key: _sectionKeys[3]),
+                          ProjectsSection(key: _sectionKeys[4]),
+                          ProfilesSection(key: _sectionKeys[5]),
+                          if (_hasCertifications)
+                            CertificationsSection(key: _sectionKeys[6]),
+                          TestimonialsSection(
+                            key: _sectionKeys[_hasCertifications ? 7 : 6],
+                          ),
+                          BlogSection(
+                            key: _sectionKeys[_hasCertifications ? 8 : 7],
+                          ),
+                          ContactSection(
+                            key: _sectionKeys[_hasCertifications ? 9 : 8],
+                          ),
+                          const FooterSection(),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            // Light bulb pull chain mechanism
-            Positioned(top: 100, right: 20, child: _buildLightBulbChain()),
-            // Scroll to top button
-            if (_showScrollToTop)
-              Positioned(
-                bottom: 30,
-                right: 30,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    _scrollController.animateTo(
-                      0,
-                      duration: const Duration(milliseconds: 800),
-                      curve: Curves.easeInOut,
-                    );
-                  },
-                  backgroundColor:
-                      Theme.of(context).brightness == Brightness.dark
-                      ? AppColors.primaryLight
-                      : AppColors.primaryDark,
-                  child: Icon(
-                    Icons.arrow_upward,
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? AppColors.darkBackground
-                        : Colors.white,
-                  ),
-                ).withCursorHover(context),
+                ],
               ),
-          ],
+              // Light bulb pull chain mechanism
+              Positioned(top: 100, right: 20, child: _buildLightBulbChain()),
+              // Scroll to top button
+              if (_showScrollToTop)
+                Positioned(
+                  bottom: 30,
+                  right: 30,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      _scrollController.animateTo(
+                        0,
+                        duration: const Duration(milliseconds: 800),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    backgroundColor:
+                        Theme.of(context).brightness == Brightness.dark
+                        ? AppColors.primaryLight
+                        : AppColors.primaryDark,
+                    child: Icon(
+                      Icons.arrow_upward,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.darkBackground
+                          : Colors.white,
+                    ),
+                  ).withCursorHover(context),
+                ),
+            ],
+          ),
         ),
       ),
     );

@@ -49,22 +49,97 @@ class _NavBarState extends State<NavBar> {
                     currentIndex: widget.currentIndex,
                   ),
                 const SizedBox(width: 10),
-                // Language Toggle Icon
-                IconButton(
-                  icon: const Icon(Icons.language),
-                  tooltip: context.locale.languageCode == 'en'
-                      ? 'Switch to Arabic'
-                      : 'التغيير إلى الإنجليزية',
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? AppColors.primaryLight
-                      : AppColors.primaryDark,
-                  onPressed: () {
-                    if (context.locale.languageCode == 'en') {
-                      context.setLocale(const Locale('ar'));
-                    } else {
-                      context.setLocale(const Locale('en'));
+                // Premium Language Selection Box
+                PopupMenuButton<Locale>(
+                  icon: Icon(
+                    Icons.language,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColors.primaryLight
+                        : AppColors.primaryDark,
+                  ),
+                  tooltip: 'Change Language',
+                  offset: const Offset(0, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  color: Theme.of(context).cardColor,
+                  onSelected: (Locale locale) {
+                    if (context.locale != locale) {
+                      context.setLocale(locale);
                     }
                   },
+                  itemBuilder: (BuildContext context) => [
+                    PopupMenuItem(
+                      value: const Locale('en'),
+                      child: Row(
+                        children: [
+                          const Text('🇺🇸', style: TextStyle(fontSize: 20)),
+                          const SizedBox(width: 12),
+                          Text(
+                            'English',
+                            style: TextStyle(
+                              color: context.locale.languageCode == 'en'
+                                  ? (Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? AppColors.primaryLight
+                                        : AppColors.primaryDark)
+                                  : null,
+                              fontWeight: context.locale.languageCode == 'en'
+                                  ? FontWeight.bold
+                                  : null,
+                            ),
+                          ),
+                          if (context.locale.languageCode == 'en') ...[
+                            const Spacer(),
+                            Icon(
+                              Icons.check,
+                              size: 18,
+                              color:
+                                  Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? AppColors.primaryLight
+                                  : AppColors.primaryDark,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: const Locale('ar'),
+                      child: Row(
+                        children: [
+                          const Text('🇸🇦', style: TextStyle(fontSize: 20)),
+                          const SizedBox(width: 12),
+                          Text(
+                            'العربية',
+                            style: TextStyle(
+                              color: context.locale.languageCode == 'ar'
+                                  ? (Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? AppColors.primaryLight
+                                        : AppColors.primaryDark)
+                                  : null,
+                              fontWeight: context.locale.languageCode == 'ar'
+                                  ? FontWeight.bold
+                                  : null,
+                            ),
+                          ),
+                          if (context.locale.languageCode == 'ar') ...[
+                            const Spacer(),
+                            Icon(
+                              Icons.check,
+                              size: 18,
+                              color:
+                                  Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? AppColors.primaryLight
+                                  : AppColors.primaryDark,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 if (!Responsive.isDesktop(context))
                   IconButton(

@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/github_stats_model.dart';
 
+import '../../core/config/stats_config.dart';
+
 class GithubService {
   static const String _baseUrl = 'https://api.github.com/users';
   final String username;
 
-  GithubService(this.username);
+  GithubService([String? name]) : username = name ?? StatsConfig.githubUsername;
 
   Future<GithubStats> fetchStats() async {
     try {

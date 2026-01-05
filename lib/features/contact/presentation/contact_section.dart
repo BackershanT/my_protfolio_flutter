@@ -49,8 +49,8 @@ class _ContactSectionState extends State<ContactSection> {
         // Show success message
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Message sent successfully!'),
+            SnackBar(
+              content: Text(AppTexts.contactSuccessMessage),
               backgroundColor: Colors.green,
             ),
           );
@@ -180,7 +180,7 @@ class _ContactSectionState extends State<ContactSection> {
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your name';
+                return AppTexts.contactNameError;
               }
               return null;
             },
@@ -205,10 +205,10 @@ class _ContactSectionState extends State<ContactSection> {
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your email';
+                return AppTexts.contactEmailError;
               }
               if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                return 'Please enter a valid email';
+                return AppTexts.contactInvalidEmailError;
               }
               return null;
             },
@@ -235,7 +235,7 @@ class _ContactSectionState extends State<ContactSection> {
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your message';
+                return AppTexts.contactMessageError;
               }
               return null;
             },
@@ -271,7 +271,7 @@ class _ContactSectionState extends State<ContactSection> {
       SocialLink(
         icon: FontAwesomeIcons.linkedin,
         color: AppColors.linkedIn,
-        url: 'https://www.linkedin.com/in/backershan-t-166aa078/',
+        url: 'https://www.linkedin.com/in/backershan-t/',
       ),
       SocialLink(
         icon: FontAwesomeIcons.github,
@@ -290,7 +290,7 @@ class _ContactSectionState extends State<ContactSection> {
       children: [
         Center(
           child: Text(
-            'Connect with me:',
+            AppTexts.contactConnectWithMe,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
               fontSize: isMobile ? 18 : 20,

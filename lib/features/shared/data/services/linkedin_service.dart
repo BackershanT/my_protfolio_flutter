@@ -1,20 +1,19 @@
 import '../models/linkedin_stats_model.dart';
+import '../../core/config/stats_config.dart';
 
 class LinkedInService {
-  // Update these values whenever your LinkedIn profile grows!
-  static final LinkedInStats _mockStats = LinkedInStats(
-    username: 'Backershan T',
-    connections: '500+',
-    endorsements: '15+',
-    followers: '595',
-    headline:
-        'Flutter Developer | Sharing Real-World Flutter Performance & Architecture Insights | Mobile & Frontend',
-    profileImageUrl: 'https://www.linkedin.com/in/backershan-t/',
-  );
-
   Future<LinkedInStats> fetchStats() async {
-    // Simulate a network delay to match the GitHub service feel
+    // Note: Direct scraping of LinkedIn on Flutter Web is usually blocked by CORS.
+    // In a real-world production app, this would be fetched via a backend proxy/cloud function.
     await Future.delayed(const Duration(milliseconds: 800));
-    return _mockStats;
+
+    return LinkedInStats(
+      username: StatsConfig.linkedinName,
+      connections: StatsConfig.linkedinConnections,
+      endorsements: '',
+      followers: StatsConfig.linkedinFollowers,
+      headline: StatsConfig.linkedinHeadline,
+      profileImageUrl: StatsConfig.linkedinImage,
+    );
   }
 }

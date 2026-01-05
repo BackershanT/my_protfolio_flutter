@@ -211,7 +211,8 @@ class AppAssets {
       'assets/projects/netflix/netflix02.jpeg';
 
   // Yachii project images
-  static const String projectYachii01 = 'assets/projects/yachii/yachii.png';
+  static const String projectYachii01 =
+      'assets/projects/yachii/yachii_home.png';
 
   // Movie App project images
   static const String projectMovieApp01 =

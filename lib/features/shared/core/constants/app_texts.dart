@@ -49,6 +49,12 @@ class AppTexts {
   static String get contactEmailHint => 'contactEmailHint'.tr();
   static String get contactMessageHint => 'contactMessageHint'.tr();
   static String get contactSendButton => 'contactSendButton'.tr();
+  static String get contactSuccessMessage => 'contactSuccessMessage'.tr();
+  static String get contactConnectWithMe => 'contactConnectWithMe'.tr();
+  static String get contactNameError => 'contactNameError'.tr();
+  static String get contactEmailError => 'contactEmailError'.tr();
+  static String get contactInvalidEmailError => 'contactInvalidEmailError'.tr();
+  static String get contactMessageError => 'contactMessageError'.tr();
 
   // Footer
   static String get footerText => 'footerText'.tr();
