@@ -86,6 +86,7 @@ class ResponsiveNavigation extends StatelessWidget {
       AppTexts.navSkills,
       AppTexts.navTechnologies,
       AppTexts.navProjects,
+      AppTexts.navProfiles,
       AppTexts.navTestimonials,
       AppTexts.navBlog,
       AppTexts.navContact,

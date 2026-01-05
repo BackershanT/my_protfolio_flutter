@@ -52,6 +52,7 @@ class AppTexts {
   static const String navTechnologies = 'Technologies';
   static const String navSkills = 'Skills';
   static const String navProjects = 'Projects';
+  static const String navProfiles = 'Profiles';
   static const String navCertifications = 'Certifications';
   static const String navBlog = 'Blog';
   static const String navTestimonials = 'Testimonials';

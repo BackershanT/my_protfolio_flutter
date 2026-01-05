@@ -7,6 +7,7 @@ import 'package:my_protfolio/features/shared/presentation/section_title.dart';
 import 'package:my_protfolio/features/shared/data/models/project_model.dart';
 import 'package:my_protfolio/features/projects/data/models/project_data.dart';
 import 'package:my_protfolio/features/projects/presentation/project_details_page.dart';
+import 'package:my_protfolio/features/shared/presentation/custom_cursor.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math' as math;
 
@@ -20,13 +21,43 @@ class ProjectsSection extends StatefulWidget {
 class _ProjectsSectionState extends State<ProjectsSection>
     with SingleTickerProviderStateMixin {
   late ScrollController _scrollController;
-  late List<Project> _projects;
+  late List<Project> _allProjects;
+  late List<Project> _filteredProjects;
+  String _selectedCategory = 'All';
+
+  final List<String> _categories = ['All', 'Mobile', 'Web', 'Flutter', 'React'];
 
   @override
   void initState() {
     super.initState();
-    _projects = ProjectData.getAllProjects();
+    _allProjects = ProjectData.getAllProjects();
+    _filteredProjects = _allProjects;
     _scrollController = ScrollController();
+  }
+
+  void _filterProjects(String category) {
+    setState(() {
+      _selectedCategory = category;
+      if (category == 'All') {
+        _filteredProjects = _allProjects;
+      } else if (category == 'Mobile') {
+        _filteredProjects = _allProjects
+            .where((p) => p.type == ProjectType.mobile)
+            .toList();
+      } else if (category == 'Website') {
+        _filteredProjects = _allProjects
+            .where((p) => p.type == ProjectType.website)
+            .toList();
+      } else {
+        _filteredProjects = _allProjects
+            .where(
+              (p) => p.technologies.any(
+                (tech) => tech.toLowerCase() == category.toLowerCase(),
+              ),
+            )
+            .toList();
+      }
+    });
   }
 
   @override
@@ -42,6 +73,61 @@ class _ProjectsSectionState extends State<ProjectsSection>
     }
   }
 
+  Widget _buildFilterBar() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: _categories.map((category) {
+          final isSelected = _selectedCategory == category;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: InkWell(
+              onTap: () => _filterProjects(category),
+              borderRadius: BorderRadius.circular(25),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? AppColors.primaryLight
+                      : (isDark
+                            ? Colors.white.withOpacity(0.05)
+                            : Colors.black.withOpacity(0.05)),
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(
+                    color: isSelected
+                        ? AppColors.primaryLight
+                        : (isDark
+                              ? Colors.white.withOpacity(0.1)
+                              : Colors.black.withOpacity(0.1)),
+                  ),
+                ),
+                child: Text(
+                  category,
+                  style: TextStyle(
+                    color: isSelected
+                        ? const Color(0xFF0A192F)
+                        : (isDark ? Colors.white70 : Colors.black87),
+                    fontWeight: isSelected
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                  ),
+                ),
+              ),
+            ).withCursorHover(context),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,7 +141,9 @@ class _ProjectsSectionState extends State<ProjectsSection>
       child: Column(
         children: [
           SectionTitle(title: AppTexts.projectsTitle),
-          SizedBox(height: MediaQuery.of(context).size.width < 850 ? 40 : 50),
+          const SizedBox(height: 30),
+          _buildFilterBar(),
+          SizedBox(height: MediaQuery.of(context).size.width < 850 ? 30 : 40),
           Responsive(
             mobile: _buildMobileLayout(context),
             desktop: _buildDesktopLayout(context),
@@ -81,6 +169,21 @@ class _ProjectsSectionState extends State<ProjectsSection>
     final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = screenWidth >= 850 && screenWidth < 1200;
 
+    if (_filteredProjects.isEmpty) {
+      return SizedBox(
+        height: 200,
+        child: Center(
+          child: Text(
+            'No projects found in this category.',
+            style: TextStyle(
+              color: isDark ? Colors.white70 : Colors.black54,
+              fontSize: 16,
+            ),
+          ),
+        ),
+      );
+    }
+
     return Column(
       children: [
         // Project counter aligned to the right side
@@ -88,16 +191,17 @@ class _ProjectsSectionState extends State<ProjectsSection>
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              '1/${_projects.length}',
+              '${_filteredProjects.length} Projects',
               style: TextStyle(
-                fontSize: isMobile ? 16 : 18,
-                fontWeight: FontWeight.bold,
-                color: isDark ? AppColors.primaryLight : AppColors.primaryDark,
+                fontSize: isMobile ? 14 : 16,
+                fontWeight: FontWeight.w500,
+                color: (isDark ? AppColors.primaryLight : AppColors.primaryDark)
+                    .withOpacity(0.7),
               ),
             ),
           ],
         ),
-        SizedBox(height: isMobile ? 20 : 30),
+        SizedBox(height: isMobile ? 15 : 20),
         // Horizontal scrollable list
         SizedBox(
           height: isMobile ? 500 : 550,
@@ -110,20 +214,24 @@ class _ProjectsSectionState extends State<ProjectsSection>
                 horizontal: isMobile ? 10 : 30,
                 vertical: isMobile ? 10 : 20,
               ),
-              itemCount: _projects.length,
+              itemCount: _filteredProjects.length,
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     right: 20, // Space between cards
                   ),
-                  child: _buildProjectCard(
-                    context,
-                    _projects[index],
-                    index,
-                    isMobile: isMobile,
-                    isTablet: isTablet,
-                    isDark: isDark,
-                  ),
+                  child:
+                      _buildProjectCard(
+                            context,
+                            _filteredProjects[index],
+                            index,
+                            isMobile: isMobile,
+                            isTablet: isTablet,
+                            isDark: isDark,
+                          )
+                          .animate()
+                          .fadeIn(duration: 400.ms, delay: (index * 100).ms)
+                          .slideX(begin: 0.1, end: 0),
                 );
               },
             ),
@@ -311,7 +419,7 @@ class _ProjectsSectionState extends State<ProjectsSection>
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
+                  ).withCursorHover(context),
                 ),
               ],
             ),

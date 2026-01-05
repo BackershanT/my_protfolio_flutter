@@ -6,13 +6,10 @@ import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
 import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_assets.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:html' as html show AnchorElement;
-import 'dart:typed_data';
-import 'dart:io' show Platform, File;
+import 'dart:math';
 
 class HeroSection extends StatefulWidget {
   final VoidCallback? onViewProjects;
@@ -24,10 +21,11 @@ class HeroSection extends StatefulWidget {
 }
 
 class _HeroSectionState extends State<HeroSection>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _animation;
+  late AnimationController _floatingController;
   int _currentIndex = 0;
+  Offset _mousePosition = Offset.zero;
 
   @override
   void initState() {
@@ -36,8 +34,13 @@ class _HeroSectionState extends State<HeroSection>
       duration: const Duration(seconds: 2),
       vsync: this,
     );
-    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
     _controller.repeat(reverse: true);
+
+    _floatingController = AnimationController(
+      duration: const Duration(seconds: 10),
+      vsync: this,
+    );
+    _floatingController.repeat();
 
     // Start the role rotation
     Future.delayed(const Duration(seconds: 3), _rotateRole);
@@ -55,6 +58,7 @@ class _HeroSectionState extends State<HeroSection>
   @override
   void dispose() {
     _controller.dispose();
+    _floatingController.dispose();
     super.dispose();
   }
 
@@ -129,15 +133,42 @@ class _HeroSectionState extends State<HeroSection>
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: screenWidth < 850 ? 20 : (screenWidth < 1200 ? 40 : 100),
-        vertical: screenWidth < 850 ? 60 : 100,
-      ),
-      child: Responsive(
-        mobile: _buildMobileLayout(),
-        desktop: _buildDesktopLayout(),
+    return MouseRegion(
+      onHover: (event) {
+        setState(() {
+          _mousePosition = event.localPosition;
+        });
+      },
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: AnimatedBuilder(
+              animation: _floatingController,
+              builder: (context, child) {
+                return CustomPaint(
+                  painter: BlobPainter(
+                    mousePosition: _mousePosition,
+                    animationValue: _floatingController.value,
+                    isDark: Theme.of(context).brightness == Brightness.dark,
+                  ),
+                );
+              },
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth < 850
+                  ? 20
+                  : (screenWidth < 1200 ? 40 : 100),
+              vertical: screenWidth < 850 ? 60 : 100,
+            ),
+            child: Responsive(
+              mobile: _buildMobileLayout(),
+              desktop: _buildDesktopLayout(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -370,4 +401,60 @@ class _HeroSectionState extends State<HeroSection>
       ],
     );
   }
+}
+
+class BlobPainter extends CustomPainter {
+  final Offset mousePosition;
+  final double animationValue;
+  final bool isDark;
+
+  BlobPainter({
+    required this.mousePosition,
+    required this.animationValue,
+    required this.isDark,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 100);
+
+    // Blob 1 - Top Left
+    final blob1Center = Offset(
+      size.width * 0.2 + (mousePosition.dx - size.width / 2) * 0.05,
+      size.height * 0.3 + (mousePosition.dy - size.height / 2) * 0.05,
+    );
+    paint.color = (isDark ? AppColors.primaryLight : AppColors.primaryDark)
+        .withOpacity(isDark ? 0.08 : 0.05);
+    canvas.drawCircle(
+      blob1Center,
+      200 + sin(animationValue * 2 * pi) * 20,
+      paint,
+    );
+
+    // Blob 2 - Bottom Right
+    final blob2Center = Offset(
+      size.width * 0.8 + (mousePosition.dx - size.width / 2) * 0.03,
+      size.height * 0.7 + (mousePosition.dy - size.height / 2) * 0.03,
+    );
+    paint.color = (isDark ? Colors.purple : Colors.blue).withOpacity(
+      isDark ? 0.05 : 0.03,
+    );
+    canvas.drawCircle(
+      blob2Center,
+      250 + cos(animationValue * 2 * pi) * 30,
+      paint,
+    );
+
+    // Blob 3 - Center Right
+    final blob3Center = Offset(
+      size.width * 0.9 + (mousePosition.dx - size.width / 2) * 0.02,
+      size.height * 0.2 + (mousePosition.dy - size.height / 2) * 0.02,
+    );
+    paint.color = AppColors.primaryLight.withOpacity(isDark ? 0.06 : 0.04);
+    canvas.drawCircle(blob3Center, 150 + sin(animationValue * pi) * 40, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant BlobPainter oldDelegate) => true;
 }

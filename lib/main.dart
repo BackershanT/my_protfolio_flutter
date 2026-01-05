@@ -6,6 +6,8 @@ import 'features/shared/core/theme/app_theme.dart';
 import 'features/shared/presentation/home_page.dart';
 import 'features/shared/config/firebase_options.dart';
 
+import 'package:my_protfolio/features/shared/core/providers/cursor_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -17,12 +19,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => CursorProvider()),
+      ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {
           return ScreenUtilInit(
-            designSize: const Size(375, 812),
+            designSize: const Size(1920, 1080),
             minTextAdapt: true,
             splitScreenMode: true,
             builder: (context, child) {

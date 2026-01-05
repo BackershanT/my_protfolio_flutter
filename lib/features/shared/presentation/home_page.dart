@@ -10,6 +10,8 @@ import 'package:my_protfolio/features/shared/presentation/footer_section.dart';
 import 'package:my_protfolio/features/shared/presentation/nav_bar.dart';
 import 'package:my_protfolio/features/shared/presentation/testimonials_section.dart';
 import 'package:my_protfolio/features/shared/presentation/certifications_section.dart';
+import 'package:my_protfolio/features/shared/presentation/custom_cursor.dart';
+import 'package:my_protfolio/features/shared/presentation/profiles_section.dart';
 import 'package:my_protfolio/features/shared/data/models/certification_data.dart';
 import 'package:provider/provider.dart';
 import 'package:my_protfolio/features/shared/core/theme/app_theme.dart';
@@ -53,7 +55,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
     _hasCertifications = CertificationData.getAllCertifications().isNotEmpty;
     _sectionKeys = List.generate(
-      _hasCertifications ? 9 : 8,
+      _hasCertifications ? 10 : 9,
       (index) => GlobalKey(),
     );
     _scrollController.addListener(_scrollListener);
@@ -151,89 +153,91 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: _buildEndDrawer(),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              NavBar(
-                onNavTap: (index) {
-                  if (_hasCertifications) {
-                    // Logic when Certifications exist (it is skipped in Desktop NavBar)
-                    if (index >= 5) {
-                      _scrollToSection(index + 1);
+      body: CustomCursor(
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                NavBar(
+                  onNavTap: (index) {
+                    if (_hasCertifications) {
+                      if (index >= 6) {
+                        _scrollToSection(index + 1);
+                      } else {
+                        _scrollToSection(index);
+                      }
                     } else {
                       _scrollToSection(index);
                     }
-                  } else {
-                    // Simple mapping when Certifications are removed
-                    _scrollToSection(index);
-                  }
-                },
-                currentIndex: _hasCertifications
-                    ? (_currentIndex >= 5
-                          ? (_currentIndex == 5 ? 4 : _currentIndex - 1)
-                          : _currentIndex)
-                    : _currentIndex,
-              ),
+                  },
+                  currentIndex: _hasCertifications
+                      ? (_currentIndex <= 5
+                            ? _currentIndex
+                            : (_currentIndex == 6 ? 5 : _currentIndex - 1))
+                      : _currentIndex,
+                ).withCursorHover(context),
 
-              Expanded(
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(
-                    children: [
-                      HeroSection(
-                        key: _sectionKeys[0],
-                        onViewProjects: () => _scrollToSection(4),
-                      ),
-                      AboutSection(key: _sectionKeys[1]),
-                      SkillsSection(key: _sectionKeys[2]),
-                      TechnologiesSection(key: _sectionKeys[3]),
-                      ProjectsSection(key: _sectionKeys[4]),
-                      if (_hasCertifications)
-                        CertificationsSection(key: _sectionKeys[5]),
-                      TestimonialsSection(
-                        key: _sectionKeys[_hasCertifications ? 6 : 5],
-                      ),
-                      BlogSection(
-                        key: _sectionKeys[_hasCertifications ? 7 : 6],
-                      ),
-                      ContactSection(
-                        key: _sectionKeys[_hasCertifications ? 8 : 7],
-                      ),
-                      const FooterSection(),
-                    ],
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Column(
+                      children: [
+                        HeroSection(
+                          key: _sectionKeys[0],
+                          onViewProjects: () => _scrollToSection(4),
+                        ),
+                        AboutSection(key: _sectionKeys[1]),
+                        SkillsSection(key: _sectionKeys[2]),
+                        TechnologiesSection(key: _sectionKeys[3]),
+                        ProjectsSection(key: _sectionKeys[4]),
+                        ProfilesSection(key: _sectionKeys[5]),
+                        if (_hasCertifications)
+                          CertificationsSection(key: _sectionKeys[6]),
+                        TestimonialsSection(
+                          key: _sectionKeys[_hasCertifications ? 7 : 6],
+                        ),
+                        BlogSection(
+                          key: _sectionKeys[_hasCertifications ? 8 : 7],
+                        ),
+                        ContactSection(
+                          key: _sectionKeys[_hasCertifications ? 9 : 8],
+                        ),
+                        const FooterSection(),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          // Light bulb pull chain mechanism
-          Positioned(top: 100, right: 20, child: _buildLightBulbChain()),
-          // Scroll to top button
-          if (_showScrollToTop)
-            Positioned(
-              bottom: 30,
-              right: 30,
-              child: FloatingActionButton(
-                onPressed: () {
-                  _scrollController.animateTo(
-                    0,
-                    duration: const Duration(milliseconds: 800),
-                    curve: Curves.easeInOut,
-                  );
-                },
-                backgroundColor: Theme.of(context).brightness == Brightness.dark
-                    ? AppColors.primaryLight
-                    : AppColors.primaryDark,
-                child: Icon(
-                  Icons.arrow_upward,
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? AppColors.darkBackground
-                      : Colors.white,
-                ),
-              ),
+              ],
             ),
-        ],
+            // Light bulb pull chain mechanism
+            Positioned(top: 100, right: 20, child: _buildLightBulbChain()),
+            // Scroll to top button
+            if (_showScrollToTop)
+              Positioned(
+                bottom: 30,
+                right: 30,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    _scrollController.animateTo(
+                      0,
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  backgroundColor:
+                      Theme.of(context).brightness == Brightness.dark
+                      ? AppColors.primaryLight
+                      : AppColors.primaryDark,
+                  child: Icon(
+                    Icons.arrow_upward,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColors.darkBackground
+                        : Colors.white,
+                  ),
+                ).withCursorHover(context),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -245,6 +249,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       AppTexts.navSkills,
       AppTexts.navTechnologies,
       AppTexts.navProjects,
+      AppTexts.navProfiles,
       if (_hasCertifications) AppTexts.navCertifications,
       AppTexts.navTestimonials,
       AppTexts.navBlog,
