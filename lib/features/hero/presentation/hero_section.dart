@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:my_protfolio/features/hero/data/models/hero_data.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
@@ -8,8 +9,11 @@ import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_assets.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:html' as html show AnchorElement;
 import 'dart:math';
+import 'dart:typed_data';
+
+// Conditional imports for web vs non-web platforms
+import 'html_stub.dart' if (dart.library.html) 'dart:html' as html;
 
 class HeroSection extends StatefulWidget {
   final VoidCallback? onViewProjects;
@@ -65,12 +69,24 @@ class _HeroSectionState extends State<HeroSection>
   Future<void> _downloadResume() async {
     try {
       if (kIsWeb) {
-        // For web, we'll use the asset URL directly
-        final url = HeroData.getResumeUrl();
+        // For web, load the asset as bytes and create a blob URL
+        final assetPath = HeroData.getResumeUrl();
+        final ByteData data = await rootBundle.load(assetPath);
+        final Uint8List bytes = data.buffer.asUint8List();
+        
+        // Create a blob from the bytes
+        final blob = html.Blob([bytes]);
+        final url = html.Url.createObjectUrlFromBlob(blob);
+        
         // Create an anchor element to trigger download
         final anchor = html.AnchorElement(href: url);
         anchor.setAttribute('download', 'BACKERSHAN_T.pdf');
         anchor.click();
+        
+        // Clean up the object URL after a short delay
+        Future.delayed(const Duration(seconds: 1), () {
+          html.Url.revokeObjectUrl(url);
+        });
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
