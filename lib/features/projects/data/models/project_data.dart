@@ -402,6 +402,46 @@ class ProjectData {
       type: ProjectType.mobile,
       readmeFilePath: 'assets/projects/ecommerce/ecommerce_platform_readme.md',
     ),
+
+    Project(
+      id: '17',
+      title: 'Threads Admin',
+      description: 'A modern e-commerce admin dashboard built with React and TypeScript. Features include product management, order tracking, customer management, analytics, revenue monitoring, banners, and settings. The dashboard has a clean, responsive UI with sidebar navigation and comprehensive data visualization capabilities.',
+      technologies: ['React', 'TypeScript', 'Vite', 'TailwindCSS', 'Lucide React', 'React Router DOM'],
+      imageUrl: AppAssets.projectThreadsAdmin,
+      screenshots: [],
+      codeUrl: '',
+      demoUrl: '',
+      type: ProjectType.website,
+      readmeFilePath: 'assets/projects/threads/threads_admin_readme.md',
+    ),
+
+    Project(
+      id: '18',
+      title: 'Thread - Premium Fashion Clothing',
+      description: 'A modern e-commerce website built with Next.js 16 for selling premium women\'s fashion clothing. The application features a complete shopping experience with product browsing, 3D product visualization, shopping cart functionality, favorites system, user authentication, and integrated payment processing. It includes responsive design for mobile and desktop, category-based navigation, and various promotional sections like new arrivals, best sellers, and offers.',
+      technologies: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Zustand', 'React Three Fiber', 'React Three Drei', 'Framer Motion', 'Axios', 'Razorpay API'],
+      imageUrl: AppAssets.projectThreadsWebsite,
+      screenshots: [],
+      codeUrl: '',
+      demoUrl: '',
+      type: ProjectType.website,
+      readmeFilePath: 'assets/projects/threads/threads_website_readme.md',
+    ),
+
+    Project(
+      id: '19',
+      title: 'Threads Backend',
+      description: 'A backend API for a Threads clothing store built with Node.js and Express. The system handles user authentication, product management with variants (size, color, fabric), order processing, and payment integration with Razorpay. It includes both user-facing and admin functionalities with role-based access control.',
+      technologies: ['TypeScript', 'Node.js', 'Express', 'MongoDB', 'Mongoose', 'JWT', 'Bcrypt', 'Cors', 'Cloudinary', 'Razorpay', 'Dotenv'],
+      imageUrl: AppAssets.projectThreadsBackend,
+      screenshots: [],
+      codeUrl: '',
+      demoUrl: '',
+      type: ProjectType.website,
+      readmeFilePath: 'assets/projects/threads/threads_backend_readme.md',
+    ),
+
   ];
 
   static List<Project> getAllProjects() => List.from(projects.reversed);

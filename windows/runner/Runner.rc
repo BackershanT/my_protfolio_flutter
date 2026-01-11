@@ -93,7 +93,7 @@ BEGIN
             VALUE "FileDescription", "my_protfolio" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "my_protfolio" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "my_protfolio.exe" "\0"
             VALUE "ProductName", "my_protfolio" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"

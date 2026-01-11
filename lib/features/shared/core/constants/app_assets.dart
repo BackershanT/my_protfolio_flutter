@@ -36,6 +36,11 @@ class AppAssets {
   static const String projectDorToDor24 =
       'assets/projects/dortodor24/dor_to_dor24.png';
 
+  // Threads project images
+  static const String projectThreadsAdmin = 'assets/projects/threads/threads_admin.png';
+  static const String projectThreadsWebsite = 'assets/projects/threads/threads_website.png';
+  static const String projectThreadsBackend = 'assets/projects/threads/threads_backend.png';
+
   // Additional project images
   static const String projectClanLogo =
       'assets/projects/clan_logo/clan_logo.png';

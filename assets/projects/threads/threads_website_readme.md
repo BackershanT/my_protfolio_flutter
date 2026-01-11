@@ -1,0 +1,3 @@
+# Thread - Premium Fashion Clothing
+
+A modern e-commerce website built with Next.js 16 for selling premium women's fashion clothing. The application features a complete shopping experience with product browsing, 3D product visualization, shopping cart functionality, favorites system, user authentication, and integrated payment processing. It includes responsive design for mobile and desktop, category-based navigation, and various promotional sections like new arrivals, best sellers, and offers.

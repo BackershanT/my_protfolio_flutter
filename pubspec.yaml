@@ -97,6 +97,7 @@ flutter:
     - assets/projects/reachout/
     - assets/projects/calender/
     - assets/projects/clan_logo/
+    - assets/projects/threads/
     - assets/projects/
     - assets/resume/
     - assets/testimonial/

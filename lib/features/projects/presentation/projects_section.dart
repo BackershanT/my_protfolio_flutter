@@ -25,7 +25,7 @@ class _ProjectsSectionState extends State<ProjectsSection>
   late List<Project> _filteredProjects;
   String _selectedCategory = 'All';
 
-  final List<String> _categories = ['All', 'Mobile', 'Web', 'Flutter', 'React'];
+  final List<String> _categories = ['All', 'Mobile', 'Website', 'Flutter', 'React'];
 
   @override
   void initState() {
