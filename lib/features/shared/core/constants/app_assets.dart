@@ -12,6 +12,20 @@ class AppAssets {
   static const String skillsCss = 'assets/skills/css.png';
   static const String skillsFigma = 'assets/skills/figma.png';
   static const String skillsXd = 'assets/skills/xd.png';
+  static const String skillsExpressJs = 'assets/skills/expressjs.png';
+  static const String skillsMongoDb = 'assets/skills/mongo.png';
+  static const String skillsAws = 'assets/skills/aws.png';
+  static const String skillsMern = 'assets/skills/mern.png';
+  static const String skillsHive = 'assets/skills/hive.png';
+  static const String skillsFastlane = 'assets/skills/fastlane.png';
+  static const String skillsTailwind = 'assets/skills/tailwind.png';
+  static const String skillsVite = 'assets/skills/vite.png';
+  static const String skillsFlame = 'assets/skills/flame.png';
+
+
+
+
+
 
   // Project images
   static const String projectReachout = 'assets/projects/reachout/reachout.png';

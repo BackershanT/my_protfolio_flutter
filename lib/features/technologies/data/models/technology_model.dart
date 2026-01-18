@@ -58,13 +58,18 @@ class TechnologyData {
         color: Colors.black,
       ),
       TechnologyModel(
-        iconData: Icons.layers_rounded,
-        name: 'Provider',
+        assetPath: AppAssets.skillsHive,
+        name: 'Hive',
         color: Color(0xFF5E5CE6),
       ),
       TechnologyModel(
-        iconData: Icons.device_hub_rounded,
-        name: 'Riverpod',
+        assetPath: AppAssets.skillsFastlane,
+        name: 'Fastline',
+        color: Color(0xFF00A6ED),
+      ),
+       TechnologyModel(
+        assetPath: AppAssets.skillsFlame,
+        name: 'Flame',
         color: Color(0xFF00A6ED),
       ),
     ],
@@ -94,19 +99,57 @@ class TechnologyData {
         color: Color(0xFF764ABC),
       ),
       TechnologyModel(
-        iconData: Icons.palette,
-        name: 'Material UI',
+        assetPath: AppAssets.skillsVite,
+        name: 'Vite',
         color: Color(0xFF007FFF),
       ),
       TechnologyModel(
-        iconData: Icons.code_rounded,
-        name: 'TypeScript',
+        assetPath: AppAssets.skillsTailwind,
+        name: 'Tailwind.css',
         color: Color(0xFF3178C6),
       ),
     ],
   );
 
+  // static const mernSection = TechnologySection(
+  //   name: 'MERN Stack',
+  //   subtitle: 'Full-Stack JavaScript Development',
+  //   headline: 'Complete MERN ecosystem proficiency',
+  //   description:
+  //       'Building scalable full-stack web applications using the MERN stack (MongoDB, Express.js, React, Node.js). Expertise in RESTful APIs, database design, server-side rendering, authentication, and modern JavaScript/TypeScript development practices.',
+  //   centerAsset: AppAssets.skillsMern,
+  //   technologies: [
+  //     TechnologyModel(
+  //       assetPath: AppAssets.skillsMongoDb,
+  //       name: 'MongoDB',
+  //       color: Color(0xFF47A248),
+  //     ),
+  //     TechnologyModel(
+  //       assetPath: AppAssets.skillsExpressJs,
+  //       name: 'Express.js',
+  //       color: Colors.black,
+  //     ),
+  //     TechnologyModel(
+  //       assetPath: AppAssets.skillsReact,
+  //       name: 'React',
+  //       color: Color(0xFF61DAFB),
+  //     ),
+  //     TechnologyModel(
+  //       assetPath: AppAssets.skillsJavascript,
+  //       name: 'Node.js',
+  //       color: Color(0xFF339933),
+  //     ),
+  //     TechnologyModel(
+  //       assetPath: AppAssets.skillsAws,
+  //       name: 'AWS',
+  //       color: Color(0xFFFF6B35),
+  //     ),
+  //   ],
+  // );
+
   static List<TechnologySection> getAllSections() {
-    return [flutterSection, reactSection];
+    return [flutterSection, reactSection, 
+    // mernSection
+    ];
   }
 }

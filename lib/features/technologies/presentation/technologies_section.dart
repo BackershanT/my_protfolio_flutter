@@ -133,9 +133,12 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
       ),
     );
 
+    // Determine layout order: Flutter and MERN sections show icon on left, React shows text on left
+    final bool showIconOnLeft = isFirst || section.name.contains('MERN');
+    
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: isFirst
+      children: showIconOnLeft
           ? [iconWidget, SizedBox(width: spacing), textWidget]
           : [textWidget, SizedBox(width: spacing), iconWidget],
     );
