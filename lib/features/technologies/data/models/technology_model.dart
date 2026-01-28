@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_assets.dart';
+import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
 
 class TechnologyModel {
   final String? assetPath;
@@ -34,14 +35,13 @@ class TechnologySection {
 }
 
 class TechnologyData {
-  static const flutterSection = TechnologySection(
-    name: 'Flutter',
-    subtitle: 'Cross-Platform Development',
-    headline: 'Flutter & Dart ecosystem mastery',
-    description:
-        'Building beautiful, natively compiled applications for mobile, web, and desktop from a single codebase. Expert in Flutter widgets, state management (Provider, Riverpod, BLoC), animations, and Firebase integration.',
+  static TechnologySection get flutterSection => TechnologySection(
+    name: AppTexts.techFlutterName,
+    subtitle: AppTexts.techFlutterSubtitle,
+    headline: AppTexts.techFlutterHeadline,
+    description: AppTexts.techFlutterDescription,
     centerAsset: AppAssets.skillsFlutter,
-    technologies: [
+    technologies: const [
       TechnologyModel(
         assetPath: AppAssets.skillsFirebase,
         name: 'Firebase',
@@ -75,14 +75,13 @@ class TechnologyData {
     ],
   );
 
-  static const reactSection = TechnologySection(
-    name: 'React',
-    subtitle: 'Modern Web Development',
-    headline: 'React ecosystem expertise',
-    description:
-        'Creating dynamic and responsive web applications using React, with expertise in modern frontend frameworks and libraries. Proficient in React hooks, Redux state management, Next.js, and component-driven development.',
+  static TechnologySection get reactSection => TechnologySection(
+    name: AppTexts.techReactName,
+    subtitle: AppTexts.techReactSubtitle,
+    headline: AppTexts.techReactHeadline,
+    description: AppTexts.techReactDescription,
     centerAsset: AppAssets.skillsReact,
-    technologies: [
+    technologies: const [
       TechnologyModel(
         assetPath: AppAssets.skillsJavascript,
         name: 'JavaScript',
@@ -111,45 +110,42 @@ class TechnologyData {
     ],
   );
 
-  // static const mernSection = TechnologySection(
-  //   name: 'MERN Stack',
-  //   subtitle: 'Full-Stack JavaScript Development',
-  //   headline: 'Complete MERN ecosystem proficiency',
-  //   description:
-  //       'Building scalable full-stack web applications using the MERN stack (MongoDB, Express.js, React, Node.js). Expertise in RESTful APIs, database design, server-side rendering, authentication, and modern JavaScript/TypeScript development practices.',
-  //   centerAsset: AppAssets.skillsMern,
-  //   technologies: [
-  //     TechnologyModel(
-  //       assetPath: AppAssets.skillsMongoDb,
-  //       name: 'MongoDB',
-  //       color: Color(0xFF47A248),
-  //     ),
-  //     TechnologyModel(
-  //       assetPath: AppAssets.skillsExpressJs,
-  //       name: 'Express.js',
-  //       color: Colors.black,
-  //     ),
-  //     TechnologyModel(
-  //       assetPath: AppAssets.skillsReact,
-  //       name: 'React',
-  //       color: Color(0xFF61DAFB),
-  //     ),
-  //     TechnologyModel(
-  //       assetPath: AppAssets.skillsJavascript,
-  //       name: 'Node.js',
-  //       color: Color(0xFF339933),
-  //     ),
-  //     TechnologyModel(
-  //       assetPath: AppAssets.skillsAws,
-  //       name: 'AWS',
-  //       color: Color(0xFFFF6B35),
-  //     ),
-  //   ],
-  // );
+  static TechnologySection get mernSection => TechnologySection(
+    name: AppTexts.techMernName,
+    subtitle: AppTexts.techMernSubtitle,
+    headline: AppTexts.techMernHeadline,
+    description: AppTexts.techMernDescription,
+    centerAsset: AppAssets.skillsMern,
+    technologies: const [
+      TechnologyModel(
+        assetPath: AppAssets.skillsMongoDb,
+        name: 'MongoDB',
+        color: Color(0xFF47A248),
+      ),
+      TechnologyModel(
+        assetPath: AppAssets.skillsExpressJs,
+        name: 'Express.js',
+        color: Colors.black,
+      ),
+      TechnologyModel(
+        assetPath: AppAssets.skillsReact,
+        name: 'React',
+        color: Color(0xFF61DAFB),
+      ),
+      TechnologyModel(
+        assetPath: AppAssets.skillsNodejs,
+        name: 'Node.js',
+        color: Color(0xFF339933),
+      ),
+      TechnologyModel(
+        assetPath: AppAssets.skillsAws,
+        name: 'AWS',
+        color: Color(0xFFFF6B35),
+      ),
+    ],
+  );
 
   static List<TechnologySection> getAllSections() {
-    return [flutterSection, reactSection, 
-    // mernSection
-    ];
+    return [flutterSection, reactSection, mernSection];
   }
 }

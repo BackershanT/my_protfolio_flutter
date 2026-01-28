@@ -160,6 +160,7 @@ class ProjectData {
           'ckbeton.bizonline.ae - A business website built using WordPress CMS',
       technologies: ['WordPress', 'Divi', 'PHP', 'jQuery'],
       imageUrl: AppAssets.projectCkBeton,
+      isFullStack: false,
       screenshots: [
         AppAssets.projectCkBetonHome,
         AppAssets.projectCkBetonAbout,
@@ -275,6 +276,7 @@ class ProjectData {
           ' YChat Application for messaging screen mirroring and sharing.',
       technologies: ['Flutter', 'Socket.io', 'flutter webrtc'],
       imageUrl: AppAssets.projectYchat,
+      isFullStack: false,
       screenshots: [
         AppAssets.projectYchat01,
         AppAssets.projectYchat02,

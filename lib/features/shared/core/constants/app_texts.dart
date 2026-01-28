@@ -28,6 +28,24 @@ class AppTexts {
   // Technologies section
   static String get technologiesTitle => 'technologiesTitle'.tr();
 
+  // Flutter Technology Section
+  static String get techFlutterName => 'techFlutterName'.tr();
+  static String get techFlutterSubtitle => 'techFlutterSubtitle'.tr();
+  static String get techFlutterHeadline => 'techFlutterHeadline'.tr();
+  static String get techFlutterDescription => 'techFlutterDescription'.tr();
+
+  // React Technology Section
+  static String get techReactName => 'techReactName'.tr();
+  static String get techReactSubtitle => 'techReactSubtitle'.tr();
+  static String get techReactHeadline => 'techReactHeadline'.tr();
+  static String get techReactDescription => 'techReactDescription'.tr();
+
+  // MERN Stack Technology Section
+  static String get techMernName => 'techMernName'.tr();
+  static String get techMernSubtitle => 'techMernSubtitle'.tr();
+  static String get techMernHeadline => 'techMernHeadline'.tr();
+  static String get techMernDescription => 'techMernDescription'.tr();
+
   // Experience section
   static String get experienceTitle => 'experienceTitle'.tr();
 

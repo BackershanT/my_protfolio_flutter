@@ -21,7 +21,7 @@ class AppAssets {
   static const String skillsTailwind = 'assets/skills/tailwind.png';
   static const String skillsVite = 'assets/skills/vite.png';
   static const String skillsFlame = 'assets/skills/flame.png';
-
+  static const String skillsNodejs = 'assets/skills/nodejs.png';
 
 
 

@@ -25,7 +25,7 @@ class _ProjectsSectionState extends State<ProjectsSection>
   late List<Project> _filteredProjects;
   String _selectedCategory = 'All';
 
-  final List<String> _categories = ['All', 'Mobile', 'Website', 'Flutter', 'React'];
+  final List<String> _categories = ['All', 'Mobile', 'Website', 'Full Stack', 'Flutter', 'React'];
 
   @override
   void initState() {
@@ -47,6 +47,11 @@ class _ProjectsSectionState extends State<ProjectsSection>
       } else if (category == 'Website') {
         _filteredProjects = _allProjects
             .where((p) => p.type == ProjectType.website)
+            .toList();
+      } else if (category == 'Full Stack') {
+        // Filter projects that are explicitly marked as Full Stack
+        _filteredProjects = _allProjects
+            .where((p) => p.isFullStack)
             .toList();
       } else {
         _filteredProjects = _allProjects

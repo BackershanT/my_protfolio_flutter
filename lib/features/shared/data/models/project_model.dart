@@ -14,6 +14,7 @@ class Project {
   final String? demoUrl;
   final String? codeUrl;
   final ProjectType type;
+  final bool isFullStack; // New field to explicitly mark Full Stack projects
 
   Project({
     required this.id,
@@ -27,6 +28,7 @@ class Project {
     this.demoUrl,
     this.codeUrl,
     this.type = ProjectType.mobile,
+    this.isFullStack = false, // Default to false
   });
 
   // Method to load README content from file
@@ -62,6 +64,7 @@ class Project {
               orElse: () => ProjectType.mobile,
             )
           : ProjectType.mobile,
+      isFullStack: json['isFullStack'] as bool? ?? false,
     );
   }
 
@@ -78,6 +81,7 @@ class Project {
       'demoUrl': demoUrl,
       'codeUrl': codeUrl,
       'type': type.name,
+      'isFullStack': isFullStack,
     };
   }
 }
