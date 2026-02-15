@@ -157,30 +157,30 @@ class _ProfilesSectionState extends State<ProfilesSection> {
                 ),
 
                 // Instagram Card
-                ProfileCard(
-                  title: 'Instagram',
-                  username: instagramStats?.username ?? 'backershan.t.2025',
-                  stats: [
-                    ProfileStat(
-                      label: 'Posts',
-                      value: instagramStats?.posts ?? '...',
-                      icon: FontAwesomeIcons.image,
-                    ),
-                    ProfileStat(
-                      label: 'Followers',
-                      value: instagramStats?.followers ?? '...',
-                      icon: FontAwesomeIcons.heart,
-                    ),
-                  ],
-                  avatarUrl: instagramStats?.profileImageUrl,
-                  brandLogo: FontAwesomeIcons.instagram,
-                  brandColor: const Color(0xFFE1306C),
-                  onTap: () => _launchUrl(
-                    'https://www.instagram.com/${StatsConfig.instagramUsername}/',
-                  ),
-                  isDark: isDark,
-                  isMobile: isMobile,
-                ),
+                // ProfileCard(
+                //   title: 'Instagram',
+                //   username: instagramStats?.username ?? 'backershan.t.2025',
+                //   stats: [
+                //     ProfileStat(
+                //       label: 'Posts',
+                //       value: instagramStats?.posts ?? '...',
+                //       icon: FontAwesomeIcons.image,
+                //     ),
+                //     ProfileStat(
+                //       label: 'Followers',
+                //       value: instagramStats?.followers ?? '...',
+                //       icon: FontAwesomeIcons.heart,
+                //     ),
+                //   ],
+                //   avatarUrl: instagramStats?.profileImageUrl,
+                //   brandLogo: FontAwesomeIcons.instagram,
+                //   brandColor: const Color(0xFFE1306C),
+                //   onTap: () => _launchUrl(
+                //     'https://www.instagram.com/${StatsConfig.instagramUsername}/',
+                //   ),
+                //   isDark: isDark,
+                //   isMobile: isMobile,
+                // ),
               ];
 
               if (isMobile) {

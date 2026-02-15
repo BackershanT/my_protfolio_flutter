@@ -414,7 +414,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                               if (widget.project.screenshots.isNotEmpty)
                                 Expanded(
                                   child:
-                                      widget.project.type == ProjectType.website
+                                      widget.project.types.contains(ProjectType.website)
                                       ? _buildScreenshotGallery(context)
                                       : _buildScreenshotGallery(context),
                                 )
@@ -750,7 +750,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     final bool hasMore = _visibleCount < widget.project.screenshots.length;
 
     // For websites, show screenshots with actual size in a vertical list
-    if (widget.project.type == ProjectType.website) {
+    if (widget.project.types.contains(ProjectType.website)) {
       return ListView.builder(
         scrollDirection: Axis.vertical,
         itemCount: _visibleCount + (hasMore ? 1 : 0),

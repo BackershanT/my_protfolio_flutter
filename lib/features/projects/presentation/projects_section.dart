@@ -42,11 +42,11 @@ class _ProjectsSectionState extends State<ProjectsSection>
         _filteredProjects = _allProjects;
       } else if (category == 'Mobile') {
         _filteredProjects = _allProjects
-            .where((p) => p.type == ProjectType.mobile)
+            .where((p) => p.types.contains(ProjectType.mobile))
             .toList();
       } else if (category == 'Website') {
         _filteredProjects = _allProjects
-            .where((p) => p.type == ProjectType.website)
+            .where((p) => p.types.contains(ProjectType.website))
             .toList();
       } else if (category == 'Full Stack') {
         // Filter projects that are explicitly marked as Full Stack

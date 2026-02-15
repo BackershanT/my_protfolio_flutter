@@ -13,7 +13,7 @@ class Project {
   final String? readmeFilePath; // New field for README file path
   final String? demoUrl;
   final String? codeUrl;
-  final ProjectType type;
+  final List<ProjectType> types;
   final bool isFullStack; // New field to explicitly mark Full Stack projects
 
   Project({
@@ -27,7 +27,7 @@ class Project {
     this.readmeFilePath, // New parameter
     this.demoUrl,
     this.codeUrl,
-    this.type = ProjectType.mobile,
+    this.types = const [ProjectType.mobile],
     this.isFullStack = false, // Default to false
   });
 
@@ -45,6 +45,24 @@ class Project {
   }
 
   factory Project.fromJson(Map<String, dynamic> json) {
+    List<ProjectType> projectTypes = [ProjectType.mobile]; // Default value
+    if (json['types'] != null && json['types'] is List) {
+      projectTypes = (json['types'] as List)
+          .map((typeStr) => ProjectType.values.firstWhere(
+              (e) => e.name == typeStr.toString(),
+              orElse: () => ProjectType.mobile,
+            ))
+          .toList();
+    } else if (json['type'] != null) {
+      // Handle legacy single type
+      projectTypes = [
+        ProjectType.values.firstWhere(
+            (e) => e.name == json['type'].toString(),
+            orElse: () => ProjectType.mobile,
+          ),
+      ];
+    }
+    
     return Project(
       id: json['id'] as String,
       title: json['title'] as String,
@@ -58,12 +76,7 @@ class Project {
       readmeFilePath: json['readmeFilePath'] as String?, // New field
       demoUrl: json['demoUrl'] as String?,
       codeUrl: json['codeUrl'] as String?,
-      type: json['type'] != null
-          ? ProjectType.values.firstWhere(
-              (e) => e.name == json['type'],
-              orElse: () => ProjectType.mobile,
-            )
-          : ProjectType.mobile,
+      types: projectTypes,
       isFullStack: json['isFullStack'] as bool? ?? false,
     );
   }
@@ -80,7 +93,7 @@ class Project {
       'readmeFilePath': readmeFilePath, // New field
       'demoUrl': demoUrl,
       'codeUrl': codeUrl,
-      'type': type.name,
+      'types': types.map((e) => e.name).toList(),
       'isFullStack': isFullStack,
     };
   }

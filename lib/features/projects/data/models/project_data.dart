@@ -51,7 +51,7 @@ class ProjectData {
       screenshots: [AppAssets.projectNetflix01, AppAssets.projectNetflix02],
       codeUrl: '',
       demoUrl: '',
-      type: ProjectType.website,
+      types: [ProjectType.website],
       readmeFilePath: 'assets/projects/netflix/README.md',
     ),
 
@@ -73,7 +73,7 @@ class ProjectData {
       ],
       codeUrl: '',
       demoUrl: '',
-      type: ProjectType.mobile,
+      types: [ProjectType.mobile],
       readmeFilePath: 'assets/projects/movie_app/README.md',
     ),
 
@@ -87,7 +87,7 @@ class ProjectData {
       screenshots: [AppAssets.projectInspector],
       codeUrl: '',
       demoUrl: '',
-      type: ProjectType.mobile,
+      types: [ProjectType.mobile],
       readmeFilePath:
           'assets/projects/leo_inspector_admin/leo_inspector_admin_readme.md',
     ),
@@ -102,7 +102,7 @@ class ProjectData {
       screenshots: [AppAssets.projectInspector],
       codeUrl: '',
       demoUrl: '',
-      type: ProjectType.mobile,
+      types: [ProjectType.mobile],
       readmeFilePath: 'assets/projects/leo_inspector/leo_inspector_readme.md',
     ),
 
@@ -116,7 +116,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl:
           'https://play.google.com/store/search?q=leo+rigging+calculator&c=apps&hl=en_IN',
-      type: ProjectType.mobile,
+      types: [ProjectType.mobile],
       readmeFilePath:
           'assets/projects/leo_rigging_calculator/leo_rigging_calculator_readme.md',
     ),
@@ -132,7 +132,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl:
           'https://play.google.com/store/apps/details?id=in.reachout_mobile&hl=en_IN',
-      type: ProjectType.mobile,
+      types: [ProjectType.mobile],
       readmeFilePath: 'assets/projects/reachout/reachout_readme.md',
     ),
 
@@ -149,7 +149,7 @@ class ProjectData {
       ],
       codeUrl: '',
       demoUrl: '',
-      type: ProjectType.mobile,
+      types: [ProjectType.mobile],
       readmeFilePath: 'assets/projects/calculator/calculator_readme.md',
     ),
 
@@ -169,7 +169,7 @@ class ProjectData {
       ],
       codeUrl: '',
       demoUrl: 'https://ckbeton.bizonline.ae',
-      type: ProjectType.website,
+      types: [ProjectType.website],
       readmeFilePath: 'assets/projects/ck/ckbeton_readme.md',
     ),
     Project(
@@ -181,7 +181,7 @@ class ProjectData {
       screenshots: [AppAssets.projectMahathma01],
       codeUrl: '',
       demoUrl: 'https://mahathmavkdtests.netlify.app/',
-      type: ProjectType.website,
+      types: [ProjectType.website],
       readmeFilePath: 'assets/projects/mahathma/mahathma_readme.md',
     ),
 
@@ -204,13 +204,13 @@ class ProjectData {
       ],
       codeUrl: '',
       demoUrl: '',
-      type: ProjectType.mobile,
+      types: [ProjectType.mobile],
       readmeFilePath: 'assets/projects/mygame/my_games_readme.md',
     ),
 
     Project(
       id: '11',
-      title: 'Door to Door',
+      title: 'Dor to Dor',
       description:
           'Door to Door Application for Delivering groceries and other essentials from your doorstep.',
       technologies: ['Flutter', 'Getx', 'Flutter Maps', 'Rest Apis'],
@@ -230,7 +230,7 @@ class ProjectData {
       codeUrl: '',
       demoUrl:
           'https://play.google.com/store/apps/details?id=com.irshad.dortodor&hl=en_IN',
-      type: ProjectType.mobile,
+      types: [ProjectType.mobile],
       readmeFilePath: 'assets/projects/dortodor24/door_to_door_readme.md',
     ),
 
@@ -243,7 +243,7 @@ class ProjectData {
       screenshots: [AppAssets.projectYachii01],
       codeUrl: '',
       demoUrl: 'https://yachii.com/',
-      type: ProjectType.website,
+      types: [ProjectType.website],
       readmeFilePath: 'assets/projects/yachii/yachii_readme.md',
     ),
 
@@ -265,7 +265,7 @@ class ProjectData {
       ],
       codeUrl: '',
       demoUrl: '',
-      type: ProjectType.mobile,
+      types: [ProjectType.mobile],
       readmeFilePath: 'assets/projects/mybus/my_bus_readme.md',
     ),
 
@@ -320,7 +320,7 @@ class ProjectData {
       ],
       codeUrl: '',
       demoUrl: '',
-      type: ProjectType.mobile,
+      types: [ProjectType.mobile],
       readmeFilePath: 'assets/projects/ychat/ychat_readme.md',
     ),
 
@@ -348,7 +348,7 @@ class ProjectData {
       ],
       codeUrl: '',
       demoUrl: 'https://ychat-admin.netlify.app/#/login',
-      type: ProjectType.website,
+      types: [ProjectType.website, ProjectType.mobile],
       readmeFilePath: 'assets/projects/ychat_admin/ychat_admin_readme.md',
     ),
 
@@ -401,7 +401,7 @@ class ProjectData {
       ],
       codeUrl: '',
       demoUrl: '',
-      type: ProjectType.mobile,
+      types: [ProjectType.mobile],
       readmeFilePath: 'assets/projects/ecommerce/ecommerce_platform_readme.md',
     ),
 
@@ -443,6 +443,30 @@ class ProjectData {
     //   type: ProjectType.website,
     //   readmeFilePath: 'assets/projects/threads/threads_backend_readme.md',
     // ),
+       Project(
+      id: '20',
+      title: 'Darvasa Food Delivery Website',
+      description: 'A food delivery website built with TypeScript, Node.js, Express, MongoDB, Mongoose, JWT, Bcrypt, Cors, Cloudinary, Razorpay, and Dotenv.',
+      technologies: ['TypeScript', 'Node.js', 'Express', 'MongoDB', 'Mongoose', 'JWT', 'Bcrypt', 'Cors', 'Cloudinary', 'Razorpay', 'Dotenv'],
+      imageUrl: AppAssets.projectEcommerce,
+      screenshots: [],
+      codeUrl: '',
+      demoUrl: '',
+      types: [ProjectType.website, ProjectType.mobile, ],
+      readmeFilePath: 'assets/projects/threads/threads_backend_readme.md',
+    ),
+     Project(
+      id: '21',
+      title: 'Plots',
+      description: 'A Realestate SAAS Project built with flutter , Node.js, Express, MongoDB, Mongoose, JWT, Bcrypt.',
+      technologies: ['Flutter', 'Node.js', 'Express', 'MongoDB', 'Mongoose', 'JWT', 'Bcrypt', 'Cors', 'Cloudinary', 'Razorpay', 'Dotenv'],
+      imageUrl: AppAssets.projectEcommerce,
+      screenshots: [],
+      codeUrl: '',
+      demoUrl: '',
+      types: [ProjectType.website, ProjectType.mobile],
+      readmeFilePath: 'assets/projects/threads/threads_backend_readme.md',
+    ),
 
   ];
 

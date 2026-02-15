@@ -58,6 +58,8 @@ class AppAssets {
   // Additional project images
   static const String projectClanLogo =
       'assets/projects/clan_logo/clan_logo.png';
+  static const String projectDarvasa =
+      'assets/projects/darvasa/darvasa.png';
 
   // Ecommerce project images
   static const String projectEcommerce01 =
