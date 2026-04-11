@@ -44,6 +44,10 @@ class SkillData {
       assetPath: AppAssets.skillsSocket,
       label: 'Socket.IO',
     ),
+    SkillModel(
+      assetPath: AppAssets.skillsSupabase,
+      label: 'Supabase',
+    ),
        SkillModel(
       assetPath: AppAssets.skillsHtml,
       label: 'Html',

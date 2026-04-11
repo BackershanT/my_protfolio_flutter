@@ -22,6 +22,8 @@ class AppAssets {
   static const String skillsVite = 'assets/skills/vite.png';
   static const String skillsFlame = 'assets/skills/flame.png';
   static const String skillsNodejs = 'assets/skills/nodejs.png';
+  static const String skillsSupabase = 'assets/skills/supabase.png';
+
 
 
 
@@ -30,25 +32,22 @@ class AppAssets {
   // Project images
   static const String projectReachout = 'assets/projects/reachout/reachout.png';
   static const String projectMahathma = 'assets/projects/mahathma/mahathma.png';
-  static const String projectInspector =
-      'assets/projects/leo_inspector/leoinspector.png';
-  static const String projectRigCalculator =
-      'assets/projects/leo_rigging_calculator/leocalculator.png';
+  static const String projectInspector = 'assets/projects/leo_inspector/leoinspector.png';
+  static const String projectRigCalculator = 'assets/projects/leo_rigging_calculator/leocalculator.png';
   static const String projectMyGame = 'assets/projects/mygame/mygames.png';
   static const String projectMyBus = 'assets/projects/mybus/mybus.png';
-  static const String projectCalculator =
-      'assets/projects/calculator/calculator.png';
+  static const String projectCalculator = 'assets/projects/calculator/calculator.png';
   static const String projectCalender = 'assets/projects/calender/calender.png';
   static const String projectNetflix = 'assets/projects/netflix/netflix.png';
-  static const String projectMovieApp =
-      'assets/projects/movie_app/movieapp.png';
+  static const String projectMovieApp = 'assets/projects/movie_app/movieapp.png';
   static const String projectYchat = 'assets/projects/ychat/ychat.jpeg';
   static const String projectYachii = 'assets/projects/yachii/yachii.png';
-  static const String projectEcommerce =
-      'assets/projects/ecommerce/ecommerce.png';
+  static const String projectEcommerce = 'assets/projects/ecommerce/ecommerce.png';
   static const String projectCkBeton = 'assets/projects/ck/ckbeton.jpg';
-  static const String projectDorToDor24 =
-      'assets/projects/dortodor24/dor_to_dor24.png';
+  static const String projectDorToDor24 = 'assets/projects/dortodor24/dor_to_dor24.png';
+  static const String projectSellora = 'assets/projects/sellora/sellora.jpeg';
+  static const String projectMahalluManagement= 'assets/projects/mahallu_management/mahallu_management.png';
+
 
   // Threads project images
   //static const String projectThreadsAdmin = 'assets/projects/threads/threads_admin.png';
@@ -56,86 +55,48 @@ class AppAssets {
   //static const String projectThreadsBackend = 'assets/projects/threads/threads_backend.png';
 
   // Additional project images
-  static const String projectClanLogo =
-      'assets/projects/clan_logo/clan_logo.png';
-  static const String projectDarvasa =
-      'assets/projects/darvasa/darvasa.png';
+  static const String projectClanLogo = 'assets/projects/clan_logo/clan_logo.png';
+  static const String projectDarvasa = 'assets/projects/darvasa/darvasa_logo.png';
 
+//************* */
   // Ecommerce project images
-  static const String projectEcommerce01 =
-      'assets/projects/ecommerce/ecommerce01.jpeg';
-  static const String projectEcommerce02 =
-      'assets/projects/ecommerce/ecommerce02.jpeg';
-  static const String projectEcommerce03 =
-      'assets/projects/ecommerce/ecommerce03.jpeg';
-  static const String projectEcommerce04 =
-      'assets/projects/ecommerce/ecommerce04.jpeg';
-  static const String projectEcommerce05 =
-      'assets/projects/ecommerce/ecommerce05.jpeg';
-  static const String projectEcommerce06 =
-      'assets/projects/ecommerce/ecommerce06.jpeg';
-  static const String projectEcommerce07 =
-      'assets/projects/ecommerce/ecommerce07.jpeg';
-  static const String projectEcommerce08 =
-      'assets/projects/ecommerce/ecommerce08.jpeg';
-  static const String projectEcommerce09 =
-      'assets/projects/ecommerce/ecommerce09.jpeg';
-  static const String projectEcommerce10 =
-      'assets/projects/ecommerce/ecommerce010.jpeg';
-  static const String projectEcommerce11 =
-      'assets/projects/ecommerce/ecommerce011.jpeg';
-  static const String projectEcommerce12 =
-      'assets/projects/ecommerce/ecommerce012.jpeg';
-  static const String projectEcommerce13 =
-      'assets/projects/ecommerce/ecommerce013.jpeg';
-  static const String projectEcommerce14 =
-      'assets/projects/ecommerce/ecommerce014.jpeg';
-  static const String projectEcommerce15 =
-      'assets/projects/ecommerce/ecommerce015.jpeg';
-  static const String projectEcommerce16 =
-      'assets/projects/ecommerce/ecommerce016.jpeg';
-  static const String projectEcommerce17 =
-      'assets/projects/ecommerce/ecommerce017.jpeg';
-  static const String projectEcommerce18 =
-      'assets/projects/ecommerce/ecommerce018.jpeg';
-  static const String projectEcommerce19 =
-      'assets/projects/ecommerce/ecommerce019.jpeg';
-  static const String projectEcommerce20 =
-      'assets/projects/ecommerce/ecommerce020.jpeg';
-  static const String projectEcommerce21 =
-      'assets/projects/ecommerce/ecommerce021.jpeg';
-  static const String projectEcommerce22 =
-      'assets/projects/ecommerce/ecommerce022.jpeg';
-  static const String projectEcommerce23 =
-      'assets/projects/ecommerce/ecommerce023.jpeg';
-  static const String projectEcommerce24 =
-      'assets/projects/ecommerce/ecommerce024.jpeg';
-  static const String projectEcommerce25 =
-      'assets/projects/ecommerce/ecommerce025.jpeg';
-  static const String projectEcommerce26 =
-      'assets/projects/ecommerce/ecommerce026.jpeg';
-  static const String projectEcommerce27 =
-      'assets/projects/ecommerce/ecommerce027.jpeg';
-  static const String projectEcommerce28 =
-      'assets/projects/ecommerce/ecommerce028.jpeg';
-  static const String projectEcommerce29 =
-      'assets/projects/ecommerce/ecommerce029.jpeg';
-  static const String projectEcommerce30 =
-      'assets/projects/ecommerce/ecommerce030.jpeg';
-  static const String projectEcommerce31 =
-      'assets/projects/ecommerce/ecommerce031.jpeg';
-  static const String projectEcommerce32 =
-      'assets/projects/ecommerce/ecommerce032.jpeg';
-  static const String projectEcommerce33 =
-      'assets/projects/ecommerce/ecommerce033.jpeg';
-  static const String projectEcommerce34 =
-      'assets/projects/ecommerce/ecommerce034.jpeg';
-  static const String projectEcommerce35 =
-      'assets/projects/ecommerce/ecommerce035.png';
-  static const String projectEcommerce36 =
-      'assets/projects/ecommerce/ecommerce036.png';
-  static const String projectEcommerce37 =
-      'assets/projects/ecommerce/ecommerce037.png';
+  static const String projectEcommerce01 = 'assets/projects/ecommerce/ecommerce01.jpeg';
+  static const String projectEcommerce02 = 'assets/projects/ecommerce/ecommerce02.jpeg';
+  static const String projectEcommerce03 = 'assets/projects/ecommerce/ecommerce03.jpeg';
+  static const String projectEcommerce04 = 'assets/projects/ecommerce/ecommerce04.jpeg';
+  static const String projectEcommerce05 = 'assets/projects/ecommerce/ecommerce05.jpeg';
+  static const String projectEcommerce06 = 'assets/projects/ecommerce/ecommerce06.jpeg';
+  static const String projectEcommerce07 = 'assets/projects/ecommerce/ecommerce07.jpeg';
+  static const String projectEcommerce08 = 'assets/projects/ecommerce/ecommerce08.jpeg';
+  static const String projectEcommerce09 = 'assets/projects/ecommerce/ecommerce09.jpeg';
+  static const String projectEcommerce10 = 'assets/projects/ecommerce/ecommerce010.jpeg';
+  static const String projectEcommerce11 = 'assets/projects/ecommerce/ecommerce011.jpeg';
+  static const String projectEcommerce12 = 'assets/projects/ecommerce/ecommerce012.jpeg';
+  static const String projectEcommerce13 = 'assets/projects/ecommerce/ecommerce013.jpeg';
+  static const String projectEcommerce14 = 'assets/projects/ecommerce/ecommerce014.jpeg';
+  static const String projectEcommerce15 = 'assets/projects/ecommerce/ecommerce015.jpeg';
+  static const String projectEcommerce16 = 'assets/projects/ecommerce/ecommerce016.jpeg';
+  static const String projectEcommerce17 = 'assets/projects/ecommerce/ecommerce017.jpeg';
+  static const String projectEcommerce18 = 'assets/projects/ecommerce/ecommerce018.jpeg';
+  static const String projectEcommerce19 = 'assets/projects/ecommerce/ecommerce019.jpeg';
+  static const String projectEcommerce20 = 'assets/projects/ecommerce/ecommerce020.jpeg';
+  static const String projectEcommerce21 = 'assets/projects/ecommerce/ecommerce021.jpeg';
+  static const String projectEcommerce22 = 'assets/projects/ecommerce/ecommerce022.jpeg';
+  static const String projectEcommerce23 = 'assets/projects/ecommerce/ecommerce023.jpeg';
+  static const String projectEcommerce24 = 'assets/projects/ecommerce/ecommerce024.jpeg';
+  static const String projectEcommerce25 = 'assets/projects/ecommerce/ecommerce025.jpeg';
+  static const String projectEcommerce26 = 'assets/projects/ecommerce/ecommerce026.jpeg';
+  static const String projectEcommerce27 = 'assets/projects/ecommerce/ecommerce027.jpeg';
+  static const String projectEcommerce28 = 'assets/projects/ecommerce/ecommerce028.jpeg';
+  static const String projectEcommerce29 = 'assets/projects/ecommerce/ecommerce029.jpeg';
+  static const String projectEcommerce30 = 'assets/projects/ecommerce/ecommerce030.jpeg';
+  static const String projectEcommerce31 = 'assets/projects/ecommerce/ecommerce031.jpeg';
+  static const String projectEcommerce32 = 'assets/projects/ecommerce/ecommerce032.jpeg';
+  static const String projectEcommerce33 = 'assets/projects/ecommerce/ecommerce033.jpeg';
+  static const String projectEcommerce34 = 'assets/projects/ecommerce/ecommerce034.jpeg';
+  static const String projectEcommerce35 = 'assets/projects/ecommerce/ecommerce035.png';
+  static const String projectEcommerce36 = 'assets/projects/ecommerce/ecommerce036.png';
+  static const String projectEcommerce37 = 'assets/projects/ecommerce/ecommerce037.png';
 
   // MyBus project images
   static const String projectMyBus01 = 'assets/projects/mybus/mybus01.png';
@@ -188,70 +149,42 @@ class AppAssets {
   static const String projectYchat39 = 'assets/projects/ychat/ychat039.png';
 
   // YChat Admin project images
-  static const String projectYchatAdminBanner =
-      'assets/projects/ychat_admin/ychat_admin_banner.png';
-  static const String projectYchatAdmin02 =
-      'assets/projects/ychat_admin/ychat_admin_2.png';
-  static const String projectYchatAdminManagement =
-      'assets/projects/ychat_admin/ychat_admin_admin_management.png';
-  static const String projectYchatAdminAppsHome =
-      'assets/projects/ychat_admin/ychat_admin_appshome.png';
-  static const String projectYchatAdminAppsHomeDetails =
-      'assets/projects/ychat_admin/ychat_admin_appshome_details.png';
-  static const String projectYchatAdminForgetPassword =
-      'assets/projects/ychat_admin/ychat_admin_forget_password.png';
-  static const String projectYchatAdminHome =
-      'assets/projects/ychat_admin/ychat_admin_home.png';
-  static const String projectYchatAdminHome1 =
-      'assets/projects/ychat_admin/ychat_admin_home1.png';
-  static const String projectYchatAdminLogin =
-      'assets/projects/ychat_admin/ychat_admin_login.png';
-  static const String projectYchatAdminNotifications =
-      'assets/projects/ychat_admin/ychat_admin_notifications.png';
-  static const String projectYchatAdminSettings =
-      'assets/projects/ychat_admin/ychat_admin_settings.png';
-  static const String projectYchatAdminSignup =
-      'assets/projects/ychat_admin/ychat_admin_signup.png';
-  static const String projectYchatAdminTicketing =
-      'assets/projects/ychat_admin/ychat_admin_ticketing.png';
-  static const String projectYchatAdminUserManagement =
-      'assets/projects/ychat_admin/ychat_admin_user_management.png';
+  static const String projectYchatAdminBanner = 'assets/projects/ychat_admin/ychat_admin_banner.png';
+  static const String projectYchatAdmin02 = 'assets/projects/ychat_admin/ychat_admin_2.png';
+  static const String projectYchatAdminManagement = 'assets/projects/ychat_admin/ychat_admin_admin_management.png';
+  static const String projectYchatAdminAppsHome = 'assets/projects/ychat_admin/ychat_admin_appshome.png';
+  static const String projectYchatAdminAppsHomeDetails = 'assets/projects/ychat_admin/ychat_admin_appshome_details.png';
+  static const String projectYchatAdminForgetPassword = 'assets/projects/ychat_admin/ychat_admin_forget_password.png';
+  static const String projectYchatAdminHome = 'assets/projects/ychat_admin/ychat_admin_home.png';
+  static const String projectYchatAdminHome1 = 'assets/projects/ychat_admin/ychat_admin_home1.png';
+  static const String projectYchatAdminLogin = 'assets/projects/ychat_admin/ychat_admin_login.png';
+  static const String projectYchatAdminNotifications = 'assets/projects/ychat_admin/ychat_admin_notifications.png';
+  static const String projectYchatAdminSettings = 'assets/projects/ychat_admin/ychat_admin_settings.png';
+  static const String projectYchatAdminSignup = 'assets/projects/ychat_admin/ychat_admin_signup.png';
+  static const String projectYchatAdminTicketing = 'assets/projects/ychat_admin/ychat_admin_ticketing.png';
+  static const String projectYchatAdminUserManagement = 'assets/projects/ychat_admin/ychat_admin_user_management.png';
 
   // Mahathma project images
-  static const String projectMahathma01 =
-      'assets/projects/mahathma/mahathma01.png';
-  static const String projectMahathma02 =
-      'assets/projects/mahathma/mahathma02.png';
-  static const String projectMahathma03 =
-      'assets/projects/mahathma/mahathma03.png';
+  static const String projectMahathma01 = 'assets/projects/mahathma/mahathma01.png';
+  static const String projectMahathma02 = 'assets/projects/mahathma/mahathma02.png';
+  static const String projectMahathma03 = 'assets/projects/mahathma/mahathma03.png';
 
   // Netflix project images
-  static const String projectNetflix01 =
-      'assets/projects/netflix/netflix01.jpeg';
-  static const String projectNetflix02 =
-      'assets/projects/netflix/netflix02.jpeg';
+  static const String projectNetflix01 = 'assets/projects/netflix/netflix01.jpeg';
+  static const String projectNetflix02 = 'assets/projects/netflix/netflix02.jpeg';
 
   // Yachii project images
-  static const String projectYachii01 =
-      'assets/projects/yachii/yachii_home.png';
+  static const String projectYachii01 = 'assets/projects/yachii/yachii_home.png';
 
   // Movie App project images
-  static const String projectMovieApp01 =
-      'assets/projects/movie_app/movie01.jpeg';
-  static const String projectMovieApp02 =
-      'assets/projects/movie_app/movie02.jpeg';
-  static const String projectMovieApp03 =
-      'assets/projects/movie_app/movie03.jpeg';
-  static const String projectMovieApp04 =
-      'assets/projects/movie_app/movie04.jpeg';
-  static const String projectMovieApp05 =
-      'assets/projects/movie_app/movie05.jpeg';
-  static const String projectMovieApp06 =
-      'assets/projects/movie_app/movie06.jpeg';
-  static const String projectMovieApp07 =
-      'assets/projects/movie_app/movie07.jpeg';
-  static const String projectMovieApp08 =
-      'assets/projects/movie_app/movie08.jpeg';
+  static const String projectMovieApp01 = 'assets/projects/movie_app/movie01.jpeg';
+  static const String projectMovieApp02 = 'assets/projects/movie_app/movie02.jpeg';
+  static const String projectMovieApp03 = 'assets/projects/movie_app/movie03.jpeg';
+  static const String projectMovieApp04 = 'assets/projects/movie_app/movie04.jpeg';
+  static const String projectMovieApp05 = 'assets/projects/movie_app/movie05.jpeg';
+  static const String projectMovieApp06 = 'assets/projects/movie_app/movie06.jpeg';
+  static const String projectMovieApp07 = 'assets/projects/movie_app/movie07.jpeg';
+  static const String projectMovieApp08 = 'assets/projects/movie_app/movie08.jpeg';
 
   // MyGame project images
   static const String projectMyGame01 = 'assets/projects/mygame/mygame01.jpeg';
@@ -264,44 +197,44 @@ class AppAssets {
   static const String projectMyGame08 = 'assets/projects/mygame/mygame08.jpeg';
 
   // Calculator project images
-  static const String projectCalculator01 =
-      'assets/projects/calculator/calculator01.jpeg';
-  static const String projectCalculator02 =
-      'assets/projects/calculator/calculator02.jpeg';
-  static const String projectCalculator03 =
-      'assets/projects/calculator/calculator03.jpeg';
+  static const String projectCalculator01 = 'assets/projects/calculator/calculator01.jpeg';
+  static const String projectCalculator02 = 'assets/projects/calculator/calculator02.jpeg';
+  static const String projectCalculator03 = 'assets/projects/calculator/calculator03.jpeg';
 
   // CK Beton project images
-  static const String projectCkBetonHome =
-      'assets/projects/ck/ckbeton.bizonline.ae_.png';
-  static const String projectCkBetonAbout =
-      'assets/projects/ck/ckbeton.bizonline.ae_about_us_.png';
-  static const String projectCkBetonServices =
-      'assets/projects/ck/ckbeton.bizonline.ae_services_.png';
-  static const String projectCkBetonContact =
-      'assets/projects/ck/ckbeton.bizonline.ae_contact_us_.png';
-
+  static const String projectCkBetonHome = 'assets/projects/ck/ckbeton.bizonline.ae_.png';
+  static const String projectCkBetonAbout = 'assets/projects/ck/ckbeton.bizonline.ae_about_us_.png';
+  static const String projectCkBetonServices = 'assets/projects/ck/ckbeton.bizonline.ae_services_.png';
+  static const String projectCkBetonContact = 'assets/projects/ck/ckbeton.bizonline.ae_contact_us_.png';
+ 
   // DorToDor24 project images
-  static const String projectDorToDor24Cart =
-      'assets/projects/dortodor24/dor24_cart.png';
-  static const String projectDorToDor24CartEmpty =
-      'assets/projects/dortodor24/dor24_cartempty.png';
-  static const String projectDorToDor24Home =
-      'assets/projects/dortodor24/dor24_home.png';
-  static const String projectDorToDor24Language =
-      'assets/projects/dortodor24/dor24_language.png';
-  static const String projectDorToDor24Location =
-      'assets/projects/dortodor24/dor24_location.png';
-  static const String projectDorToDor24Login =
-      'assets/projects/dortodor24/dor24_login.png';
-  static const String projectDorToDor24Menu =
-      'assets/projects/dortodor24/dor24_menu.png';
-  static const String projectDorToDor24Product =
-      'assets/projects/dortodor24/dor24_product.png';
-  static const String projectDorToDor24Signup =
-      'assets/projects/dortodor24/dor24_signup.png';
-  static const String projectDorToDor24Splash =
-      'assets/projects/dortodor24/dor24_splash.png';
+  static const String projectDorToDor24Cart = 'assets/projects/dortodor24/dor24_cart.png';
+  static const String projectDorToDor24CartEmpty = 'assets/projects/dortodor24/dor24_cartempty.png';
+  static const String projectDorToDor24Home = 'assets/projects/dortodor24/dor24_home.png';
+  static const String projectDorToDor24Language = 'assets/projects/dortodor24/dor24_language.png';
+  static const String projectDorToDor24Location = 'assets/projects/dortodor24/dor24_location.png';
+  static const String projectDorToDor24Login = 'assets/projects/dortodor24/dor24_login.png';
+  static const String projectDorToDor24Menu =  'assets/projects/dortodor24/dor24_menu.png';
+  static const String projectDorToDor24Product = 'assets/projects/dortodor24/dor24_product.png';
+  static const String projectDorToDor24Signup = 'assets/projects/dortodor24/dor24_signup.png';
+  static const String projectDorToDor24Splash = 'assets/projects/dortodor24/dor24_splash.png';
+
+ // mahallu project images
+  static const String projectMahalluManagement01 = 'assets/projects/mahallu_management/mahallu01.png';
+  static const String projectMahalluManagement02 = 'assets/projects/mahallu_management/mahallu02.png';
+  static const String projectMahalluManagement03 = 'assets/projects/mahallu_management/mahallu03.png';
+  static const String projectMahalluManagement04 = 'assets/projects/mahallu_management/mahallu04.png';      static const String projectMahalluManagement05 = 'assets/projects/mahallu_management/mahallu05.png';
+  static const String projectMahalluManagement06 = 'assets/projects/mahallu_management/mahallu06.png';
+  static const String projectMahalluManagement07 = 'assets/projects/mahallu_management/mahallu07.png';
+  static const String projectMahalluManagement08 = 'assets/projects/mahallu_management/mahallu08.png';
+ // DARVASA project images
+
+  static const String projectDarvasa01 = 'assets/projects/darvasa/darvasa01.png';
+  static const String projectDarvasa02 = 'assets/projects/darvasa/darvasa02.png';
+  static const String projectDarvasa03 = 'assets/projects/darvasa/darvasa03.png';
+  static const String projectDarvasa04 = 'assets/projects/darvasa/darvasa04.png';
+  static const String projectDarvasa05 = 'assets/projects/darvasa/darvasa05.png';
+
 
   // Profile and logo images
   static const String profileAvatar = 'assets/images/dp.jpeg';
