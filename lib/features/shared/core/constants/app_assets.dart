@@ -233,7 +233,7 @@ class AppAssets {
   static const String projectDarvasa02 = 'assets/projects/darvasa/darvasa02.png';
   static const String projectDarvasa03 = 'assets/projects/darvasa/darvasa03.png';
   static const String projectDarvasa04 = 'assets/projects/darvasa/darvasa04.png';
-  static const String projectDarvasa05 = 'assets/projects/darvasa/darvasa05.png';
+  static const String projectDarvasa05 = 'assets/projects/darvasa/darvasaa05.png';
 
 
   // Profile and logo images
