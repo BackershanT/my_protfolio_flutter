@@ -9,7 +9,7 @@ class ProfileCard extends StatelessWidget {
   final String username;
   final List<ProfileStat> stats;
   final String? avatarUrl;
-  final IconData brandLogo;
+  final FaIconData brandLogo;
   final Color brandColor;
   final VoidCallback onTap;
   final bool isDark;
@@ -234,7 +234,7 @@ class ProfileCard extends StatelessWidget {
 class ProfileStat {
   final String label;
   final String value;
-  final IconData icon;
+  final FaIconData icon;
 
   ProfileStat({required this.label, required this.value, required this.icon});
 }

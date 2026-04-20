@@ -324,7 +324,7 @@ class _ContactSectionState extends State<ContactSection> {
 }
 
 class SocialLink extends StatefulWidget {
-  final IconData icon;
+  final FaIconData icon;
   final Color color;
   final String url;
 
@@ -385,7 +385,7 @@ class _SocialLinkState extends State<SocialLink> {
               ),
             ],
           ),
-          child: Icon(widget.icon, color: Colors.white, size: iconSize),
+          child: FaIcon(widget.icon, color: Colors.white, size: iconSize),
         ),
       ),
     );
