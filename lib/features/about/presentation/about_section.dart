@@ -4,6 +4,7 @@ import 'package:my_protfolio/features/about/data/models/about_data.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
 import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
+import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
 import 'package:my_protfolio/features/shared/presentation/section_title.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -75,17 +76,28 @@ class AboutSection extends StatelessWidget {
     final titleSize = isMobile ? 18.0 : (screenWidth < 1200 ? 20.0 : 24.0);
     final descSize = isMobile ? 14.0 : 16.0;
     
-    return Container(
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = isDark ? AppColors.primaryLight : AppColors.primaryDark;
+
+    final cardWidget = Container(
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white.withOpacity(0.1)
+          color: isDark
+              ? Colors.white.withOpacity(0.08)
               : Colors.black.withOpacity(0.05),
           width: 1,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: primaryColor.withOpacity(isDark ? 0.08 : 0.04),
+            blurRadius: 20,
+            spreadRadius: 2,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +106,7 @@ class AboutSection extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(iconPadding),
             decoration: BoxDecoration(
-              color: Theme.of(context).brightness == Brightness.dark
+              color: isDark
                   ? AppColors.primaryLight.withOpacity(0.1)
                   : AppColors.primaryDark.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
@@ -102,9 +114,7 @@ class AboutSection extends StatelessWidget {
             child: Icon(
               feature.icon,
               size: iconSize,
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? AppColors.primaryLight
-                  : AppColors.primaryDark,
+              color: isDark ? AppColors.primaryLight : AppColors.primaryDark,
             ),
           ).animate().scale(
                 delay: feature.delay.ms,
@@ -112,7 +122,6 @@ class AboutSection extends StatelessWidget {
                 curve: Curves.elasticOut,
               ),
           SizedBox(height: isMobile ? 16 : 24),
-          // Title - RESPONSIVE
           Text(
             feature.title,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -124,7 +133,6 @@ class AboutSection extends StatelessWidget {
                 duration: 600.ms,
               ),
           SizedBox(height: isMobile ? 8 : 16),
-          // Description - RESPONSIVE
           Text(
             feature.description,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -142,6 +150,13 @@ class AboutSection extends StatelessWidget {
               ),
         ],
       ),
+    );
+
+    return TiltCard(
+      maxTilt: isMobile ? 0 : 12,
+      scale: isMobile ? 1.0 : 1.03,
+      glareOpacity: 0.1,
+      child: cardWidget,
     ).animate().fadeIn(
           delay: feature.delay.ms,
           duration: 600.ms,

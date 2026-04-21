@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
 import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
+import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
 import 'package:my_protfolio/features/shared/presentation/section_title.dart';
 import 'package:my_protfolio/features/technologies/data/models/technology_model.dart';
 import 'dart:math' as math;
@@ -235,47 +236,62 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Center logo (Flutter or React)
-          Container(
-            width: centerIconSize,
-            height: centerIconSize,
-            decoration: BoxDecoration(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? AppColors.primaryLight.withValues(alpha: 0.1)
-                  : AppColors.primaryDark.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? AppColors.primaryLight
-                    : AppColors.primaryDark,
-                width: 3,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color:
-                      (Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.primaryLight
-                              : AppColors.primaryDark)
-                          .withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Image.asset(
-                centerAsset,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(
-                    Icons.flutter_dash,
-                    size: centerIconSize * 0.6,
+          // 3D floating center logo with layered glow rings
+          FloatingWidget(
+            amplitude: 12,
+            duration: const Duration(seconds: 4),
+            child: TiltCard(
+              maxTilt: 18,
+              scale: 1.0,
+              glareOpacity: 0.18,
+              borderRadius: BorderRadius.circular(500),
+              child: Container(
+                width: centerIconSize,
+                height: centerIconSize,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppColors.primaryLight.withValues(alpha: 0.08)
+                      : AppColors.primaryDark.withValues(alpha: 0.08),
+                  shape: BoxShape.circle,
+                  border: Border.all(
                     color: Theme.of(context).brightness == Brightness.dark
                         ? AppColors.primaryLight
                         : AppColors.primaryDark,
-                  );
-                },
+                    width: 2.5,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: (Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.primaryLight
+                              : AppColors.primaryDark)
+                          .withValues(alpha: 0.45),
+                      blurRadius: 40,
+                      spreadRadius: 6,
+                    ),
+                    BoxShadow(
+                      color: (Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.primaryLight
+                              : AppColors.primaryDark)
+                          .withValues(alpha: 0.15),
+                      blurRadius: 80,
+                      spreadRadius: 16,
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(18),
+                  child: Image.asset(
+                    centerAsset,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) => Icon(
+                      Icons.flutter_dash,
+                      size: centerIconSize * 0.6,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.primaryLight
+                          : AppColors.primaryDark,
+                    ),
+                  ),
+                ),
               ),
             ),
           ).animate().scale(
@@ -348,64 +364,94 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
     double size,
   ) {
     final isHovered = _hoveredIndex == index;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: isHovered
-                  ? tech.color
-                  : (Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black)
-                        .withValues(alpha: 0.1),
-              width: 2,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: isHovered
-                    ? tech.color.withValues(alpha: 0.4)
-                    : Colors.black.withValues(alpha: 0.1),
-                blurRadius: isHovered ? 15 : 10,
-                spreadRadius: isHovered ? 2 : 0,
-              ),
-            ],
+    final iconWidget = AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      width: isHovered ? size * 1.22 : size,
+      height: isHovered ? size * 1.22 : size,
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: isHovered
+              ? tech.color
+              : (isDark ? Colors.white : Colors.black).withValues(alpha: 0.1),
+          width: isHovered ? 2.5 : 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isHovered
+                ? tech.color.withValues(alpha: 0.55)
+                : Colors.black.withValues(alpha: 0.12),
+            blurRadius: isHovered ? 28 : 10,
+            spreadRadius: isHovered ? 4 : 0,
           ),
-          child: tech.assetPath != null
-              ? Padding(
-                  padding: EdgeInsets.all(size * 0.25),
-                  child: Image.asset(
-                    tech.assetPath!,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Icon(
-                        tech.iconData ?? Icons.code_rounded,
-                        size: size * 0.5,
-                        color: isHovered
-                            ? tech.color
-                            : tech.color.withValues(alpha: 0.7),
-                      );
-                    },
+          if (isHovered)
+            BoxShadow(
+              color: tech.color.withValues(alpha: 0.20),
+              blurRadius: 50,
+              spreadRadius: 10,
+            ),
+        ],
+      ),
+      child: ClipOval(
+        child: tech.assetPath != null
+            ? Padding(
+                padding: EdgeInsets.all(size * 0.22),
+                child: Image.asset(
+                  tech.assetPath!,
+                  fit: BoxFit.contain,
+                  errorBuilder: (_, __, ___) => Icon(
+                    tech.iconData ?? Icons.code_rounded,
+                    size: size * 0.5,
+                    color: isHovered ? tech.color : tech.color.withValues(alpha: 0.7),
                   ),
-                )
-              : Icon(
-                  tech.iconData ?? Icons.code_rounded,
-                  size: size * 0.5,
-                  color: isHovered
-                      ? tech.color
-                      : tech.color.withValues(alpha: 0.7),
                 ),
-        )
-        .animate(target: isHovered ? 1 : 0)
-        .scale(
-          begin: const Offset(1, 1),
-          end: const Offset(1.2, 1.2),
-          duration: 300.ms,
-          curve: Curves.easeOut,
-        );
+              )
+            : Icon(
+                tech.iconData ?? Icons.code_rounded,
+                size: size * 0.5,
+                color: isHovered ? tech.color : tech.color.withValues(alpha: 0.7),
+              ),
+      ),
+    );
+
+    // Tooltip label on hover
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        iconWidget,
+        if (isHovered)
+          Positioned(
+            bottom: -(size * 0.55),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: tech.color,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: tech.color.withValues(alpha: 0.4),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Text(
+                tech.name,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 }
 

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
+import 'package:my_protfolio/features/shared/core/constants/colors.dart';
 import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
+import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
 import 'package:my_protfolio/features/shared/presentation/section_title.dart';
 import 'package:my_protfolio/features/shared/data/models/testimonial_model.dart';
 import 'package:my_protfolio/features/shared/data/models/testimonial_data.dart';
@@ -145,44 +147,97 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
   ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final screenWidth = MediaQuery.of(context).size.width;
+    final primaryColor = isDark ? AppColors.primaryLight : AppColors.primaryDark;
 
-    // Card dimensions matching about section cards: 280px on mobile and 350px on desktop
     final cardWidth = isMobile ? 280.0 : 350.0;
     final padding = isMobile ? 20.0 : (screenWidth < 1200 ? 24.0 : 30.0);
     final contentSize = isMobile ? 14.0 : 16.0;
     final nameSize = isMobile ? 18.0 : 20.0;
-    final roleSize = isMobile ? 14.0 : 16.0;
+    final roleSize = isMobile ? 13.0 : 15.0;
 
-    Widget card = Container(
-      width: isMobile
-          ? cardWidth
-          : null, // No width constraint for desktop (Expanded will handle it)
+    final cardInner = Container(
+      width: isMobile ? cardWidth : null,
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
+        color: isDark ? const Color(0xFF112240) : Colors.white,
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isDark
-              ? Colors.white.withOpacity(0.1)
-              : Colors.black.withOpacity(0.05),
-          width: 1,
+          color: primaryColor.withOpacity(0.18),
+          width: 1.5,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: primaryColor.withOpacity(isDark ? 0.12 : 0.06),
+            blurRadius: 30,
+            spreadRadius: 2,
+            offset: const Offset(0, 12),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Client info (avatar, name, role, company) - ABOVE content
+          // Big decorative quote mark
+          Text(
+            '❝',
+            style: TextStyle(
+              fontSize: isMobile ? 36 : 48,
+              height: 1,
+              color: primaryColor.withOpacity(0.35),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          // Testimonial content
+          Expanded(
+            child: SingleChildScrollView(
+              child: Text(
+                testimonial.content,
+                style: TextStyle(
+                  fontSize: contentSize,
+                  height: 1.7,
+                  fontStyle: FontStyle.italic,
+                  color: isDark ? Colors.white70 : Colors.black87,
+                ),
+              ).animate().fadeIn(duration: 600.ms),
+            ),
+          ),
+          SizedBox(height: isMobile ? 20 : 28),
+          // Divider
+          Container(
+            height: 1,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  primaryColor.withOpacity(0.5),
+                  Colors.transparent,
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Client info
           Row(
             children: [
-              // Avatar with image
               Container(
-                width: isMobile ? 50 : 60,
-                height: isMobile ? 50 : 60,
+                width: isMobile ? 44 : 52,
+                height: isMobile ? 44 : 52,
                 decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: primaryColor.withOpacity(0.4),
+                    width: 2,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: primaryColor.withOpacity(0.2),
+                      blurRadius: 12,
+                      spreadRadius: 1,
+                    ),
+                  ],
                   color: isDark
-                      ? Colors.white.withOpacity(0.1)
+                      ? Colors.white.withOpacity(0.08)
                       : Colors.black.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(30),
                   image: testimonial.avatarUrl.isNotEmpty
                       ? DecorationImage(
                           image: AssetImage(testimonial.avatarUrl),
@@ -193,12 +248,12 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                 child: testimonial.avatarUrl.isEmpty
                     ? Icon(
                         Icons.person,
-                        size: isMobile ? 24 : 30,
-                        color: isDark ? Colors.white70 : Colors.black54,
+                        size: isMobile ? 22 : 26,
+                        color: isDark ? Colors.white54 : Colors.black45,
                       )
                     : null,
               ),
-              SizedBox(width: 15),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,64 +263,41 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                       style: TextStyle(
                         fontSize: nameSize,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                        color: isDark ? Colors.white : Colors.black87,
                       ),
                     ).animate().fadeIn(delay: 200.ms, duration: 600.ms),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 3),
                     Text(
-                      '${testimonial.role}',
-                      style: TextStyle(
-                        fontSize: roleSize - 2,
-                        color: isDark
-                            ? Colors.white70
-                            : Colors.black.withOpacity(0.7),
-                      ),
-                    ).animate().fadeIn(delay: 400.ms, duration: 600.ms),
-                    SizedBox(height: 2),
-                    Text(
-                      ' ${testimonial.company}',
+                      '${testimonial.role} · ${testimonial.company}',
                       style: TextStyle(
                         fontSize: roleSize,
-                        color: isDark
-                            ? Colors.white70
-                            : Colors.black.withOpacity(0.7),
+                        color: primaryColor.withOpacity(0.75),
+                        fontWeight: FontWeight.w500,
                       ),
-                    ).animate().fadeIn(delay: 400.ms, duration: 600.ms),
+                    ).animate().fadeIn(delay: 350.ms, duration: 600.ms),
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: isMobile ? 20 : 30),
-
-          // Testimonial content - BELOW client info
-          Expanded(
-            child: SingleChildScrollView(
-              child: Text(
-                testimonial.content,
-                style: TextStyle(
-                  fontSize: contentSize,
-                  height: 1.6,
-                  fontStyle: FontStyle.italic,
-                  color: Theme.of(context).textTheme.bodyMedium?.color,
-                ),
-              ).animate().fadeIn(duration: 600.ms),
-            ),
-          ),
         ],
       ),
     );
 
-    // For mobile, we wrap in a container with specific width and margin
+    final card = TiltCard(
+      maxTilt: isMobile ? 0 : 13,
+      scale: isMobile ? 1.0 : 1.03,
+      glareOpacity: 0.10,
+      child: cardInner,
+    );
+
     if (isMobile) {
       return Container(
         width: cardWidth,
-        margin: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
+        margin: const EdgeInsets.symmetric(horizontal: 10),
         child: card,
       );
-    } else {
-      // For desktop, we just return the card as Expanded will handle sizing
-      return card;
     }
+    return card;
   }
 }

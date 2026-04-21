@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
 import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
+import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
 import 'package:my_protfolio/features/shared/presentation/section_title.dart';
 import 'package:my_protfolio/features/shared/data/models/project_model.dart';
 import 'package:my_protfolio/features/projects/data/models/project_data.dart';
@@ -267,169 +268,170 @@ class _ProjectsSectionState extends State<ProjectsSection>
         ? project.technologies.take(3).toList()
         : project.technologies;
 
-    return Container(
-      width: isMobile ? 280.0 : 350.0, // Similar width to about section cards
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white.withOpacity(0.1)
-              : Colors.black.withOpacity(0.05),
-          width: 1,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Project image container
-          Container(
-            height: imageHeight,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(12),
-              ),
-              image: project.imageUrl.isNotEmpty
-                  ? DecorationImage(
-                      image: project.imageUrl.startsWith('http')
-                          ? NetworkImage(project.imageUrl)
-                          : AssetImage(project.imageUrl) as ImageProvider,
-                      fit: BoxFit.fill,
-                    )
-                  : null,
-              color: project.imageUrl.isEmpty
-                  ? (isDark ? const Color(0xFF2A3D4F) : const Color(0xFFEFEFEF))
-                  : null,
-            ),
-            child: project.imageUrl.isEmpty
-                ? Container(
-                    padding: EdgeInsets.all(iconPadding),
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? AppColors.primaryLight.withOpacity(0.1)
-                          : AppColors.primaryDark.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(
-                      Icons.folder_rounded,
-                      size: isMobile ? 40.0 : 50.0,
-                      color: isDark
-                          ? AppColors.primaryLight
-                          : AppColors.primaryDark,
-                    ),
-                  )
-                : null,
+    return TiltCard(
+      maxTilt: isMobile ? 0 : 14,
+      scale: isMobile ? 1.0 : 1.03,
+      glareOpacity: 0.12,
+      child: Container(
+        width: isMobile ? 280.0 : 350.0,
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isDark
+                ? Colors.white.withOpacity(0.08)
+                : Colors.black.withOpacity(0.05),
+            width: 1,
           ),
-
-          // Content area
-          Padding(
-            padding: EdgeInsets.all(padding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Project title - limited to one line
-                Text(
-                  project.title,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: titleSize,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+          boxShadow: [
+            BoxShadow(
+              color: (isDark ? AppColors.primaryLight : AppColors.primaryDark)
+                  .withOpacity(isDark ? 0.10 : 0.06),
+              blurRadius: 24,
+              spreadRadius: 2,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Project image container
+            Container(
+              height: imageHeight,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
                 ),
-                SizedBox(height: isMobile ? 16 : 24),
-
-                // Tech stack - limited to 3 items and each tech name to 5 characters
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  children: limitedTechStack.map((tech) {
-                    // Limit each tech name to 5 characters
-                    final shortenedTech = tech.length > 5
-                        ? '${tech.substring(0, 5)}...'
-                        : tech;
-
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
+                image: project.imageUrl.isNotEmpty
+                    ? DecorationImage(
+                        image: project.imageUrl.startsWith('http')
+                            ? NetworkImage(project.imageUrl)
+                            : AssetImage(project.imageUrl) as ImageProvider,
+                        fit: BoxFit.fill,
+                      )
+                    : null,
+                color: project.imageUrl.isEmpty
+                    ? (isDark ? const Color(0xFF2A3D4F) : const Color(0xFFEFEFEF))
+                    : null,
+              ),
+              child: project.imageUrl.isEmpty
+                  ? Container(
+                      padding: EdgeInsets.all(iconPadding),
                       decoration: BoxDecoration(
                         color: isDark
-                            ? AppColors.primaryLight.withOpacity(0.15)
+                            ? AppColors.primaryLight.withOpacity(0.1)
                             : AppColors.primaryDark.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text(
-                        shortenedTech,
-                        style: TextStyle(
-                          fontSize: isMobile ? 12 : 14,
-                          fontWeight: FontWeight.w500,
-                          color: isDark
-                              ? AppColors.primaryLight
-                              : AppColors.primaryDark,
-                        ),
+                      child: Icon(
+                        Icons.folder_rounded,
+                        size: isMobile ? 40.0 : 50.0,
+                        color: isDark ? AppColors.primaryLight : AppColors.primaryDark,
                       ),
-                    );
-                  }).toList(),
-                ),
+                    )
+                  : null,
+            ),
 
-                SizedBox(height: isMobile ? 12 : 16),
-
-                // Project description - limited to two lines
-                Text(
-                  project.description,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontSize: descSize,
-                    height: 1.6,
-                    color: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.color?.withOpacity(0.7),
+            // Content area
+            Padding(
+              padding: EdgeInsets.all(padding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    project.title,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: titleSize,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                  SizedBox(height: isMobile ? 16 : 24),
 
-                SizedBox(height: isMobile ? 20 : 30),
-
-                // Show Details button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ProjectDetailsPage(project: project),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: limitedTechStack.map((tech) {
+                      final shortenedTech = tech.length > 5
+                          ? '${tech.substring(0, 5)}...'
+                          : tech;
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? AppColors.primaryLight.withOpacity(0.15)
+                              : AppColors.primaryDark.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          shortenedTech,
+                          style: TextStyle(
+                            fontSize: isMobile ? 12 : 14,
+                            fontWeight: FontWeight.w500,
+                            color: isDark ? AppColors.primaryLight : AppColors.primaryDark,
+                          ),
                         ),
                       );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF64FFDA),
-                      foregroundColor: const Color(0xFF0A192F),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 20 : 24,
-                        vertical: isMobile ? 12 : 16,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                    }).toList(),
+                  ),
+
+                  SizedBox(height: isMobile ? 12 : 16),
+
+                  Text(
+                    project.description,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: descSize,
+                      height: 1.6,
+                      color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
                     ),
-                    child: Text(
-                      'Show Details',
-                      style: TextStyle(
-                        fontSize: isMobile ? 14 : 16,
-                        fontWeight: FontWeight.bold,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+
+                  SizedBox(height: isMobile ? 20 : 30),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProjectDetailsPage(project: project),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF64FFDA),
+                        foregroundColor: const Color(0xFF0A192F),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isMobile ? 20 : 24,
+                          vertical: isMobile ? 12 : 16,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        elevation: 0,
                       ),
-                    ),
-                  ).withCursorHover(context),
-                ),
-              ],
+                      child: Text(
+                        'Show Details',
+                        style: TextStyle(
+                          fontSize: isMobile ? 14 : 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ).withCursorHover(context),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
+import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
 import 'package:my_protfolio/features/shared/presentation/section_title.dart';
 import 'package:my_protfolio/features/shared/data/models/github_stats_model.dart';
 import 'package:my_protfolio/features/shared/data/services/github_service.dart';
@@ -205,7 +206,12 @@ class _ProfilesSectionState extends State<ProfilesSection> {
                 spacing: 40,
                 runSpacing: 40,
                 alignment: WrapAlignment.center,
-                children: cards,
+                children: cards.map((card) => TiltCard(
+                  maxTilt: 14,
+                  scale: 1.03,
+                  glareOpacity: 0.12,
+                  child: card,
+                )).toList(),
               );
             },
           ),

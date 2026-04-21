@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_protfolio/features/blog/data/models/blog_post_model.dart';
 import 'package:my_protfolio/features/blog/data/models/blog_data.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
+import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
 import 'package:my_protfolio/features/shared/presentation/section_title.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -163,148 +164,67 @@ class _BlogSectionState extends State<BlogSection> {
     bool isMobile,
     bool isDark,
   ) {
-    return Container(
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E2D3D) : const Color(0xFFFEF7FF),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark
-              ? Colors.white.withValues(alpha: 0.1)
-              : Colors.black.withValues(alpha: 0.05),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark
-                ? Colors.black.withValues(alpha: 0.2)
-                : Colors.grey.withValues(alpha: 0.1),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
+    final primaryColor = isDark ? AppColors.primaryLight : AppColors.primaryDark;
+
+    return TiltCard(
+      maxTilt: isMobile ? 0 : 14,
+      scale: isMobile ? 1.0 : 1.03,
+      glareOpacity: 0.12,
+      child: Container(
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF112240) : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: primaryColor.withValues(alpha: 0.15),
+            width: 1.5,
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Blog image container
-          Container(
-            height: isMobile ? 180 : 200,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
-              ),
-              image: post.imageUrl.isNotEmpty
-                  ? DecorationImage(
-                      image: NetworkImage(post.imageUrl),
-                      fit: BoxFit.fill,
-                    )
-                  : null,
-              color: post.imageUrl.isEmpty
-                  ? (isDark ? const Color(0xFF2A3D4F) : const Color(0xFFEFEFEF))
-                  : null,
+          boxShadow: [
+            BoxShadow(
+              color: primaryColor.withValues(alpha: isDark ? 0.12 : 0.06),
+              blurRadius: 30,
+              spreadRadius: 2,
+              offset: const Offset(0, 12),
             ),
-            child: post.imageUrl.isEmpty
-                ? Icon(
-                    _getCategoryIcon(post.category),
-                    size: isMobile ? 60 : 80,
-                    color: isDark
-                        ? const Color(0xFF64FFDA)
-                        : const Color(0xFF0A192F),
-                  )
-                : null,
-          ),
-
-          // Content area
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(isMobile ? 20 : 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Blog title
-                  Text(
-                    post.title,
-                    style: TextStyle(
-                      fontSize: isMobile ? 20 : 24,
-                      fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : Colors.black87,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  // Tags
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: post.tags.take(3).map((tag) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? const Color(0xFF64FFDA).withValues(alpha: 0.15)
-                              : const Color(0xFF0A192F).withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          tag,
-                          style: TextStyle(
-                            fontSize: isMobile ? 11 : 13,
-                            fontWeight: FontWeight.w500,
-                            color: isDark
-                                ? const Color(0xFF64FFDA)
-                                : const Color(0xFF0A192F),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // Blog excerpt
-                  Flexible(
-                    child: Text(
-                      post.excerpt,
-                      style: TextStyle(
-                        fontSize: isMobile ? 13 : 15,
-                        height: 1.5,
-                        color: isDark ? Colors.white70 : Colors.black54,
-                      ),
-                      overflow: TextOverflow.fade,
-                      softWrap: true,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // Action buttons and metadata
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Read time and date
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Blog image container
+            Container(
+              height: isMobile ? 180 : 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+                image: post.imageUrl.isNotEmpty
+                    ? DecorationImage(
+                        image: NetworkImage(post.imageUrl),
+                        fit: BoxFit.fill,
+                      )
+                    : null,
+                color: post.imageUrl.isEmpty
+                    ? (isDark ? const Color(0xFF1E3A5F) : const Color(0xFFEFF3FF))
+                    : null,
+              ),
+              child: post.imageUrl.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Icon(
+                            _getCategoryIcon(post.category),
+                            size: isMobile ? 56 : 72,
+                            color: primaryColor.withValues(alpha: 0.6),
+                          ),
+                          const SizedBox(height: 8),
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
+                              horizontal: 12, vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: isDark
-                                  ? const Color(
-                                      0xFF64FFDA,
-                                    ).withValues(alpha: 0.15)
-                                  : const Color(
-                                      0xFF0A192F,
-                                    ).withValues(alpha: 0.1),
+                              color: primaryColor.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
@@ -312,74 +232,167 @@ class _BlogSectionState extends State<BlogSection> {
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
-                                color: isDark
-                                    ? const Color(0xFF64FFDA)
-                                    : const Color(0xFF0A192F),
+                                color: primaryColor,
+                                letterSpacing: 1,
                               ),
-                            ),
-                          ),
-                          Text(
-                            '${post.readTime} min read',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: isDark ? Colors.white70 : Colors.black54,
                             ),
                           ),
                         ],
                       ),
+                    )
+                  : null,
+            ),
 
-                      const SizedBox(height: 8),
-
-                      Text(
-                        _formatDate(post.publishedDate),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: isDark ? Colors.white54 : Colors.black38,
-                        ),
+            // Content area
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(isMobile ? 20 : 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Blog title
+                    Text(
+                      post.title,
+                      style: TextStyle(
+                        fontSize: isMobile ? 18 : 22,
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? Colors.white : Colors.black87,
+                        height: 1.3,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
 
-                      const SizedBox(height: 10),
+                    const SizedBox(height: 10),
 
-                      // Action button
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            if (post.externalUrl != null &&
-                                post.externalUrl!.isNotEmpty) {
-                              _launchUrl(post.externalUrl!);
-                            } else {
-                              // Show blog detail dialog
-                              _showBlogDetailDialog(
-                                context,
-                                post,
-                                isMobile,
-                                isDark,
-                              );
-                            }
-                          },
-                          icon: const Icon(Icons.open_in_new, size: 18),
-                          label: const Text('Read Article'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF64FFDA),
-                            foregroundColor: const Color(0xFF0A192F),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: isMobile ? 16 : 20,
-                              vertical: isMobile ? 10 : 12,
+                    // Tags
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: post.tags.take(3).map((tag) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: primaryColor.withValues(alpha: 0.10),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            '#$tag',
+                            style: TextStyle(
+                              fontSize: isMobile ? 11 : 12,
+                              fontWeight: FontWeight.w500,
+                              color: primaryColor,
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    // Blog excerpt
+                    Flexible(
+                      child: Text(
+                        post.excerpt,
+                        style: TextStyle(
+                          fontSize: isMobile ? 13 : 14,
+                          height: 1.55,
+                          color: isDark ? Colors.white60 : Colors.black54,
+                        ),
+                        overflow: TextOverflow.fade,
+                        softWrap: true,
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    // Meta row + button
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: primaryColor.withValues(alpha: 0.12),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                post.category.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: primaryColor,
+                                  letterSpacing: 0.8,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '${post.readTime} min read',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: isDark ? Colors.white54 : Colors.black38,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 6),
+
+                        Text(
+                          _formatDate(post.publishedDate),
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: isDark ? Colors.white38 : Colors.black26,
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        // Action button
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              if (post.externalUrl != null &&
+                                  post.externalUrl!.isNotEmpty) {
+                                _launchUrl(post.externalUrl!);
+                              } else {
+                                _showBlogDetailDialog(context, post, isMobile, isDark);
+                              }
+                            },
+                            icon: const Icon(Icons.open_in_new, size: 16),
+                            label: const Text('Read Article'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              foregroundColor: isDark
+                                  ? AppColors.darkBackground
+                                  : Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: isMobile ? 14 : 18,
+                                vertical: isMobile ? 10 : 12,
+                              ),
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

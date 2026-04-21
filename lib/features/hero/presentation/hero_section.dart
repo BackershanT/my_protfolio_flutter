@@ -1,3 +1,5 @@
+import 'dart:math';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart' show rootBundle;
@@ -7,10 +9,9 @@ import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
 import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_assets.dart';
+import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:math';
-import 'dart:typed_data';
 
 // Conditional imports for web vs non-web platforms
 import 'html_stub.dart' if (dart.library.html) 'dart:html' as html;
@@ -26,28 +27,56 @@ class HeroSection extends StatefulWidget {
 
 class _HeroSectionState extends State<HeroSection>
     with TickerProviderStateMixin {
-  late AnimationController _controller;
-  late AnimationController _floatingController;
+  late AnimationController _starController;
+  late AnimationController _gridController;
+  late AnimationController _floatController;
   int _currentIndex = 0;
   Offset _mousePosition = Offset.zero;
+  Size _widgetSize = Size.zero;
+
+  final List<StarParticle> _stars = [];
+  final Random _rng = Random();
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    );
-    _controller.repeat(reverse: true);
 
-    _floatingController = AnimationController(
-      duration: const Duration(seconds: 10),
+    _starController = AnimationController(
       vsync: this,
-    );
-    _floatingController.repeat();
+      duration: const Duration(seconds: 20),
+    )..repeat();
 
-    // Start the role rotation
+    _gridController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 6),
+    )..repeat();
+
+    _floatController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    )..repeat(reverse: true);
+
+    _generateStars();
     Future.delayed(const Duration(seconds: 3), _rotateRole);
+  }
+
+  void _generateStars() {
+    _stars.clear();
+    final colors = [
+      const Color(0xFF64FFDA),
+      Colors.white,
+      const Color(0xFF7B9FFF),
+      const Color(0xFFC0CCFF),
+    ];
+    for (int i = 0; i < 180; i++) {
+      _stars.add(StarParticle(
+        x: _rng.nextDouble() * 1920,
+        y: _rng.nextDouble() * 1080,
+        z: _rng.nextDouble() * 1800 + 200,
+        speed: _rng.nextDouble() * 0.4 + 0.05,
+        color: colors[_rng.nextInt(colors.length)],
+      ));
+    }
   }
 
   void _rotateRole() {
@@ -61,33 +90,26 @@ class _HeroSectionState extends State<HeroSection>
 
   @override
   void dispose() {
-    _controller.dispose();
-    _floatingController.dispose();
+    _starController.dispose();
+    _gridController.dispose();
+    _floatController.dispose();
     super.dispose();
   }
 
   Future<void> _downloadResume() async {
     try {
       if (kIsWeb) {
-        // For web, load the asset as bytes and create a blob URL
         final assetPath = HeroData.getResumeUrl();
         final ByteData data = await rootBundle.load(assetPath);
         final Uint8List bytes = data.buffer.asUint8List();
-        
-        // Create a blob from the bytes
         final blob = html.Blob([bytes]);
         final url = html.Url.createObjectUrlFromBlob(blob);
-        
-        // Create an anchor element to trigger download
         final anchor = html.AnchorElement(href: url);
         anchor.setAttribute('download', 'BACKERSHAN_T.pdf');
         anchor.click();
-        
-        // Clean up the object URL after a short delay
         Future.delayed(const Duration(seconds: 1), () {
           html.Url.revokeObjectUrl(url);
         });
-
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -97,29 +119,18 @@ class _HeroSectionState extends State<HeroSection>
           );
         }
       } else {
-        // For mobile/desktop, download the file to device storage
         final dir = await getApplicationDocumentsDirectory();
         final savePath = '${dir.path}/BACKERSHAN_T.pdf';
-
-        // Create Dio instance
         final dio = Dio();
-
-        // Download the file
         await dio.download(HeroData.getResumeUrl(), savePath);
-
-        // Show success message
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text(
-                'Resume downloaded successfully! Check your documents folder.',
-              ),
+              content: const Text('Resume downloaded! Check your documents.'),
               backgroundColor: Colors.green,
               action: SnackBarAction(
                 label: 'Open',
                 onPressed: () {
-                  // On mobile/desktop, we can't directly open the file without additional plugins
-                  // So we'll just show the file path
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('File saved to: $savePath'),
@@ -133,7 +144,6 @@ class _HeroSectionState extends State<HeroSection>
         }
       }
     } catch (e) {
-      // Show error message
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -148,45 +158,145 @@ class _HeroSectionState extends State<HeroSection>
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return MouseRegion(
-      onHover: (event) {
-        setState(() {
-          _mousePosition = event.localPosition;
-        });
-      },
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: AnimatedBuilder(
-              animation: _floatingController,
-              builder: (context, child) {
-                return CustomPaint(
-                  painter: BlobPainter(
-                    mousePosition: _mousePosition,
-                    animationValue: _floatingController.value,
-                    isDark: Theme.of(context).brightness == Brightness.dark,
+    return LayoutBuilder(builder: (context, constraints) {
+      _widgetSize = Size(constraints.maxWidth, constraints.maxHeight);
+      return MouseRegion(
+        onHover: (event) {
+          setState(() {
+            _mousePosition = event.localPosition;
+          });
+        },
+        child: SizedBox(
+          width: double.infinity,
+          child: Stack(
+            children: [
+              // ── 3D Starfield background ──
+              Positioned.fill(
+                child: AnimatedBuilder(
+                  animation: _starController,
+                  builder: (context, _) {
+                    // Animate star Z positions (fly-through effect)
+                    final t = _starController.value;
+                    for (final s in _stars) {
+                      s.z -= s.speed * 4;
+                      if (s.z <= 10) {
+                        s.z = 1800;
+                        s.x = _rng.nextDouble() * 1920;
+                        s.y = _rng.nextDouble() * 1080;
+                      }
+                    }
+                    return CustomPaint(
+                      painter: StarfieldPainter(
+                        particles: _stars,
+                        cameraZ: 0,
+                        isDark: isDark,
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              // ── 3D Perspective Grid ──
+              Positioned.fill(
+                child: AnimatedBuilder(
+                  animation: _gridController,
+                  builder: (context, _) {
+                    final shift =
+                        (_mousePosition.dx - screenWidth / 2) * 0.03;
+                    return CustomPaint(
+                      painter: Grid3DPainter(
+                        animValue: _gridController.value,
+                        isDark: isDark,
+                        perspectiveShift: shift,
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              // ── Subtle gradient overlay (depth fog) ──
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        (isDark
+                                ? AppColors.darkBackground
+                                : AppColors.lightBackground)
+                            .withOpacity(0.0),
+                        (isDark
+                                ? AppColors.darkBackground
+                                : AppColors.lightBackground)
+                            .withOpacity(0.85),
+                      ],
+                    ),
                   ),
-                );
-              },
-            ),
+                ),
+              ),
+
+              // ── Decorative floating 3D cubes ──
+              Positioned(
+                top: 80,
+                left: screenWidth * 0.08,
+                child: FloatingWidget(
+                  amplitude: 15,
+                  duration: const Duration(seconds: 5),
+                  child: RotatingCube(
+                    size: 38,
+                    color: isDark
+                        ? AppColors.primaryLight
+                        : AppColors.primaryDark,
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 120,
+                right: screenWidth * 0.06,
+                child: FloatingWidget(
+                  amplitude: 12,
+                  duration: const Duration(seconds: 7),
+                  child: RotatingCube(
+                    size: 28,
+                    color: isDark ? Colors.purpleAccent : Colors.blue,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 200,
+                right: screenWidth * 0.15,
+                child: FloatingWidget(
+                  amplitude: 8,
+                  duration: const Duration(seconds: 6),
+                  child: RotatingCube(
+                    size: 20,
+                    color: isDark ? Colors.cyanAccent : Colors.indigo,
+                  ),
+                ),
+              ),
+
+              // ── Main content ──
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth < 850
+                      ? 20
+                      : (screenWidth < 1200 ? 40 : 100),
+                  vertical: screenWidth < 850 ? 60 : 100,
+                ),
+                child: Responsive(
+                  mobile: _buildMobileLayout(),
+                  desktop: _buildDesktopLayout(),
+                ),
+              ),
+            ],
           ),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(
-              horizontal: screenWidth < 850
-                  ? 20
-                  : (screenWidth < 1200 ? 40 : 100),
-              vertical: screenWidth < 850 ? 60 : 100,
-            ),
-            child: Responsive(
-              mobile: _buildMobileLayout(),
-              desktop: _buildDesktopLayout(),
-            ),
-          ),
-        ],
-      ),
-    );
+        ),
+      );
+    });
   }
 
   Widget _buildMobileLayout() {
@@ -220,25 +330,55 @@ class _HeroSectionState extends State<HeroSection>
     final screenWidth = MediaQuery.of(context).size.width;
     final radius = screenWidth < 850
         ? 80.0
-        : (screenWidth < 1200 ? 100.0 : 120.0);
+        : (screenWidth < 1200 ? 100.0 : 130.0);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor =
+        isDark ? AppColors.primaryLight : AppColors.primaryDark;
 
-    return CircleAvatar(
-      radius: radius,
-      backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? AppColors.primaryLight
-          : AppColors.primaryDark,
-      child: CircleAvatar(
-        radius: radius - 10,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        child:
-            CircleAvatar(
-              radius: radius - 20,
-              backgroundImage: AssetImage(AppAssets.profileAvatar),
-            ).animate().scale(
-              delay: 300.ms,
-              duration: 800.ms,
-              curve: Curves.elasticOut,
+    return FloatingWidget(
+      amplitude: 14,
+      duration: const Duration(seconds: 4),
+      child: TiltCard(
+        maxTilt: 20,
+        scale: 1.0,
+        glareOpacity: 0.2,
+        borderRadius: BorderRadius.circular(500),
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: primaryColor.withOpacity(0.4),
+                blurRadius: 40,
+                spreadRadius: 8,
+                offset: const Offset(0, 20),
+              ),
+              BoxShadow(
+                color: primaryColor.withOpacity(0.15),
+                blurRadius: 80,
+                spreadRadius: 20,
+              ),
+            ],
+          ),
+          child: CircleAvatar(
+            radius: radius,
+            backgroundColor: primaryColor,
+            child: CircleAvatar(
+              radius: radius - 4,
+              backgroundColor: isDark
+                  ? AppColors.darkBackground
+                  : Colors.white,
+              child: CircleAvatar(
+                radius: radius - 12,
+                backgroundImage: AssetImage(AppAssets.profileAvatar),
+              ).animate().scale(
+                    delay: 300.ms,
+                    duration: 800.ms,
+                    curve: Curves.elasticOut,
+                  ),
             ),
+          ),
+        ),
       ),
     ).animate().fadeIn(delay: 200.ms, duration: 800.ms);
   }
@@ -248,25 +388,48 @@ class _HeroSectionState extends State<HeroSection>
     final isMobile = screenWidth < 850;
     final isTablet = screenWidth >= 850 && screenWidth < 1200;
     final isDesktop = screenWidth >= 1200;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Flutter.dev style: Large, bold headline - RESPONSIVE
+        // Glowing caption
         Text(
-              AppTexts.heroName,
-              style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                fontSize: isMobile ? 32 : (isTablet ? 40 : 56),
+          'I am',
+          style: TextStyle(
+            fontSize: isMobile ? 12 : 14,
+            letterSpacing: 3,
+            fontWeight: FontWeight.w600,
+            color: isDark
+                ? AppColors.primaryLight.withOpacity(0.8)
+                : AppColors.primaryDark.withOpacity(0.7),
+          ),
+        )
+            .animate()
+            .fadeIn(delay: 200.ms, duration: 600.ms)
+            .slideX(begin: -0.3, end: 0),
+        const SizedBox(height: 12),
+        // Large bold headline
+        Text(
+          AppTexts.heroName,
+          style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                fontSize: isMobile ? 32 : (isTablet ? 40 : 60),
                 fontWeight: FontWeight.bold,
-                height: 1.1,
-                letterSpacing: -1,
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? AppColors
-                          .primaryLight // Cyan color for dark mode
-                    : null, // Use default color for light mode
+                height: 1.05,
+                letterSpacing: -1.5,
+                color: isDark ? AppColors.primaryLight : null,
+                shadows: [
+                  Shadow(
+                    color: (isDark
+                            ? AppColors.primaryLight
+                            : AppColors.primaryDark)
+                        .withOpacity(0.3),
+                    blurRadius: 30,
+                  ),
+                ],
               ),
-            )
+        )
             .animate()
             .fadeIn(delay: 400.ms, duration: 600.ms)
             .slide(
@@ -275,7 +438,7 @@ class _HeroSectionState extends State<HeroSection>
               curve: Curves.easeOutCubic,
             ),
         SizedBox(height: isMobile ? 15 : 24),
-        // Animated role with Flutter.dev style - RESPONSIVE
+        // Animated role switcher
         SizedBox(
           height: isMobile ? 50 : 70,
           child: AnimatedSwitcher(
@@ -296,33 +459,34 @@ class _HeroSectionState extends State<HeroSection>
               AppTexts.heroRoles[_currentIndex],
               key: ValueKey<int>(_currentIndex),
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontSize: isMobile ? 20 : (isTablet ? 26 : 38),
-                fontWeight: FontWeight.w600,
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? AppColors.primaryLight
-                    : AppColors.primaryDark,
-                height: 1.2,
-              ),
+                    fontSize: isMobile ? 20 : (isTablet ? 26 : 38),
+                    fontWeight: FontWeight.w600,
+                    color:
+                        isDark ? AppColors.primaryLight : AppColors.primaryDark,
+                    height: 1.2,
+                  ),
             ),
           ),
         ).animate().fadeIn(delay: 600.ms, duration: 600.ms),
         SizedBox(height: isMobile ? 20 : 30),
-        // Description with better readability - RESPONSIVE
+        // Description
         ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: isDesktop ? 700 : (isTablet ? 500 : double.infinity),
-              ),
-              child: Text(
-                AppTexts.heroDescription,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          constraints: BoxConstraints(
+            maxWidth: isDesktop ? 700 : (isTablet ? 500 : double.infinity),
+          ),
+          child: Text(
+            AppTexts.heroDescription,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontSize: isMobile ? 14 : (isTablet ? 16 : 18),
                   height: 1.7,
-                  color: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.color?.withOpacity(0.8),
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.color
+                      ?.withOpacity(0.8),
                 ),
-              ),
-            )
+          ),
+        )
             .animate()
             .fadeIn(delay: 800.ms, duration: 600.ms)
             .slide(
@@ -339,77 +503,32 @@ class _HeroSectionState extends State<HeroSection>
   Widget _buildActionButtons() {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 850;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Wrap(
       spacing: isMobile ? 12 : 20,
       runSpacing: 16,
       children: [
-        // Flutter.dev style: Primary CTA button
-        ElevatedButton(
-              onPressed: _downloadResume,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).brightness == Brightness.dark
-                    ? AppColors.primaryLight
-                    : AppColors.primaryDark,
-                foregroundColor: Theme.of(context).brightness == Brightness.dark
-                    ? AppColors.darkBackground
-                    : Colors.white,
-                padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 24 : 32,
-                  vertical: isMobile ? 16 : 20,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                elevation: 0,
-              ),
-              child: Text(
-                AppTexts.resumeButtonText,
-                style: TextStyle(
-                  fontSize: isMobile ? 14 : 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            )
-            .animate()
-            .fadeIn(delay: 1000.ms, duration: 600.ms)
-            .scale(
+        // Primary CTA
+        _Btn3D(
+          onPressed: _downloadResume,
+          filled: true,
+          isDark: isDark,
+          label: AppTexts.resumeButtonText,
+          isMobile: isMobile,
+        ).animate().fadeIn(delay: 1000.ms, duration: 600.ms).scale(
               begin: const Offset(0.9, 0.9),
               duration: 600.ms,
               curve: Curves.easeOutBack,
             ),
-        // Secondary button
-        OutlinedButton(
-              onPressed: widget.onViewProjects ?? () {},
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Theme.of(context).brightness == Brightness.dark
-                    ? AppColors.primaryLight
-                    : AppColors.primaryDark,
-                padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 24 : 32,
-                  vertical: isMobile ? 16 : 20,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                side: BorderSide(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? AppColors.primaryLight
-                      : AppColors.primaryDark,
-                  width: 2,
-                ),
-              ),
-              child: Text(
-                AppTexts.viewProjects,
-                style: TextStyle(
-                  fontSize: isMobile ? 14 : 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            )
-            .animate()
-            .fadeIn(delay: 1200.ms, duration: 600.ms)
-            .scale(
+        // Secondary CTA
+        _Btn3D(
+          onPressed: widget.onViewProjects ?? () {},
+          filled: false,
+          isDark: isDark,
+          label: AppTexts.viewProjects,
+          isMobile: isMobile,
+        ).animate().fadeIn(delay: 1200.ms, duration: 600.ms).scale(
               begin: const Offset(0.9, 0.9),
               duration: 600.ms,
               curve: Curves.easeOutBack,
@@ -419,58 +538,101 @@ class _HeroSectionState extends State<HeroSection>
   }
 }
 
-class BlobPainter extends CustomPainter {
-  final Offset mousePosition;
-  final double animationValue;
+// ─────────────────────────────────────────────────────────────────
+//  3D-styled button with tilt + glow effect
+// ─────────────────────────────────────────────────────────────────
+class _Btn3D extends StatefulWidget {
+  final VoidCallback onPressed;
+  final bool filled;
   final bool isDark;
+  final String label;
+  final bool isMobile;
 
-  BlobPainter({
-    required this.mousePosition,
-    required this.animationValue,
+  const _Btn3D({
+    required this.onPressed,
+    required this.filled,
     required this.isDark,
+    required this.label,
+    required this.isMobile,
   });
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 100);
+  State<_Btn3D> createState() => _Btn3DState();
+}
 
-    // Blob 1 - Top Left
-    final blob1Center = Offset(
-      size.width * 0.2 + (mousePosition.dx - size.width / 2) * 0.05,
-      size.height * 0.3 + (mousePosition.dy - size.height / 2) * 0.05,
-    );
-    paint.color = (isDark ? AppColors.primaryLight : AppColors.primaryDark)
-        .withOpacity(isDark ? 0.08 : 0.05);
-    canvas.drawCircle(
-      blob1Center,
-      200 + sin(animationValue * 2 * pi) * 20,
-      paint,
-    );
-
-    // Blob 2 - Bottom Right
-    final blob2Center = Offset(
-      size.width * 0.8 + (mousePosition.dx - size.width / 2) * 0.03,
-      size.height * 0.7 + (mousePosition.dy - size.height / 2) * 0.03,
-    );
-    paint.color = (isDark ? Colors.purple : Colors.blue).withOpacity(
-      isDark ? 0.05 : 0.03,
-    );
-    canvas.drawCircle(
-      blob2Center,
-      250 + cos(animationValue * 2 * pi) * 30,
-      paint,
-    );
-
-    // Blob 3 - Center Right
-    final blob3Center = Offset(
-      size.width * 0.9 + (mousePosition.dx - size.width / 2) * 0.02,
-      size.height * 0.2 + (mousePosition.dy - size.height / 2) * 0.02,
-    );
-    paint.color = AppColors.primaryLight.withOpacity(isDark ? 0.06 : 0.04);
-    canvas.drawCircle(blob3Center, 150 + sin(animationValue * pi) * 40, paint);
-  }
+class _Btn3DState extends State<_Btn3D> {
+  bool _hovered = false;
+  double _rotY = 0;
 
   @override
-  bool shouldRepaint(covariant BlobPainter oldDelegate) => true;
+  Widget build(BuildContext context) {
+    final primaryColor = widget.isDark
+        ? AppColors.primaryLight
+        : AppColors.primaryDark;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() {
+        _hovered = false;
+        _rotY = 0;
+      }),
+      onHover: (e) {
+        final w = widget.isMobile ? 150.0 : 180.0;
+        setState(() {
+          _rotY = ((e.localPosition.dx / w) - 0.5) * 0.3; // slight tilt
+        });
+      },
+      child: AnimatedScale(
+        scale: _hovered ? 1.06 : 1.0,
+        duration: const Duration(milliseconds: 200),
+        child: Transform(
+          alignment: Alignment.center,
+          transform: Matrix4.identity()
+            ..setEntry(3, 2, 0.001)
+            ..rotateY(_rotY),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: EdgeInsets.symmetric(
+              horizontal: widget.isMobile ? 24 : 32,
+              vertical: widget.isMobile ? 14 : 18,
+            ),
+            decoration: BoxDecoration(
+              color: widget.filled
+                  ? (widget.isDark
+                      ? AppColors.primaryLight
+                      : AppColors.primaryDark)
+                  : Colors.transparent,
+              border: Border.all(color: primaryColor, width: 2),
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: _hovered
+                  ? [
+                      BoxShadow(
+                        color: primaryColor.withOpacity(0.5),
+                        blurRadius: 20,
+                        spreadRadius: 2,
+                        offset: const Offset(0, 8),
+                      ),
+                    ]
+                  : [],
+            ),
+            child: GestureDetector(
+              onTap: widget.onPressed,
+              child: Text(
+                widget.label,
+                style: TextStyle(
+                  fontSize: widget.isMobile ? 14 : 16,
+                  fontWeight: FontWeight.w600,
+                  color: widget.filled
+                      ? (widget.isDark
+                          ? AppColors.darkBackground
+                          : Colors.white)
+                      : primaryColor,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
 import 'package:my_protfolio/features/shared/core/constants/colors.dart';
 import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
+import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
 import 'package:my_protfolio/features/shared/presentation/section_title.dart';
 import 'package:my_protfolio/features/skills/data/models/skill_model.dart';
 
@@ -290,130 +291,140 @@ class _SkillCardState extends State<_SkillCard> {
         ? AppColors.primaryLight
         : AppColors.primaryDark;
 
+    final card = AnimatedOpacity(
+      opacity: widget.isActive || _isHovered ? 1.0 : 0.6,
+      duration: const Duration(milliseconds: 400),
+      child: Container(
+        width: widget.isMobile ? 220 : 200,
+        height: widget.isMobile ? 220 : 200,
+        decoration: BoxDecoration(
+          color: widget.isDark
+              ? const Color(0xFF112240).withOpacity(0.85)
+              : Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: (widget.isActive || _isHovered)
+                ? primaryColor.withOpacity(0.6)
+                : primaryColor.withOpacity(0.12),
+            width: 2,
+          ),
+          boxShadow: [
+            if (widget.isActive || _isHovered)
+              BoxShadow(
+                color: primaryColor.withOpacity(0.25),
+                blurRadius: 30,
+                offset: const Offset(0, 12),
+                spreadRadius: 3,
+              )
+            else
+              BoxShadow(
+                color: Colors.black.withOpacity(0.06),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            if (widget.isActive || _isHovered)
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    gradient: RadialGradient(
+                      colors: [
+                        primaryColor.withOpacity(0.12),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Hero(
+                        tag: 'skill_${widget.skill.label}_${widget.isMobile}_${widget.isActive}',
+                        child: Image.asset(
+                          widget.skill.assetPath,
+                          width: widget.isMobile ? 100 : 80,
+                          height: widget.isMobile ? 100 : 80,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) => Icon(
+                            Icons.code,
+                            size: 60,
+                            color: primaryColor.withOpacity(0.5),
+                          ),
+                        ),
+                      )
+                      .animate(
+                        target: widget.isMobile
+                            ? (widget.isActive ? 1 : 0)
+                            : (_isHovered ? 1 : 0),
+                      )
+                      .shimmer(
+                        duration: 1200.ms,
+                        color: primaryColor.withOpacity(0.3),
+                      )
+                      .scale(
+                        begin: const Offset(1, 1),
+                        end: const Offset(1.15, 1.15),
+                        curve: Curves.easeOutBack,
+                      )
+                      .rotate(
+                        begin: 0,
+                        end: widget.isMobile ? 0 : 0.05,
+                        curve: Curves.easeOutBack,
+                      ),
+                  const SizedBox(height: 16),
+                  Text(
+                        widget.skill.label,
+                        style: TextStyle(
+                          fontSize: widget.isMobile ? 18 : 16,
+                          fontWeight: FontWeight.bold,
+                          color: widget.isDark ? Colors.white : AppColors.primaryDark,
+                          letterSpacing: 1.1,
+                        ),
+                      )
+                      .animate(
+                        target: widget.isMobile
+                            ? (widget.isActive ? 1 : 0)
+                            : (_isHovered ? 1 : 0),
+                      )
+                      .fadeIn()
+                      .slideY(begin: 0.2, end: 0)
+                      .tint(color: primaryColor, begin: 0, end: 0.2),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    // Wrap desktop cards with 3D tilt; mobile uses scale only
+    if (!widget.isMobile) {
+      return TiltCard(
+        maxTilt: 15,
+        scale: widget.isActive ? 1.05 : 1.0,
+        glareOpacity: 0.12,
+        child: MouseRegion(
+          onEnter: (_) => setState(() => _isHovered = true),
+          onExit: (_) => setState(() => _isHovered = false),
+          child: card,
+        ),
+      );
+    }
+
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedScale(
-        scale: widget.isMobile
-            ? (widget.isActive ? 1.0 : 0.8)
-            : (_isHovered ? 1.05 : 0.95),
+        scale: widget.isActive ? 1.0 : 0.8,
         duration: const Duration(milliseconds: 400),
         curve: Curves.easeOutBack,
-        child: AnimatedOpacity(
-          opacity: widget.isActive || _isHovered ? 1.0 : 0.6,
-          duration: const Duration(milliseconds: 400),
-          child: Container(
-            width: widget.isMobile ? 220 : 200,
-            height: widget.isMobile ? 220 : 200,
-            decoration: BoxDecoration(
-              color: widget.isDark
-                  ? const Color(0xFF112240).withOpacity(0.8)
-                  : Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(
-                color: (widget.isActive || _isHovered)
-                    ? primaryColor.withOpacity(0.5)
-                    : primaryColor.withOpacity(0.1),
-                width: 2,
-              ),
-              boxShadow: [
-                if (widget.isActive || _isHovered)
-                  BoxShadow(
-                    color: primaryColor.withOpacity(0.2),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                    spreadRadius: 2,
-                  )
-                else
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-              ],
-            ),
-            child: Stack(
-              children: [
-                if (widget.isActive || _isHovered)
-                  Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
-                        gradient: RadialGradient(
-                          colors: [
-                            primaryColor.withOpacity(0.1),
-                            Colors.transparent,
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Hero(
-                            tag:
-                                'skill_${widget.skill.label}_${widget.isMobile}_${widget.isActive}',
-                            child: Image.asset(
-                              widget.skill.assetPath,
-                              width: widget.isMobile ? 100 : 80,
-                              height: widget.isMobile ? 100 : 80,
-                              fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Icon(
-                                    Icons.code,
-                                    size: 60,
-                                    color: primaryColor.withOpacity(0.5),
-                                  ),
-                            ),
-                          )
-                          .animate(
-                            target: widget.isMobile
-                                ? (widget.isActive ? 1 : 0)
-                                : (_isHovered ? 1 : 0),
-                          )
-                          .shimmer(
-                            duration: 1200.ms,
-                            color: primaryColor.withOpacity(0.3),
-                          )
-                          .scale(
-                            begin: const Offset(1, 1),
-                            end: const Offset(1.15, 1.15),
-                            curve: Curves.easeOutBack,
-                          )
-                          .rotate(
-                            begin: 0,
-                            end: widget.isMobile ? 0 : 0.05,
-                            curve: Curves.easeOutBack,
-                          ),
-                      const SizedBox(height: 16),
-                      Text(
-                            widget.skill.label,
-                            style: TextStyle(
-                              fontSize: widget.isMobile ? 18 : 16,
-                              fontWeight: FontWeight.bold,
-                              color: widget.isDark
-                                  ? Colors.white
-                                  : AppColors.primaryDark,
-                              letterSpacing: 1.1,
-                            ),
-                          )
-                          .animate(
-                            target: widget.isMobile
-                                ? (widget.isActive ? 1 : 0)
-                                : (_isHovered ? 1 : 0),
-                          )
-                          .fadeIn()
-                          .slideY(begin: 0.2, end: 0)
-                          .tint(color: primaryColor, begin: 0, end: 0.2),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        child: card,
       ),
     );
   }
