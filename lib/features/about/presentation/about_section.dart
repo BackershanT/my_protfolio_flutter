@@ -6,7 +6,6 @@ import 'package:my_protfolio/features/shared/core/constants/colors.dart';
 import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
 import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
 import 'package:my_protfolio/features/shared/presentation/section_title.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
@@ -86,13 +85,13 @@ class AboutSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isDark
-              ? Colors.white.withOpacity(0.08)
-              : Colors.black.withOpacity(0.05),
+              ? Colors.white.withValues(alpha: 0.08)
+              : Colors.black.withValues(alpha: 0.05),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: primaryColor.withOpacity(isDark ? 0.08 : 0.04),
+            color: primaryColor.withValues(alpha: isDark ? 0.08 : 0.04),
             blurRadius: 20,
             spreadRadius: 2,
             offset: const Offset(0, 8),
@@ -107,8 +106,8 @@ class AboutSection extends StatelessWidget {
             padding: EdgeInsets.all(iconPadding),
             decoration: BoxDecoration(
               color: isDark
-                  ? AppColors.primaryLight.withOpacity(0.1)
-                  : AppColors.primaryDark.withOpacity(0.1),
+                  ? AppColors.primaryLight.withValues(alpha: 0.1)
+                  : AppColors.primaryDark.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -142,7 +141,7 @@ class AboutSection extends StatelessWidget {
                       .textTheme
                       .bodyMedium
                       ?.color
-                      ?.withOpacity(0.7),
+                      ?.withValues(alpha: 0.7),
                 ),
           ).animate().fadeIn(
                 delay: (feature.delay + 400).ms,

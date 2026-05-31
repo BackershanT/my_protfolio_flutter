@@ -113,7 +113,7 @@ class ExperienceSection extends StatelessWidget {
                       (Theme.of(context).brightness == Brightness.dark
                               ? AppColors.primaryLight
                               : AppColors.primaryDark)
-                          .withOpacity(0.3),
+                          .withValues(alpha: 0.3),
                 ).animate().fadeIn(
                   delay: (index * 200 + 300).ms,
                   duration: 600.ms,
@@ -131,8 +131,8 @@ class ExperienceSection extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16.r),
                         border: Border.all(
                           color: Theme.of(context).brightness == Brightness.dark
-                              ? Colors.white.withOpacity(0.1)
-                              : Colors.black.withOpacity(0.05),
+                              ? Colors.white.withValues(alpha: 0.1)
+                              : Colors.black.withValues(alpha: 0.05),
                           width: 1,
                         ),
                       ),
@@ -172,7 +172,7 @@ class ExperienceSection extends StatelessWidget {
                                                     Brightness.dark
                                                 ? AppColors.primaryLight
                                                 : AppColors.primaryDark)
-                                            .withOpacity(0.1),
+                                            .withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(20.r),
                                   ),
                                   child: Text(
@@ -209,7 +209,7 @@ class ExperienceSection extends StatelessWidget {
                                 size: 16.sp,
                                 color: Theme.of(
                                   context,
-                                ).textTheme.bodyMedium?.color?.withOpacity(0.6),
+                                ).textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
                               ),
                               SizedBox(width: 8.w),
                               Text(
@@ -221,7 +221,7 @@ class ExperienceSection extends StatelessWidget {
                                           .textTheme
                                           .bodyMedium
                                           ?.color
-                                          ?.withOpacity(0.6),
+                                          ?.withValues(alpha: 0.6),
                                     ),
                               ),
                             ],

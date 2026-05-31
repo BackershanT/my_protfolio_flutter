@@ -74,8 +74,8 @@ class EducationSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
           color: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white.withOpacity(0.1)
-              : Colors.black.withOpacity(0.05),
+              ? Colors.white.withValues(alpha: 0.1)
+              : Colors.black.withValues(alpha: 0.05),
           width: 1,
         ),
       ),
@@ -86,8 +86,8 @@ class EducationSection extends StatelessWidget {
             padding: EdgeInsets.all(20.r),
             decoration: BoxDecoration(
               color: Theme.of(context).brightness == Brightness.dark
-                  ? AppColors.primaryLight.withOpacity(0.1)
-                  : AppColors.primaryDark.withOpacity(0.1),
+                  ? AppColors.primaryLight.withValues(alpha: 0.1)
+                  : AppColors.primaryDark.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12.r),
             ),
             child: Icon(
@@ -135,7 +135,7 @@ class EducationSection extends StatelessWidget {
                           .textTheme
                           .bodyMedium
                           ?.color
-                          ?.withOpacity(0.6),
+                          ?.withValues(alpha: 0.6),
                     ),
                     SizedBox(width: 8.w),
                     Text(
@@ -146,7 +146,7 @@ class EducationSection extends StatelessWidget {
                                 .textTheme
                                 .bodyMedium
                                 ?.color
-                                ?.withOpacity(0.6),
+                                ?.withValues(alpha: 0.6),
                           ),
                     ),
                     SizedBox(width: 20.w),
@@ -160,7 +160,7 @@ class EducationSection extends StatelessWidget {
                                 .textTheme
                                 .bodyMedium
                                 ?.color
-                                ?.withOpacity(0.6),
+                                ?.withValues(alpha: 0.6),
                           ),
                           SizedBox(width: 8.w),
                           Text(
@@ -171,7 +171,7 @@ class EducationSection extends StatelessWidget {
                                       .textTheme
                                       .bodyMedium
                                       ?.color
-                                      ?.withOpacity(0.6),
+                                      ?.withValues(alpha: 0.6),
                                 ),
                           ),
                         ],

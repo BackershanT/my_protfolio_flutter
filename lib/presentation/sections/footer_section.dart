@@ -16,7 +16,7 @@ class FooterSection extends StatelessWidget {
         vertical: 30.h,
       ),
       color: Theme.of(context).brightness == Brightness.dark
-          ? AppColors.darkBackground.withOpacity(0.8)
+          ? AppColors.darkBackground.withValues(alpha: 0.8)
           : Colors.grey.shade200,
       child: Column(
         children: [

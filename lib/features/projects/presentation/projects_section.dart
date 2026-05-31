@@ -104,15 +104,15 @@ class _ProjectsSectionState extends State<ProjectsSection>
                   color: isSelected
                       ? AppColors.primaryLight
                       : (isDark
-                            ? Colors.white.withOpacity(0.05)
-                            : Colors.black.withOpacity(0.05)),
+                            ? Colors.white.withValues(alpha: 0.05)
+                            : Colors.black.withValues(alpha: 0.05)),
                   borderRadius: BorderRadius.circular(25),
                   border: Border.all(
                     color: isSelected
                         ? AppColors.primaryLight
                         : (isDark
-                              ? Colors.white.withOpacity(0.1)
-                              : Colors.black.withOpacity(0.1)),
+                              ? Colors.white.withValues(alpha: 0.1)
+                              : Colors.black.withValues(alpha: 0.1)),
                   ),
                 ),
                 child: Text(
@@ -202,7 +202,7 @@ class _ProjectsSectionState extends State<ProjectsSection>
                 fontSize: isMobile ? 14 : 16,
                 fontWeight: FontWeight.w500,
                 color: (isDark ? AppColors.primaryLight : AppColors.primaryDark)
-                    .withOpacity(0.7),
+                    .withValues(alpha: 0.7),
               ),
             ),
           ],
@@ -279,14 +279,14 @@ class _ProjectsSectionState extends State<ProjectsSection>
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isDark
-                ? Colors.white.withOpacity(0.08)
-                : Colors.black.withOpacity(0.05),
+                ? Colors.white.withValues(alpha: 0.08)
+                : Colors.black.withValues(alpha: 0.05),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
               color: (isDark ? AppColors.primaryLight : AppColors.primaryDark)
-                  .withOpacity(isDark ? 0.10 : 0.06),
+                  .withValues(alpha: isDark ? 0.10 : 0.06),
               blurRadius: 24,
               spreadRadius: 2,
               offset: const Offset(0, 10),
@@ -321,8 +321,8 @@ class _ProjectsSectionState extends State<ProjectsSection>
                       padding: EdgeInsets.all(iconPadding),
                       decoration: BoxDecoration(
                         color: isDark
-                            ? AppColors.primaryLight.withOpacity(0.1)
-                            : AppColors.primaryDark.withOpacity(0.1),
+                            ? AppColors.primaryLight.withValues(alpha: 0.1)
+                            : AppColors.primaryDark.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(
@@ -364,8 +364,8 @@ class _ProjectsSectionState extends State<ProjectsSection>
                         ),
                         decoration: BoxDecoration(
                           color: isDark
-                              ? AppColors.primaryLight.withOpacity(0.15)
-                              : AppColors.primaryDark.withOpacity(0.1),
+                              ? AppColors.primaryLight.withValues(alpha: 0.15)
+                              : AppColors.primaryDark.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -387,7 +387,7 @@ class _ProjectsSectionState extends State<ProjectsSection>
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: descSize,
                       height: 1.6,
-                      color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+                      color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

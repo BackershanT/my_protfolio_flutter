@@ -40,10 +40,10 @@ class CustomCursor extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: AppColors.primaryLight.withOpacity(0.5),
+                        color: AppColors.primaryLight.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
-                      color: AppColors.primaryLight.withOpacity(0.1),
+                      color: AppColors.primaryLight.withValues(alpha: 0.1),
                     ),
                   ),
                 ),

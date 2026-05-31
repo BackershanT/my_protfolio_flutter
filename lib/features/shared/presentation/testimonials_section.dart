@@ -107,7 +107,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                 shape: BoxShape.circle,
                 color: _currentPage == index
                     ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                    : Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
               ),
             );
           }),
@@ -162,12 +162,12 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
         color: isDark ? const Color(0xFF112240) : Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: primaryColor.withOpacity(0.18),
+          color: primaryColor.withValues(alpha: 0.18),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: primaryColor.withOpacity(isDark ? 0.12 : 0.06),
+            color: primaryColor.withValues(alpha: isDark ? 0.12 : 0.06),
             blurRadius: 30,
             spreadRadius: 2,
             offset: const Offset(0, 12),
@@ -183,7 +183,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
             style: TextStyle(
               fontSize: isMobile ? 36 : 48,
               height: 1,
-              color: primaryColor.withOpacity(0.35),
+              color: primaryColor.withValues(alpha: 0.35),
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -209,7 +209,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  primaryColor.withOpacity(0.5),
+                  primaryColor.withValues(alpha: 0.5),
                   Colors.transparent,
                 ],
               ),
@@ -225,19 +225,19 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: primaryColor.withOpacity(0.4),
+                    color: primaryColor.withValues(alpha: 0.4),
                     width: 2,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: primaryColor.withOpacity(0.2),
+                      color: primaryColor.withValues(alpha: 0.2),
                       blurRadius: 12,
                       spreadRadius: 1,
                     ),
                   ],
                   color: isDark
-                      ? Colors.white.withOpacity(0.08)
-                      : Colors.black.withOpacity(0.05),
+                      ? Colors.white.withValues(alpha: 0.08)
+                      : Colors.black.withValues(alpha: 0.05),
                   image: testimonial.avatarUrl.isNotEmpty
                       ? DecorationImage(
                           image: AssetImage(testimonial.avatarUrl),
@@ -271,7 +271,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                       '${testimonial.role} · ${testimonial.company}',
                       style: TextStyle(
                         fontSize: roleSize,
-                        color: primaryColor.withOpacity(0.75),
+                        color: primaryColor.withValues(alpha: 0.75),
                         fontWeight: FontWeight.w500,
                       ),
                     ).animate().fadeIn(delay: 350.ms, duration: 600.ms),

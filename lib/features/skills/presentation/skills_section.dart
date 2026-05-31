@@ -206,7 +206,7 @@ class _SkillsSectionState extends State<SkillsSection> {
             color: isActive
                 ? (isDark ? AppColors.primaryLight : AppColors.primaryDark)
                 : (isDark ? AppColors.primaryLight : AppColors.primaryDark)
-                      .withOpacity(0.2),
+                      .withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(5),
             boxShadow: isActive
                 ? [
@@ -215,7 +215,7 @@ class _SkillsSectionState extends State<SkillsSection> {
                           (isDark
                                   ? AppColors.primaryLight
                                   : AppColors.primaryDark)
-                              .withOpacity(0.4),
+                              .withValues(alpha: 0.4),
                       blurRadius: 8,
                       spreadRadius: 1,
                     ),
@@ -299,26 +299,26 @@ class _SkillCardState extends State<_SkillCard> {
         height: widget.isMobile ? 220 : 200,
         decoration: BoxDecoration(
           color: widget.isDark
-              ? const Color(0xFF112240).withOpacity(0.85)
+              ? const Color(0xFF112240).withValues(alpha: 0.85)
               : Colors.white,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: (widget.isActive || _isHovered)
-                ? primaryColor.withOpacity(0.6)
-                : primaryColor.withOpacity(0.12),
+                ? primaryColor.withValues(alpha: 0.6)
+                : primaryColor.withValues(alpha: 0.12),
             width: 2,
           ),
           boxShadow: [
             if (widget.isActive || _isHovered)
               BoxShadow(
-                color: primaryColor.withOpacity(0.25),
+                color: primaryColor.withValues(alpha: 0.25),
                 blurRadius: 30,
                 offset: const Offset(0, 12),
                 spreadRadius: 3,
               )
             else
               BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: Colors.black.withValues(alpha: 0.06),
                 blurRadius: 12,
                 offset: const Offset(0, 6),
               ),
@@ -333,7 +333,7 @@ class _SkillCardState extends State<_SkillCard> {
                     borderRadius: BorderRadius.circular(24),
                     gradient: RadialGradient(
                       colors: [
-                        primaryColor.withOpacity(0.12),
+                        primaryColor.withValues(alpha: 0.12),
                         Colors.transparent,
                       ],
                     ),
@@ -354,7 +354,7 @@ class _SkillCardState extends State<_SkillCard> {
                           errorBuilder: (context, error, stackTrace) => Icon(
                             Icons.code,
                             size: 60,
-                            color: primaryColor.withOpacity(0.5),
+                            color: primaryColor.withValues(alpha: 0.5),
                           ),
                         ),
                       )
@@ -365,7 +365,7 @@ class _SkillCardState extends State<_SkillCard> {
                       )
                       .shimmer(
                         duration: 1200.ms,
-                        color: primaryColor.withOpacity(0.3),
+                        color: primaryColor.withValues(alpha: 0.3),
                       )
                       .scale(
                         begin: const Offset(1, 1),

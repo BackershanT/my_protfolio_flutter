@@ -227,11 +227,11 @@ class _HeroSectionState extends State<HeroSection>
                         (isDark
                                 ? AppColors.darkBackground
                                 : AppColors.lightBackground)
-                            .withOpacity(0.0),
+                            .withValues(alpha: 0.0),
                         (isDark
                                 ? AppColors.darkBackground
                                 : AppColors.lightBackground)
-                            .withOpacity(0.85),
+                            .withValues(alpha: 0.85),
                       ],
                     ),
                   ),
@@ -348,13 +348,13 @@ class _HeroSectionState extends State<HeroSection>
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: primaryColor.withOpacity(0.4),
+                color: primaryColor.withValues(alpha: 0.4),
                 blurRadius: 40,
                 spreadRadius: 8,
                 offset: const Offset(0, 20),
               ),
               BoxShadow(
-                color: primaryColor.withOpacity(0.15),
+                color: primaryColor.withValues(alpha: 0.15),
                 blurRadius: 80,
                 spreadRadius: 20,
               ),
@@ -402,8 +402,8 @@ class _HeroSectionState extends State<HeroSection>
             letterSpacing: 3,
             fontWeight: FontWeight.w600,
             color: isDark
-                ? AppColors.primaryLight.withOpacity(0.8)
-                : AppColors.primaryDark.withOpacity(0.7),
+                ? AppColors.primaryLight.withValues(alpha: 0.8)
+                : AppColors.primaryDark.withValues(alpha: 0.7),
           ),
         )
             .animate()
@@ -424,7 +424,7 @@ class _HeroSectionState extends State<HeroSection>
                     color: (isDark
                             ? AppColors.primaryLight
                             : AppColors.primaryDark)
-                        .withOpacity(0.3),
+                        .withValues(alpha: 0.3),
                     blurRadius: 30,
                   ),
                 ],
@@ -483,7 +483,7 @@ class _HeroSectionState extends State<HeroSection>
                       .textTheme
                       .bodyLarge
                       ?.color
-                      ?.withOpacity(0.8),
+                      ?.withValues(alpha: 0.8),
                 ),
           ),
         )
@@ -607,7 +607,7 @@ class _Btn3DState extends State<_Btn3D> {
               boxShadow: _hovered
                   ? [
                       BoxShadow(
-                        color: primaryColor.withOpacity(0.5),
+                        color: primaryColor.withValues(alpha: 0.5),
                         blurRadius: 20,
                         spreadRadius: 2,
                         offset: const Offset(0, 8),

@@ -48,6 +48,10 @@ class SkillData {
       assetPath: AppAssets.skillsSupabase,
       label: 'Supabase',
     ),
+      SkillModel(
+      assetPath: AppAssets.skillsNeon,
+      label: 'Neon',
+    ),
        SkillModel(
       assetPath: AppAssets.skillsHtml,
       label: 'Html',

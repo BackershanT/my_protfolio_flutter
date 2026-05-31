@@ -115,7 +115,7 @@ class _TiltCardState extends State<TiltCard>
                               ),
                               radius: 0.8,
                               colors: [
-                                Colors.white.withOpacity(widget.glareOpacity),
+                                Colors.white.withValues(alpha: widget.glareOpacity),
                                 Colors.transparent,
                               ],
                             ),
@@ -183,7 +183,7 @@ class StarfieldPainter extends CustomPainter {
 
       final alpha = (1.0 - dz / 2000).clamp(0.0, 1.0);
       final paint = Paint()
-        ..color = p.color.withOpacity(alpha * (isDark ? 0.9 : 0.5))
+        ..color = p.color.withValues(alpha: alpha * (isDark ? 0.9 : 0.5))
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, projSize * 0.5);
 
       canvas.drawCircle(Offset(projX, projY), projSize.clamp(0.5, 4.0), paint);
@@ -298,12 +298,12 @@ class _RotatingCubeState extends State<RotatingCube>
             width: widget.size,
             height: widget.size,
             decoration: BoxDecoration(
-              color: widget.color.withOpacity(0.15),
-              border: Border.all(color: widget.color.withOpacity(0.6), width: 1.5),
+              color: widget.color.withValues(alpha: 0.15),
+              border: Border.all(color: widget.color.withValues(alpha: 0.6), width: 1.5),
               borderRadius: BorderRadius.circular(4),
               boxShadow: [
                 BoxShadow(
-                  color: widget.color.withOpacity(0.3),
+                  color: widget.color.withValues(alpha: 0.3),
                   blurRadius: 20,
                   spreadRadius: 2,
                 ),
@@ -336,7 +336,7 @@ class Grid3DPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.5
       ..color = (isDark ? const Color(0xFF64FFDA) : const Color(0xFF0A192F))
-          .withOpacity(isDark ? 0.08 : 0.04);
+          .withValues(alpha: isDark ? 0.08 : 0.04);
 
     // Perspective vanishing point
     final vp = Offset(size.width / 2 + perspectiveShift, size.height * 0.4);

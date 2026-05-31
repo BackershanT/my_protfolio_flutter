@@ -41,7 +41,7 @@ class AppTheme {
     final Color textColor = isDark ? AppColors.darkText : AppColors.lightText;
     final Color secondaryTextColor = isDark
         ? AppColors.secondaryText
-        : AppColors.lightText.withOpacity(0.7);
+        : AppColors.lightText.withValues(alpha: 0.7);
 
     return ThemeData(
       useMaterial3: true,

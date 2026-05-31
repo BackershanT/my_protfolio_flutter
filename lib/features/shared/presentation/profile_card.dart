@@ -38,18 +38,18 @@ class ProfileCard extends StatelessWidget {
             padding: const EdgeInsets.all(28),
             decoration: BoxDecoration(
               color: isDark
-                  ? const Color(0xFF112240).withOpacity(0.4)
+                  ? const Color(0xFF112240).withValues(alpha: 0.4)
                   : Colors.white,
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
                 color: isDark
-                    ? Colors.white.withOpacity(0.08)
-                    : Colors.black.withOpacity(0.05),
+                    ? Colors.white.withValues(alpha: 0.08)
+                    : Colors.black.withValues(alpha: 0.05),
                 width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
+                  color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
                   blurRadius: 30,
                   offset: const Offset(0, 15),
                 ),
@@ -67,7 +67,7 @@ class ProfileCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: LinearGradient(
-                          colors: [brandColor, brandColor.withOpacity(0.5)],
+                          colors: [brandColor, brandColor.withValues(alpha: 0.5)],
                         ),
                       ),
                       child: CircleAvatar(
@@ -97,13 +97,13 @@ class ProfileCard extends StatelessWidget {
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: isDark
-                                ? Colors.white.withOpacity(0.1)
-                                : Colors.black.withOpacity(0.1),
+                                ? Colors.white.withValues(alpha: 0.1)
+                                : Colors.black.withValues(alpha: 0.1),
                             width: 1,
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: brandColor.withOpacity(0.3),
+                              color: brandColor.withValues(alpha: 0.3),
                               blurRadius: 10,
                             ),
                           ],
@@ -152,12 +152,12 @@ class ProfileCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        brandColor.withOpacity(0.1),
-                        brandColor.withOpacity(0.05),
+                        brandColor.withValues(alpha: 0.1),
+                        brandColor.withValues(alpha: 0.05),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: brandColor.withOpacity(0.2)),
+                    border: Border.all(color: brandColor.withValues(alpha: 0.2)),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

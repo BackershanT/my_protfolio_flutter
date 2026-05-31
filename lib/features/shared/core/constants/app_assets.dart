@@ -23,6 +23,7 @@ class AppAssets {
   static const String skillsFlame = 'assets/skills/flame.png';
   static const String skillsNodejs = 'assets/skills/nodejs.png';
   static const String skillsSupabase = 'assets/skills/supabase.png';
+  static const String skillsNeon = 'assets/skills/neon.png';
 
 
 
