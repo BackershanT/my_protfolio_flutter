@@ -25,7 +25,6 @@ class ThemeProvider with ChangeNotifier {
       case ThemeMode.dark:
         return true;
       case ThemeMode.system:
-      default:
         return MediaQuery.of(context).platformBrightness == Brightness.dark;
     }
   }
@@ -73,21 +72,21 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(
+          backgroundColor: WidgetStateProperty.all(
             isDark ? AppColors.primaryLight : AppColors.primaryDark,
           ),
-          foregroundColor: MaterialStateProperty.all(
+          foregroundColor: WidgetStateProperty.all(
             isDark ? AppColors.darkBackground : AppColors.lightBackground,
           ),
-          textStyle: MaterialStateProperty.all(
+          textStyle: WidgetStateProperty.all(
             (isArabic ? GoogleFonts.cairo() : GoogleFonts.poppins()).copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
-          padding: MaterialStateProperty.all(
+          padding: WidgetStateProperty.all(
             const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           ),
-          shape: MaterialStateProperty.all(
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
         ),
@@ -123,15 +122,15 @@ class AppTheme {
     iconTheme: const IconThemeData(color: Color(0xFF0A192F)),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(AppColors.primaryDark),
-        foregroundColor: MaterialStateProperty.all(AppColors.lightBackground),
-        textStyle: MaterialStateProperty.all(
+        backgroundColor: WidgetStateProperty.all(AppColors.primaryDark),
+        foregroundColor: WidgetStateProperty.all(AppColors.lightBackground),
+        textStyle: WidgetStateProperty.all(
           GoogleFonts.poppins(fontWeight: FontWeight.w600),
         ),
-        padding: MaterialStateProperty.all(
+        padding: WidgetStateProperty.all(
           const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         ),
-        shape: MaterialStateProperty.all(
+        shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
@@ -167,15 +166,15 @@ class AppTheme {
     iconTheme: const IconThemeData(color: Color(0xFF64FFDA)),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(AppColors.primaryLight),
-        foregroundColor: MaterialStateProperty.all(AppColors.darkBackground),
-        textStyle: MaterialStateProperty.all(
+        backgroundColor: WidgetStateProperty.all(AppColors.primaryLight),
+        foregroundColor: WidgetStateProperty.all(AppColors.darkBackground),
+        textStyle: WidgetStateProperty.all(
           GoogleFonts.poppins(fontWeight: FontWeight.w600),
         ),
-        padding: MaterialStateProperty.all(
+        padding: WidgetStateProperty.all(
           const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         ),
-        shape: MaterialStateProperty.all(
+        shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),

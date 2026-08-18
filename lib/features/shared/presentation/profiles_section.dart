@@ -100,9 +100,7 @@ class _ProfilesSectionState extends State<ProfilesSection> {
               final linkedinStats = snapshot.hasData
                   ? snapshot.data![1] as LinkedInStats
                   : null;
-              final instagramStats = snapshot.hasData
-                  ? snapshot.data![2] as InstagramStats
-                  : null;
+              // instagramStats reserved for future use
 
               final cards = [
                 // GitHub Card

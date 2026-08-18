@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb, debugPrint;
 import 'dart:async';
 
 class ContactRepository {
@@ -37,7 +37,7 @@ class ContactRepository {
         }),
       ]);
     } on FirebaseException catch (e) {
-      print('Firebase error: ${e.code} - ${e.message}');
+      debugPrint('Firebase error: ${e.code} - ${e.message}');
       if (e.code == 'permission-denied') {
         throw Exception(
           'Firebase permission denied. Please check your Firestore database rules.',
@@ -54,12 +54,12 @@ class ContactRepository {
         throw Exception('Failed to send message: ${e.message}');
       }
     } on TimeoutException catch (e) {
-      print('Timeout error: $e');
+      debugPrint('Timeout error: $e');
       throw Exception(
         'Request timed out. This usually means the Firebase configuration is incorrect or the Firestore database rules don\'t allow writes. Please verify your Firebase setup and database rules.',
       );
     } catch (e) {
-      print('Unknown error: $e');
+      debugPrint('Unknown error: $e');
       throw Exception(
         'Failed to send message. Please verify your Firebase configuration and internet connection. Error details: ${e.toString()}',
       );

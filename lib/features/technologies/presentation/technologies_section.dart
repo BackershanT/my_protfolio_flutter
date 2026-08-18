@@ -230,12 +230,13 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
     final iconSize = isMobile ? 50.0 : (isTablet ? 55.0 : 60.0);
     final centerIconSize = isMobile ? 90.0 : (isTablet ? 100.0 : 120.0);
 
-    return SizedBox(
-      height: radius * 2.5,
-      width: radius * 2.5,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
+    return RepaintBoundary(
+      child: SizedBox(
+        height: radius * 2.5,
+        width: radius * 2.5,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
           // 3D floating center logo with layered glow rings
           FloatingWidget(
             amplitude: 12,
@@ -302,8 +303,6 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
           // Surrounding tech icons
           ...List.generate(technologies.length, (index) {
             final angle = (2 * math.pi / technologies.length) * index;
-            final x = radius * math.cos(angle);
-            final y = radius * math.sin(angle);
 
             return AnimatedBuilder(
               animation: _rotationController,
@@ -354,8 +353,9 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
           }),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildTechIcon(
     BuildContext context,

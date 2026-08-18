@@ -5,7 +5,7 @@ import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FooterSection extends StatelessWidget {
-  const FooterSection({Key? key}) : super(key: key);
+  const FooterSection({super.key});
 
   @override
   Widget build(BuildContext context) {

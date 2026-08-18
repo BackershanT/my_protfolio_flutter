@@ -32,7 +32,6 @@ class _HeroSectionState extends State<HeroSection>
   late AnimationController _floatController;
   int _currentIndex = 0;
   Offset _mousePosition = Offset.zero;
-  Size _widgetSize = Size.zero;
 
   final List<StarParticle> _stars = [];
   final Random _rng = Random();
@@ -161,7 +160,6 @@ class _HeroSectionState extends State<HeroSection>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return LayoutBuilder(builder: (context, constraints) {
-      _widgetSize = Size(constraints.maxWidth, constraints.maxHeight);
       return MouseRegion(
         onHover: (event) {
           setState(() {
@@ -174,45 +172,48 @@ class _HeroSectionState extends State<HeroSection>
             children: [
               // ── 3D Starfield background ──
               Positioned.fill(
-                child: AnimatedBuilder(
-                  animation: _starController,
-                  builder: (context, _) {
-                    // Animate star Z positions (fly-through effect)
-                    final t = _starController.value;
-                    for (final s in _stars) {
-                      s.z -= s.speed * 4;
-                      if (s.z <= 10) {
-                        s.z = 1800;
-                        s.x = _rng.nextDouble() * 1920;
-                        s.y = _rng.nextDouble() * 1080;
+                child: RepaintBoundary(
+                  child: AnimatedBuilder(
+                    animation: _starController,
+                    builder: (context, _) {
+                      // Animate star Z positions (fly-through effect)
+                      for (final s in _stars) {
+                        s.z -= s.speed * 4;
+                        if (s.z <= 10) {
+                          s.z = 1800;
+                          s.x = _rng.nextDouble() * 1920;
+                          s.y = _rng.nextDouble() * 1080;
+                        }
                       }
-                    }
-                    return CustomPaint(
-                      painter: StarfieldPainter(
-                        particles: _stars,
-                        cameraZ: 0,
-                        isDark: isDark,
-                      ),
-                    );
-                  },
+                      return CustomPaint(
+                        painter: StarfieldPainter(
+                          particles: _stars,
+                          cameraZ: 0,
+                          isDark: isDark,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
 
               // ── 3D Perspective Grid ──
               Positioned.fill(
-                child: AnimatedBuilder(
-                  animation: _gridController,
-                  builder: (context, _) {
-                    final shift =
-                        (_mousePosition.dx - screenWidth / 2) * 0.03;
-                    return CustomPaint(
-                      painter: Grid3DPainter(
-                        animValue: _gridController.value,
-                        isDark: isDark,
-                        perspectiveShift: shift,
-                      ),
-                    );
-                  },
+                child: RepaintBoundary(
+                  child: AnimatedBuilder(
+                    animation: _gridController,
+                    builder: (context, _) {
+                      final shift =
+                          (_mousePosition.dx - screenWidth / 2) * 0.03;
+                      return CustomPaint(
+                        painter: Grid3DPainter(
+                          animValue: _gridController.value,
+                          isDark: isDark,
+                          perspectiveShift: shift,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
 

@@ -9,8 +9,6 @@ import 'package:my_protfolio/features/shared/data/models/project_model.dart';
 import 'package:my_protfolio/features/projects/data/models/project_data.dart';
 import 'package:my_protfolio/features/projects/presentation/project_details_page.dart';
 import 'package:my_protfolio/features/shared/presentation/custom_cursor.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'dart:math' as math;
 
 class ProjectsSection extends StatefulWidget {
   const ProjectsSection({super.key});
@@ -72,12 +70,7 @@ class _ProjectsSectionState extends State<ProjectsSection>
     super.dispose();
   }
 
-  Future<void> _launchUrl(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (!await launchUrl(uri)) {
-      throw Exception('Could not launch $url');
-    }
-  }
+
 
   Widget _buildFilterBar() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -308,7 +301,11 @@ class _ProjectsSectionState extends State<ProjectsSection>
                     ? DecorationImage(
                         image: project.imageUrl.startsWith('http')
                             ? NetworkImage(project.imageUrl)
-                            : AssetImage(project.imageUrl) as ImageProvider,
+                            : ResizeImage.resizeIfNeeded(
+                                700,
+                                null,
+                                AssetImage(project.imageUrl),
+                              ),
                         fit: BoxFit.fill,
                       )
                     : null,

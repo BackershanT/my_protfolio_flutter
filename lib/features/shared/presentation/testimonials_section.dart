@@ -18,7 +18,7 @@ class TestimonialsSection extends StatefulWidget {
 
 class _TestimonialsSectionState extends State<TestimonialsSection> {
   late List<Testimonial> _testimonials;
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
   int _currentPage = 0;
   Timer? _timer;
 

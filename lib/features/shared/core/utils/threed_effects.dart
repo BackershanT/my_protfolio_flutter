@@ -34,10 +34,7 @@ class _TiltCardState extends State<TiltCard>
   bool _hovered = false;
 
   late AnimationController _springController;
-  late Animation<double> _rotXAnim;
-  late Animation<double> _rotYAnim;
-  double _targetRotX = 0;
-  double _targetRotY = 0;
+
 
   @override
   void initState() {
@@ -82,8 +79,9 @@ class _TiltCardState extends State<TiltCard>
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return MouseRegion(
+    return RepaintBoundary(
+      child: LayoutBuilder(builder: (context, constraints) {
+        return MouseRegion(
         onHover: (e) => _onHover(e, constraints),
         onExit: (_) => _onExit(),
         child: AnimatedScale(
@@ -129,7 +127,8 @@ class _TiltCardState extends State<TiltCard>
           ),
         ),
       );
-    });
+    }),
+    );
   }
 }
 
@@ -178,7 +177,9 @@ class StarfieldPainter extends CustomPainter {
       if (projX < 0 ||
           projX > size.width ||
           projY < 0 ||
-          projY > size.height) continue;
+          projY > size.height) {
+        continue;
+      }
       if (projSize <= 0) continue;
 
       final alpha = (1.0 - dz / 2000).clamp(0.0, 1.0);
@@ -237,15 +238,17 @@ class _FloatingWidgetState extends State<FloatingWidget>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _anim,
-      builder: (context, child) {
-        return Transform.translate(
-          offset: Offset(0, _anim.value),
-          child: child,
-        );
-      },
-      child: widget.child,
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: _anim,
+        builder: (context, child) {
+          return Transform.translate(
+            offset: Offset(0, _anim.value),
+            child: child,
+          );
+        },
+        child: widget.child,
+      ),
     );
   }
 }
@@ -284,9 +287,10 @@ class _RotatingCubeState extends State<RotatingCube>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _ctrl,
-      builder: (_, __) {
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: _ctrl,
+        builder: (_, __) {
         final angle = _ctrl.value * 2 * pi;
         return Transform(
           alignment: Alignment.center,
@@ -312,6 +316,7 @@ class _RotatingCubeState extends State<RotatingCube>
           ),
         );
       },
+      ),
     );
   }
 }
@@ -364,7 +369,6 @@ class Grid3DPainter extends CustomPainter {
       final t0 = 0.0;
       final t1 = 1.0;
       final x0 = lerpDouble(vp.dx, x, t0)!;
-      final y0 = lerpDouble(vp.dy, size.height, t0)!;
       final x1 = lerpDouble(vp.dx, x, t1)!;
       final y1 = lerpDouble(vp.dy, size.height, t1)!;
       canvas.drawLine(Offset(x0, size.height / 2), Offset(x1, y1), paint);

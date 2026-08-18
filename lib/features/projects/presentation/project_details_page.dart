@@ -478,8 +478,9 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                                   fit: BoxFit.cover,
                                   loadingBuilder:
                                       (context, child, loadingProgress) {
-                                        if (loadingProgress == null)
+                                        if (loadingProgress == null) {
                                           return child;
+                                        }
                                         return Container(
                                           width: 80,
                                           height: 80,
@@ -532,8 +533,9 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                                         frame,
                                         wasSynchronouslyLoaded,
                                       ) {
-                                        if (wasSynchronouslyLoaded)
+                                        if (wasSynchronouslyLoaded) {
                                           return child;
+                                        }
                                         return AnimatedOpacity(
                                           opacity: frame == null ? 0 : 1,
                                           duration: const Duration(
@@ -919,7 +921,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              (context as Element).reassemble();
+              setState(() {});
             },
             child: const Text('Retry'),
           ),

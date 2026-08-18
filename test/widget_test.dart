@@ -1,30 +1,37 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:my_protfolio/main.dart';
+import 'package:my_protfolio/features/shared/core/theme/app_theme.dart';
+import 'package:my_protfolio/features/shared/data/models/certification_data.dart';
+import 'package:my_protfolio/features/projects/data/models/project_data.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('Portfolio Core Tests', () {
+    test('ThemeProvider initializes with light mode and toggles correctly', () {
+      final themeProvider = ThemeProvider();
+      expect(themeProvider.themeMode, equals(ThemeMode.light));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      themeProvider.toggleTheme(true);
+      expect(themeProvider.themeMode, equals(ThemeMode.dark));
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      themeProvider.toggleTheme(false);
+      expect(themeProvider.themeMode, equals(ThemeMode.light));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      themeProvider.setThemeMode(ThemeMode.system);
+      expect(themeProvider.themeMode, equals(ThemeMode.system));
+    });
+
+    test('ProjectData returns projects list with valid data', () {
+      final projects = ProjectData.getAllProjects();
+      expect(projects, isNotEmpty);
+      for (final p in projects) {
+        expect(p.title, isNotEmpty);
+        expect(p.description, isNotEmpty);
+      }
+    });
+
+    test('CertificationData returns certifications list', () {
+      final certs = CertificationData.getAllCertifications();
+      expect(certs, isA<List>());
+    });
   });
 }

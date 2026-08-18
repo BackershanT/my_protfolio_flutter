@@ -1,5 +1,4 @@
 import 'package:my_protfolio/features/shared/data/models/certification_model.dart';
-import 'package:my_protfolio/features/shared/core/constants/app_assets.dart';
 
 class CertificationData {
   static List<Certification> getAllCertifications() {

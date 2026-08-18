@@ -37,6 +37,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late Animation<double> _chainAnimation;
   bool _isDarkMode = false;
   bool _showScrollToTop = false;
+  double _lastCheckedScrollPosition = 0;
 
   @override
   void didChangeDependencies() {
@@ -95,23 +96,30 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       });
     }
 
+    // Throttle section visibility calculation to avoid heavy tree traversals on every pixel
+    if ((scrollPosition - _lastCheckedScrollPosition).abs() < 30) {
+      return;
+    }
+    _lastCheckedScrollPosition = scrollPosition;
+
     for (int i = 0; i < _sectionKeys.length; i++) {
       final key = _sectionKeys[i];
       if (key.currentContext != null) {
-        final RenderBox renderBox =
-            key.currentContext!.findRenderObject() as RenderBox;
-        final position = renderBox.localToGlobal(Offset.zero);
-        final sectionTop = position.dy;
-        final sectionBottom = sectionTop + renderBox.size.height;
+        final renderBox = key.currentContext?.findRenderObject() as RenderBox?;
+        if (renderBox != null && renderBox.hasSize) {
+          final position = renderBox.localToGlobal(Offset.zero);
+          final sectionTop = position.dy;
+          final sectionBottom = sectionTop + renderBox.size.height;
 
-        if (sectionTop <= screenHeight / 2 &&
-            sectionBottom >= screenHeight / 2) {
-          if (_currentIndex != i) {
-            setState(() {
-              _currentIndex = i;
-            });
+          if (sectionTop <= screenHeight / 2 &&
+              sectionBottom >= screenHeight / 2) {
+            if (_currentIndex != i) {
+              setState(() {
+                _currentIndex = i;
+              });
+            }
+            break;
           }
-          break;
         }
       }
     }

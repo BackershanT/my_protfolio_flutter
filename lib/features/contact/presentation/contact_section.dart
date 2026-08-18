@@ -7,7 +7,6 @@ import 'package:my_protfolio/features/shared/presentation/section_title.dart';
 import 'package:my_protfolio/features/contact/data/repositories/contact_repository.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 
 class ContactSection extends StatefulWidget {
@@ -61,7 +60,7 @@ class _ContactSectionState extends State<ContactSection> {
           _messageController.clear();
         }
       } catch (e) {
-        print('Error sending message: $e');
+        debugPrint('Error sending message: $e');
         // Show user-friendly error message
         String errorMessage = 'Failed to send message. ';
 
@@ -365,7 +364,11 @@ class _SocialLinkState extends State<SocialLink> {
           curve: Curves.easeOutCubic,
           height: size,
           width: size,
-          transform: Matrix4.identity()..scale(_isHovered ? 1.1 : 1.0),
+          transform: Matrix4.diagonal3Values(
+            _isHovered ? 1.1 : 1.0,
+            _isHovered ? 1.1 : 1.0,
+            1.0,
+          ),
           decoration: BoxDecoration(
             gradient: _isHovered
                 ? LinearGradient(

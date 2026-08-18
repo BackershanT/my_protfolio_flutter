@@ -7,7 +7,7 @@ import 'package:my_protfolio/features/shared/presentation/section_title.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AboutSection extends StatelessWidget {
-  const AboutSection({Key? key}) : super(key: key);
+  const AboutSection({super.key});
 
   @override
   Widget build(BuildContext context) {

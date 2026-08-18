@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AnimatedIconWidget extends StatefulWidget {
   final String assetPath;
@@ -51,43 +50,5 @@ class _AnimatedIconWidgetState extends State<AnimatedIconWidget> {
         curve: Curves.elasticOut,
       ),
     );
-  }
-
-  // Static method to get all skill icons
-  static List<AnimatedIconWidget> getSkillIcons() {
-    return [
-      AnimatedIconWidget(
-        assetPath: 'assets/lottie/flutter.json',
-        label: 'Flutter',
-      ),
-      AnimatedIconWidget(
-        assetPath: 'assets/lottie/dart.json',
-        label: 'Dart',
-      ),
-      AnimatedIconWidget(
-        assetPath: 'assets/lottie/firebase.json',
-        label: 'Firebase',
-      ),
-      AnimatedIconWidget(
-        assetPath: 'assets/lottie/nodejs.json',
-        label: 'Node.js',
-      ),
-      AnimatedIconWidget(
-        assetPath: 'assets/lottie/react.json',
-        label: 'React',
-      ),
-      AnimatedIconWidget(
-        assetPath: 'assets/lottie/vue.json',
-        label: 'Vue.js',
-      ),
-      AnimatedIconWidget(
-        assetPath: 'assets/lottie/angular.json',
-        label: 'Angular',
-      ),
-      AnimatedIconWidget(
-        assetPath: 'assets/lottie/python.json',
-        label: 'Python',
-      ),
-    ];
   }
 }

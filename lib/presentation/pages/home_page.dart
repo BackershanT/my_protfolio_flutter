@@ -9,7 +9,7 @@ import 'package:my_protfolio/features/shared/presentation/nav_bar.dart';
 import 'package:my_protfolio/features/shared/presentation/testimonials_section.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
