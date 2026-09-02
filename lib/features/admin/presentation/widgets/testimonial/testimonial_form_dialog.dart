@@ -178,7 +178,10 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Header
-              TestimonialFormHeader(theme: theme, isEditing: _isEditing),
+              TestimonialFormHeader(
+                isEditing: _isEditing,
+                onClose: () => Navigator.of(context).pop(),
+              ),
               // Form
               Flexible(
                 child: SingleChildScrollView(
@@ -200,7 +203,6 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
                           validator: (val) => val == null || val.trim().isEmpty
                               ? 'Name is required'
                               : null,
-                          theme: theme,
                         ),
                         const SizedBox(height: 16),
                         // Role
@@ -212,7 +214,6 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
                           validator: (val) => val == null || val.trim().isEmpty
                               ? 'Role is required'
                               : null,
-                          theme: theme,
                         ),
                         const SizedBox(height: 16),
                         // Company
@@ -221,7 +222,6 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
                           label: 'Company (Optional)',
                           hint: 'e.g. Google',
                           icon: Icons.business_outlined,
-                          theme: theme,
                         ),
                         const SizedBox(height: 16),
                         // Content
@@ -234,7 +234,6 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
                           validator: (val) => val == null || val.trim().isEmpty
                               ? 'Content is required'
                               : null,
-                          theme: theme,
                         ),
                         const SizedBox(height: 20),
                         // Rating
@@ -256,7 +255,6 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
                         const SizedBox(height: 24),
                         // Action buttons
                         TestimonialFormActions(
-                          theme: theme,
                           isEditing: _isEditing,
                           onSave: _handleSave,
                           onCancel: () => Navigator.of(context).pop(),
@@ -273,5 +271,66 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
     );
   }
 
-}
+  Widget _buildSectionLabel(String label, ThemeData theme) {
+    return Text(
+      label,
+      style: theme.textTheme.bodyMedium?.copyWith(
+        fontWeight: FontWeight.w600,
+        fontSize: 13,
+        color: theme.hintColor,
+      ),
+    );
+  }
+
+  Widget _buildAvatarSection(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16),
+        Center(
+          child: Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              AvatarPreviewWidget(
+                avatarUrl: _avatarUrlController.text,
+                name: _nameController.text.isEmpty ? '?' : _nameController.text,
+                radius: 40,
+              ),
+              if (_isUploading)
+                Positioned.fill(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.black45,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )
+              else
+                Container(
+                  decoration: BoxDecoration(
+                    color: theme.primaryColor,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: theme.scaffoldBackgroundColor, width: 2),
+                  ),
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                    iconSize: 18,
+                    onPressed: _isUploading ? null : _pickImage,
+                    icon: const Icon(Icons.camera_alt, color: Colors.white),
+                    tooltip: 'Upload Avatar',
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
