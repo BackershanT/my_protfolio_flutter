@@ -46,8 +46,6 @@ class AppTexts {
   static String get techMernHeadline => 'techMernHeadline'.tr();
   static String get techMernDescription => 'techMernDescription'.tr();
 
-  // Experience section
-  static String get experienceTitle => 'experienceTitle'.tr();
 
   // Projects section
   static String get projectsTitle => 'projectsTitle'.tr();

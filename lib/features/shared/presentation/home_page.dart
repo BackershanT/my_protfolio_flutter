@@ -9,10 +9,8 @@ import 'package:my_protfolio/features/contact/presentation/contact_section.dart'
 import 'package:my_protfolio/features/shared/presentation/footer_section.dart';
 import 'package:my_protfolio/features/shared/presentation/nav_bar.dart';
 import 'package:my_protfolio/features/shared/presentation/testimonials_section.dart';
-import 'package:my_protfolio/features/shared/presentation/certifications_section.dart';
 import 'package:my_protfolio/features/shared/presentation/custom_cursor.dart';
 import 'package:my_protfolio/features/shared/presentation/profiles_section.dart';
-import 'package:my_protfolio/features/shared/data/models/certification_data.dart';
 import 'package:provider/provider.dart';
 import 'package:my_protfolio/features/shared/core/theme/app_theme.dart';
 import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
@@ -30,7 +28,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   late final List<GlobalKey> _sectionKeys;
-  bool _hasCertifications = false;
 
   int _currentIndex = 0;
   late AnimationController _chainController;
@@ -55,11 +52,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _hasCertifications = CertificationData.getAllCertifications().isNotEmpty;
-    _sectionKeys = List.generate(
-      _hasCertifications ? 10 : 9,
-      (index) => GlobalKey(),
-    );
+    _sectionKeys = List.generate(9, (index) => GlobalKey());
     _scrollController.addListener(_scrollListener);
 
     // Initialize animation controller for the chain
@@ -174,21 +167,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 children: [
                   NavBar(
                     onNavTap: (index) {
-                      if (_hasCertifications) {
-                        if (index >= 6) {
-                          _scrollToSection(index + 1);
-                        } else {
-                          _scrollToSection(index);
-                        }
-                      } else {
-                        _scrollToSection(index);
-                      }
+                      _scrollToSection(index);
                     },
-                    currentIndex: _hasCertifications
-                        ? (_currentIndex <= 5
-                              ? _currentIndex
-                              : (_currentIndex == 6 ? 5 : _currentIndex - 1))
-                        : _currentIndex,
+                    currentIndex: _currentIndex,
                   ).withCursorHover(context),
                   Expanded(
                     child: SingleChildScrollView(
@@ -204,17 +185,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           TechnologiesSection(key: _sectionKeys[3]),
                           ProjectsSection(key: _sectionKeys[4]),
                           ProfilesSection(key: _sectionKeys[5]),
-                          if (_hasCertifications)
-                            CertificationsSection(key: _sectionKeys[6]),
-                          TestimonialsSection(
-                            key: _sectionKeys[_hasCertifications ? 7 : 6],
-                          ),
-                          BlogSection(
-                            key: _sectionKeys[_hasCertifications ? 8 : 7],
-                          ),
-                          ContactSection(
-                            key: _sectionKeys[_hasCertifications ? 9 : 8],
-                          ),
+                          TestimonialsSection(key: _sectionKeys[6]),
+                          BlogSection(key: _sectionKeys[7]),
+                          ContactSection(key: _sectionKeys[8]),
                           const FooterSection(),
                         ],
                       ),
@@ -264,7 +237,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       AppTexts.navTechnologies,
       AppTexts.navProjects,
       AppTexts.navProfiles,
-      if (_hasCertifications) AppTexts.navCertifications,
       AppTexts.navTestimonials,
       AppTexts.navBlog,
       AppTexts.navContact,
