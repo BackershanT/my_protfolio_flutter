@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:my_protfolio/features/admin/data/models/testimonial_model.dart';
+import 'package:my_protfolio/features/admin/data/repositories/testimonial_repository.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/testimonial/star_rating_widget.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/testimonial/featured_toggle_widget.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/testimonial/avatar_preview_widget.dart';
+import 'package:my_protfolio/features/admin/presentation/widgets/testimonial/testimonial_text_field.dart';
+import 'package:my_protfolio/features/admin/presentation/widgets/testimonial/testimonial_form_header.dart';
+import 'package:my_protfolio/features/admin/presentation/widgets/testimonial/testimonial_form_actions.dart';
 
 /// Reusable form dialog for creating and editing testimonials.
 ///
@@ -62,6 +67,8 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
   late final TextEditingController _avatarUrlController;
   late int _rating;
   late bool _isFeatured;
+  bool _isUploading = false;
+  final _repository = TestimonialRepository();
 
   bool get _isEditing => widget.testimonial != null;
 
@@ -76,6 +83,36 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
     _avatarUrlController = TextEditingController(text: t?.avatarUrl ?? '');
     _rating = t?.rating ?? 5;
     _isFeatured = t?.isFeatured ?? false;
+  }
+
+  Future<void> _pickImage() async {
+    try {
+      final picker = ImagePicker();
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+      
+      if (image != null) {
+        setState(() {
+          _isUploading = true;
+        });
+
+        final bytes = await image.readAsBytes();
+        final url = await _repository.uploadAvatar(bytes, image.name);
+
+        setState(() {
+          _avatarUrlController.text = url;
+          _isUploading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _isUploading = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to upload image: $e')),
+        );
+      }
+    }
   }
 
   @override
@@ -141,7 +178,7 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Header
-              _buildDialogHeader(theme),
+              TestimonialFormHeader(theme: theme, isEditing: _isEditing),
               // Form
               Flexible(
                 child: SingleChildScrollView(
@@ -155,7 +192,7 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
                         _buildAvatarSection(theme),
                         const SizedBox(height: 20),
                         // Name
-                        _buildField(
+                        TestimonialTextField(
                           controller: _nameController,
                           label: 'Full Name',
                           hint: 'e.g. John Doe',
@@ -167,7 +204,7 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
                         ),
                         const SizedBox(height: 16),
                         // Role
-                        _buildField(
+                        TestimonialTextField(
                           controller: _roleController,
                           label: 'Role / Job Title',
                           hint: 'e.g. Senior Developer',
@@ -179,7 +216,7 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
                         ),
                         const SizedBox(height: 16),
                         // Company
-                        _buildField(
+                        TestimonialTextField(
                           controller: _companyController,
                           label: 'Company (Optional)',
                           hint: 'e.g. Google',
@@ -188,7 +225,7 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
                         ),
                         const SizedBox(height: 16),
                         // Content
-                        _buildField(
+                        TestimonialTextField(
                           controller: _contentController,
                           label: 'Testimonial Content',
                           hint: 'Write the testimonial text here...',
@@ -218,7 +255,12 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
                         ),
                         const SizedBox(height: 24),
                         // Action buttons
-                        _buildActions(theme),
+                        TestimonialFormActions(
+                          theme: theme,
+                          isEditing: _isEditing,
+                          onSave: _handleSave,
+                          onCancel: () => Navigator.of(context).pop(),
+                        ),
                       ],
                     ),
                   ),
@@ -231,185 +273,5 @@ class _TestimonialFormDialogState extends State<TestimonialFormDialog> {
     );
   }
 
-  Widget _buildDialogHeader(ThemeData theme) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(24, 20, 16, 16),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: theme.dividerColor.withOpacity(0.1),
-          ),
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: theme.primaryColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(
-              _isEditing ? Icons.edit_rounded : Icons.add_rounded,
-              color: theme.primaryColor,
-              size: 20,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              _isEditing ? 'Edit Testimonial' : 'Add New Testimonial',
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          IconButton(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: Icon(Icons.close_rounded, color: theme.hintColor),
-            style: IconButton.styleFrom(
-              backgroundColor: theme.dividerColor.withOpacity(0.1),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAvatarSection(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 16),
-        Center(
-          child: AvatarPreviewWidget(
-            avatarUrl: _avatarUrlController.text,
-            name: _nameController.text.isEmpty ? '?' : _nameController.text,
-            radius: 36,
-          ),
-        ),
-        const SizedBox(height: 12),
-        _buildField(
-          controller: _avatarUrlController,
-          label: 'Avatar URL (Optional)',
-          hint: 'https://example.com/avatar.jpg',
-          icon: Icons.link_rounded,
-          onChanged: (_) => setState(() {}),
-          theme: theme,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildField({
-    required TextEditingController controller,
-    required String label,
-    required String hint,
-    required IconData icon,
-    required ThemeData theme,
-    String? Function(String?)? validator,
-    int maxLines = 1,
-    ValueChanged<String>? onChanged,
-  }) {
-    return TextFormField(
-      controller: controller,
-      validator: validator,
-      maxLines: maxLines,
-      onChanged: onChanged,
-      style: theme.textTheme.bodyMedium,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        prefixIcon: Icon(icon, size: 20),
-        labelStyle: TextStyle(color: theme.hintColor, fontSize: 14),
-        hintStyle: TextStyle(
-          color: theme.hintColor.withOpacity(0.4),
-          fontSize: 13,
-        ),
-        filled: true,
-        fillColor: theme.cardColor,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.dividerColor),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.dividerColor.withOpacity(0.3)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.primaryColor, width: 1.5),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.red),
-        ),
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: maxLines > 1 ? 14 : 0,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionLabel(String label, ThemeData theme) {
-    return Text(
-      label,
-      style: theme.textTheme.bodyMedium?.copyWith(
-        fontWeight: FontWeight.w600,
-        fontSize: 13,
-        color: theme.hintColor,
-      ),
-    );
-  }
-
-  Widget _buildActions(ThemeData theme) {
-    return Row(
-      children: [
-        Expanded(
-          child: OutlinedButton(
-            onPressed: () => Navigator.of(context).pop(),
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              side: BorderSide(color: theme.dividerColor.withOpacity(0.3)),
-            ),
-            child: Text(
-              'Cancel',
-              style: TextStyle(
-                color: theme.textTheme.bodyMedium?.color,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          flex: 2,
-          child: ElevatedButton.icon(
-            onPressed: _handleSave,
-            icon: Icon(
-              _isEditing ? Icons.save_rounded : Icons.add_rounded,
-              size: 20,
-            ),
-            label: Text(
-              _isEditing ? 'Update' : 'Add Testimonial',
-              style: const TextStyle(fontWeight: FontWeight.w600),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: theme.primaryColor,
-              foregroundColor: theme.scaffoldBackgroundColor,
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 0,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+}
 }

@@ -1,7 +1,7 @@
+import 'dart:typed_data';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:my_protfolio/features/admin/data/models/testimonial_model.dart';
-
 class TestimonialRepository {
   final _client = Supabase.instance.client;
   static const String _table = 'testimonials';
@@ -79,6 +79,27 @@ class TestimonialRepository {
     } catch (e) {
       debugPrint('Unknown delete error: $e');
       throw Exception('Failed to delete testimonial: ${e.toString()}');
+    }
+  }
+
+  /// Uploads an avatar image to Supabase Storage and returns the public URL.
+  Future<String> uploadAvatar(Uint8List fileBytes, String fileName) async {
+    try {
+      final fileExtension = fileName.split('.').last;
+      final uniqueFileName = '${DateTime.now().millisecondsSinceEpoch}_${fileName.hashCode}.$fileExtension';
+      final path = 'avatars/$uniqueFileName';
+
+      await _client.storage.from('testimonials').uploadBinary(
+        path,
+        fileBytes,
+        fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
+      );
+
+      final publicUrl = _client.storage.from('testimonials').getPublicUrl(path);
+      return publicUrl;
+    } catch (e) {
+      debugPrint('Supabase uploadAvatar error: $e');
+      throw Exception('Failed to upload image: ${e.toString()}');
     }
   }
 }

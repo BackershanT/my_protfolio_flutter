@@ -64,20 +64,19 @@ class _TestimonialCardState extends State<TestimonialCard> {
             // Header with avatar & actions
             _buildHeader(theme, t),
             // Content
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                '"${t.content}"',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontStyle: FontStyle.italic,
-                  height: 1.5,
-                  color: theme.textTheme.bodyMedium?.color?.withOpacity(0.85),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  '"${t.content}"',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontStyle: FontStyle.italic,
+                    height: 1.6,
+                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.85),
+                  ),
                 ),
-                maxLines: 4,
-                overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(height: 16),
             // Footer with rating
             _buildFooter(theme, t),
           ],

@@ -208,7 +208,7 @@ class _AdminTestimonialsPageState extends State<AdminTestimonialsPage> {
                     crossAxisCount: crossAxisCount,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
-                    childAspectRatio: crossAxisCount == 1 ? 1.8 : 1.1,
+                    childAspectRatio: crossAxisCount == 1 ? 2.5 : 1.6,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
