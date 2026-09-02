@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_protfolio/features/shared/data/models/project_model.dart';
-import 'package:my_protfolio/features/shared/core/constants/colors.dart';
-import 'package:my_protfolio/features/shared/presentation/footer_section.dart';
+import 'package:my_protfolio/features/projects/data/models/project_model.dart';
+import 'package:my_protfolio/core/constants/colors.dart';
+import 'package:my_protfolio/features/home/presentation/footer_section.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 

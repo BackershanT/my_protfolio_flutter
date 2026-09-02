@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_protfolio/features/shared/data/models/project_model.dart';
-import 'package:my_protfolio/features/shared/core/constants/app_assets.dart';
+import 'package:my_protfolio/features/projects/data/models/project_model.dart';
+import 'package:my_protfolio/core/constants/app_assets.dart';
 
 class ProjectDesign {
   final Color bgColor;

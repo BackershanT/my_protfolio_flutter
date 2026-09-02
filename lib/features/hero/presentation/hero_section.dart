@@ -5,11 +5,11 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:my_protfolio/features/hero/data/models/hero_data.dart';
-import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
-import 'package:my_protfolio/features/shared/core/constants/colors.dart';
-import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
-import 'package:my_protfolio/features/shared/core/constants/app_assets.dart';
-import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
+import 'package:my_protfolio/core/constants/app_texts.dart';
+import 'package:my_protfolio/core/constants/colors.dart';
+import 'package:my_protfolio/core/utils/responsive.dart';
+import 'package:my_protfolio/core/constants/app_assets.dart';
+import 'package:my_protfolio/core/utils/threed_effects.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 

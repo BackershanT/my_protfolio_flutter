@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
-import 'package:my_protfolio/features/shared/core/constants/colors.dart';
-import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
-import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
-import 'package:my_protfolio/features/shared/presentation/section_title.dart';
+import 'package:my_protfolio/core/constants/app_texts.dart';
+import 'package:my_protfolio/core/constants/colors.dart';
+import 'package:my_protfolio/core/utils/responsive.dart';
+import 'package:my_protfolio/core/utils/threed_effects.dart';
+import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
 import 'package:my_protfolio/features/technologies/data/models/technology_model.dart';
 import 'dart:math' as math;
 

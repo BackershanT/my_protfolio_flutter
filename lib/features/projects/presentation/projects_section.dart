@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
-import 'package:my_protfolio/features/shared/core/constants/colors.dart';
-import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
-import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
-import 'package:my_protfolio/features/shared/presentation/section_title.dart';
-import 'package:my_protfolio/features/shared/data/models/project_model.dart';
+import 'package:my_protfolio/core/constants/app_texts.dart';
+import 'package:my_protfolio/core/constants/colors.dart';
+import 'package:my_protfolio/core/utils/responsive.dart';
+import 'package:my_protfolio/core/utils/threed_effects.dart';
+import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
+import 'package:my_protfolio/features/projects/data/models/project_model.dart';
 import 'package:my_protfolio/features/projects/data/models/project_data.dart';
 import 'package:my_protfolio/features/projects/presentation/project_details_page.dart';
-import 'package:my_protfolio/features/shared/presentation/custom_cursor.dart';
+import 'package:my_protfolio/core/presentation/widgets/custom_cursor.dart';
 
 class ProjectsSection extends StatefulWidget {
   const ProjectsSection({super.key});

@@ -6,16 +6,16 @@ import 'package:my_protfolio/features/technologies/presentation/technologies_sec
 import 'package:my_protfolio/features/projects/presentation/projects_section.dart';
 import 'package:my_protfolio/features/blog/presentation/blog_section.dart';
 import 'package:my_protfolio/features/contact/presentation/contact_section.dart';
-import 'package:my_protfolio/features/shared/presentation/footer_section.dart';
-import 'package:my_protfolio/features/shared/presentation/nav_bar.dart';
-import 'package:my_protfolio/features/shared/presentation/testimonials_section.dart';
-import 'package:my_protfolio/features/shared/presentation/custom_cursor.dart';
-import 'package:my_protfolio/features/shared/presentation/profiles_section.dart';
+import 'package:my_protfolio/features/home/presentation/footer_section.dart';
+import 'package:my_protfolio/core/presentation/widgets/nav_bar.dart';
+import 'package:my_protfolio/features/testimonials/presentation/testimonials_section.dart';
+import 'package:my_protfolio/core/presentation/widgets/custom_cursor.dart';
+import 'package:my_protfolio/features/profiles/presentation/profiles_section.dart';
 import 'package:provider/provider.dart';
-import 'package:my_protfolio/features/shared/core/theme/app_theme.dart';
-import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
-import 'package:my_protfolio/features/shared/core/constants/colors.dart';
-import 'package:my_protfolio/features/shared/core/constants/app_assets.dart';
+import 'package:my_protfolio/core/theme/app_theme.dart';
+import 'package:my_protfolio/core/constants/app_texts.dart';
+import 'package:my_protfolio/core/constants/colors.dart';
+import 'package:my_protfolio/core/constants/app_assets.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class HomePage extends StatefulWidget {

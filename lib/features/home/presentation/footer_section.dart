@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
-import 'package:my_protfolio/features/shared/core/constants/colors.dart';
-import 'package:my_protfolio/features/shared/core/utils/responsive.dart';
+import 'package:my_protfolio/core/constants/app_texts.dart';
+import 'package:my_protfolio/core/constants/colors.dart';
+import 'package:my_protfolio/core/utils/responsive.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FooterSection extends StatelessWidget {

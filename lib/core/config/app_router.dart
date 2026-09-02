@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:my_protfolio/features/shared/presentation/home_page.dart';
+import 'package:my_protfolio/features/home/presentation/home_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:my_protfolio/features/admin/presentation/login_screen.dart';
 import 'package:my_protfolio/features/admin/presentation/admin_layout.dart';

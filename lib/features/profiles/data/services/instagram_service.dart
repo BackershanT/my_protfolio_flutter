@@ -1,5 +1,5 @@
 import '../models/instagram_stats_model.dart';
-import '../../core/config/stats_config.dart';
+import 'package:my_protfolio/core/config/stats_config.dart';
 
 class InstagramService {
   Future<InstagramStats> fetchStats() async {

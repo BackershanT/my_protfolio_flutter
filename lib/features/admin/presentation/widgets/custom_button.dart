@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_protfolio/features/shared/core/providers/cursor_provider.dart';
-import 'package:my_protfolio/features/shared/presentation/custom_cursor.dart';
+import 'package:my_protfolio/core/providers/cursor_provider.dart';
+import 'package:my_protfolio/core/presentation/widgets/custom_cursor.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;

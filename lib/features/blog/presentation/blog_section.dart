@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:my_protfolio/features/blog/data/models/blog_post_model.dart';
 import 'package:my_protfolio/features/blog/data/models/blog_data.dart';
-import 'package:my_protfolio/features/shared/core/constants/colors.dart';
-import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
-import 'package:my_protfolio/features/shared/presentation/section_title.dart';
+import 'package:my_protfolio/core/constants/colors.dart';
+import 'package:my_protfolio/core/utils/threed_effects.dart';
+import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BlogSection extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:my_protfolio/features/shared/presentation/custom_cursor.dart';
+import 'package:my_protfolio/core/presentation/widgets/custom_cursor.dart';
 import 'package:my_protfolio/features/admin/presentation/pages/admin_testimonials_page.dart';
 
 class AdminLayout extends StatefulWidget {

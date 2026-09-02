@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'features/shared/core/theme/app_theme.dart';
-import 'features/shared/core/config/app_router.dart';
+import 'core/theme/app_theme.dart';
+import 'core/config/app_router.dart';
 
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:my_protfolio/features/shared/core/providers/cursor_provider.dart';
+import 'package:my_protfolio/core/providers/cursor_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:my_protfolio/features/admin/data/providers/testimonial_provider.dart';

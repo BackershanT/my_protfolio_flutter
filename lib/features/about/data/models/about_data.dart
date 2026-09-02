@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
+import 'package:my_protfolio/core/constants/app_texts.dart';
 
 class FeatureCard {
   final IconData icon;

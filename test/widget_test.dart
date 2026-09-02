@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_protfolio/features/shared/core/theme/app_theme.dart';
+import 'package:my_protfolio/core/theme/app_theme.dart';
 import 'package:my_protfolio/features/shared/data/models/certification_data.dart';
 import 'package:my_protfolio/features/projects/data/models/project_data.dart';
 

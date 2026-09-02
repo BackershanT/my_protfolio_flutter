@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:my_protfolio/features/shared/core/constants/colors.dart';
-import 'package:my_protfolio/features/shared/core/providers/cursor_provider.dart';
+import 'package:my_protfolio/core/constants/colors.dart';
+import 'package:my_protfolio/core/providers/cursor_provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class CustomCursor extends StatelessWidget {

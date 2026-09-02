@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/custom_text_field.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/custom_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:my_protfolio/features/shared/core/providers/cursor_provider.dart';
-import 'package:my_protfolio/features/shared/presentation/custom_cursor.dart';
+import 'package:my_protfolio/core/providers/cursor_provider.dart';
+import 'package:my_protfolio/core/presentation/widgets/custom_cursor.dart';
 
 class AdminLoginScreen extends StatefulWidget {
   const AdminLoginScreen({super.key});

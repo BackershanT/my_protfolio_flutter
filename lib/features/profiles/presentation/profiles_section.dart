@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:my_protfolio/features/shared/core/constants/app_texts.dart';
-import 'package:my_protfolio/features/shared/core/constants/colors.dart';
-import 'package:my_protfolio/features/shared/core/utils/threed_effects.dart';
-import 'package:my_protfolio/features/shared/presentation/section_title.dart';
-import 'package:my_protfolio/features/shared/data/models/github_stats_model.dart';
-import 'package:my_protfolio/features/shared/data/services/github_service.dart';
-import 'package:my_protfolio/features/shared/data/models/linkedin_stats_model.dart';
-import 'package:my_protfolio/features/shared/data/services/linkedin_service.dart';
-import 'package:my_protfolio/features/shared/data/models/instagram_stats_model.dart';
-import 'package:my_protfolio/features/shared/data/services/instagram_service.dart';
+import 'package:my_protfolio/core/constants/app_texts.dart';
+import 'package:my_protfolio/core/constants/colors.dart';
+import 'package:my_protfolio/core/utils/threed_effects.dart';
+import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
+import 'package:my_protfolio/features/profiles/data/models/github_stats_model.dart';
+import 'package:my_protfolio/features/profiles/data/services/github_service.dart';
+import 'package:my_protfolio/features/profiles/data/models/linkedin_stats_model.dart';
+import 'package:my_protfolio/features/profiles/data/services/linkedin_service.dart';
+import 'package:my_protfolio/features/profiles/data/models/instagram_stats_model.dart';
+import 'package:my_protfolio/features/profiles/data/services/instagram_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:my_protfolio/features/shared/presentation/profile_card.dart';
-import 'package:my_protfolio/features/shared/core/config/stats_config.dart';
+import 'package:my_protfolio/features/profiles/presentation/widgets/profile_card.dart';
+import 'package:my_protfolio/core/config/stats_config.dart';
 
 import 'dart:async';
 
