@@ -1,72 +1,118 @@
 import 'package:my_protfolio/core/constants/app_assets.dart';
 
 class SkillModel {
-  final String assetPath;
-  final String label;
+  final int? id;
+  final String name;
+  final String image;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   const SkillModel({
-    required this.assetPath,
-    required this.label,
+    this.id,
+    required this.name,
+    required this.image,
+    this.createdAt,
+    this.updatedAt,
   });
+
+  factory SkillModel.fromJson(Map<String, dynamic> json) {
+    return SkillModel(
+      id: json['id'] as int?,
+      name: json['name'] as String,
+      image: json['image'] as String,
+      createdAt: json['created_at'] != null 
+          ? DateTime.parse(json['created_at'] as String) 
+          : null,
+      updatedAt: json['updated_at'] != null 
+          ? DateTime.parse(json['updated_at'] as String) 
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) 'id': id,
+      'name': name,
+      'image': image,
+      if (createdAt != null) 'created_at': createdAt?.toIso8601String(),
+      if (updatedAt != null) 'updated_at': updatedAt?.toIso8601String(),
+    };
+  }
+
+  SkillModel copyWith({
+    int? id,
+    String? name,
+    String? image,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return SkillModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      image: image ?? this.image,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }
 
 class SkillData {
   static const skills = [
     SkillModel(
-      assetPath: AppAssets.skillsFlutter,
-      label: 'Flutter',
+      image: AppAssets.skillsFlutter,
+      name: 'Flutter',
     ),
     SkillModel(
-      assetPath: AppAssets.skillsReact,
-      label: 'React',
+      image: AppAssets.skillsReact,
+      name: 'React',
     ),
     SkillModel(
-      assetPath: AppAssets.skillsJavascript,
-      label: 'JavaScript',
+      image: AppAssets.skillsJavascript,
+      name: 'JavaScript',
     ),
     SkillModel(
-      assetPath: AppAssets.skillsFirebase,
-      label: 'Firebase',
+      image: AppAssets.skillsFirebase,
+      name: 'Firebase',
     ),
     SkillModel(
-      assetPath: AppAssets.skillsBloc,
-      label: 'BLoC',
+      image: AppAssets.skillsBloc,
+      name: 'BLoC',
     ),
     SkillModel(
-      assetPath: AppAssets.skillsRedux,
-      label: 'Redux',
+      image: AppAssets.skillsRedux,
+      name: 'Redux',
     ),
     SkillModel(
-      assetPath: AppAssets.skillsNextjs,
-      label: 'Next.js',
+      image: AppAssets.skillsNextjs,
+      name: 'Next.js',
     ),
     SkillModel(
-      assetPath: AppAssets.skillsSocket,
-      label: 'Socket.IO',
+      image: AppAssets.skillsSocket,
+      name: 'Socket.IO',
     ),
     SkillModel(
-      assetPath: AppAssets.skillsSupabase,
-      label: 'Supabase',
+      image: AppAssets.skillsSupabase,
+      name: 'Supabase',
     ),
-      SkillModel(
-      assetPath: AppAssets.skillsNeon,
-      label: 'Neon',
+    SkillModel(
+      image: AppAssets.skillsNeon,
+      name: 'Neon',
     ),
-       SkillModel(
-      assetPath: AppAssets.skillsHtml,
-      label: 'Html',
+    SkillModel(
+      image: AppAssets.skillsHtml,
+      name: 'Html',
     ),
-       SkillModel(
-      assetPath: AppAssets.skillsCss,
-      label: 'Css',
+    SkillModel(
+      image: AppAssets.skillsCss,
+      name: 'Css',
     ),
-       SkillModel(
-      assetPath: AppAssets.skillsFigma,
-      label: 'Figma',
+    SkillModel(
+      image: AppAssets.skillsFigma,
+      name: 'Figma',
     ),
-       SkillModel(
-      assetPath: AppAssets.skillsXd,
-      label: 'Xd',
+    SkillModel(
+      image: AppAssets.skillsXd,
+      name: 'Xd',
     ),
   ];
 

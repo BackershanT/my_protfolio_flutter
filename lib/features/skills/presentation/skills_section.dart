@@ -4,9 +4,11 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:my_protfolio/core/constants/app_texts.dart';
 import 'package:my_protfolio/core/constants/colors.dart';
 import 'package:my_protfolio/core/utils/responsive.dart';
-import 'package:my_protfolio/core/utils/threed_effects.dart';
 import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
+import 'package:provider/provider.dart';
+import 'package:my_protfolio/features/admin/data/providers/skill_provider.dart';
 import 'package:my_protfolio/features/skills/data/models/skill_model.dart';
+import 'package:my_protfolio/features/skills/presentation/widgets/skill_card_widget.dart';
 
 class SkillsSection extends StatefulWidget {
   const SkillsSection({super.key});
@@ -32,6 +34,10 @@ class _SkillsSectionState extends State<SkillsSection> {
 
     _startMobileAutoScroll();
     _startDesktopAutoScroll();
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SkillProvider>().loadSkills();
+    });
   }
 
   @override
@@ -135,17 +141,35 @@ class _SkillsSectionState extends State<SkillsSection> {
             title: AppTexts.skillsTitle,
           ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, end: 0),
           SizedBox(height: isMobile ? 40 : 80),
-          Responsive(
-            mobile: _buildMobileCarousel(context),
-            desktop: _buildDesktopGrid(context),
+          Consumer<SkillProvider>(
+            builder: (context, provider, child) {
+              final isLoading = provider.isLoading;
+              var items = provider.skills;
+              if (items.isEmpty && !isLoading) {
+                items = SkillData.getAllSkills();
+              }
+              
+              if (isLoading && items.isEmpty) {
+                 return Responsive(
+                   mobile: _buildMobileSkeleton(context),
+                   desktop: _buildDesktopSkeleton(context),
+                 );
+              }
+
+              return Responsive(
+                mobile: _buildMobileCarousel(context, items),
+                desktop: _buildDesktopGrid(context, items),
+              );
+            },
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMobileCarousel(BuildContext context) {
-    final skills = SkillData.getAllSkills();
+  Widget _buildMobileCarousel(BuildContext context, List<dynamic> skills) {
+    if (skills.isEmpty) return const SizedBox.shrink();
+    
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Column(
@@ -175,7 +199,7 @@ class _SkillsSectionState extends State<SkillsSection> {
                 final isActive = _currentPage == skillIndex;
 
                 return Center(
-                  child: _SkillCard(
+                  child: SkillCardWidget(
                     skill: skill,
                     isDark: isDark,
                     isActive: isActive,
@@ -227,8 +251,9 @@ class _SkillsSectionState extends State<SkillsSection> {
     );
   }
 
-  Widget _buildDesktopGrid(BuildContext context) {
-    final skills = SkillData.getAllSkills();
+  Widget _buildDesktopGrid(BuildContext context, List<dynamic> skills) {
+    if (skills.isEmpty) return const SizedBox.shrink();
+    
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return MouseRegion(
@@ -248,7 +273,7 @@ class _SkillsSectionState extends State<SkillsSection> {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child:
-                  _SkillCard(
+                  SkillCardWidget(
                         skill: skill,
                         isDark: isDark,
                         isActive: true,
@@ -263,169 +288,89 @@ class _SkillsSectionState extends State<SkillsSection> {
       ),
     );
   }
-}
 
-class _SkillCard extends StatefulWidget {
-  final SkillModel skill;
-  final bool isDark;
-  final bool isActive;
-  final bool isMobile;
-
-  const _SkillCard({
-    required this.skill,
-    required this.isDark,
-    required this.isActive,
-    required this.isMobile,
-  });
-
-  @override
-  State<_SkillCard> createState() => _SkillCardState();
-}
-
-class _SkillCardState extends State<_SkillCard> {
-  bool _isHovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final primaryColor = widget.isDark
-        ? AppColors.primaryLight
-        : AppColors.primaryDark;
-
-    final card = AnimatedOpacity(
-      opacity: widget.isActive || _isHovered ? 1.0 : 0.6,
-      duration: const Duration(milliseconds: 400),
-      child: Container(
-        width: widget.isMobile ? 220 : 200,
-        height: widget.isMobile ? 220 : 200,
-        decoration: BoxDecoration(
-          color: widget.isDark
-              ? const Color(0xFF112240).withValues(alpha: 0.85)
-              : Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: (widget.isActive || _isHovered)
-                ? primaryColor.withValues(alpha: 0.6)
-                : primaryColor.withValues(alpha: 0.12),
-            width: 2,
+  Widget _buildMobileSkeleton(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 280,
+          child: PageView.builder(
+            controller: _pageController,
+            itemCount: 3,
+            itemBuilder: (context, index) {
+              return Center(
+                child: const _SkillSkeletonCard(isMobile: true),
+              );
+            },
           ),
-          boxShadow: [
-            if (widget.isActive || _isHovered)
-              BoxShadow(
-                color: primaryColor.withValues(alpha: 0.25),
-                blurRadius: 30,
-                offset: const Offset(0, 12),
-                spreadRadius: 3,
-              )
-            else
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.06),
-                blurRadius: 12,
-                offset: const Offset(0, 6),
-              ),
-          ],
         ),
-        child: Stack(
-          children: [
-            if (widget.isActive || _isHovered)
-              Positioned.fill(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    gradient: RadialGradient(
-                      colors: [
-                        primaryColor.withValues(alpha: 0.12),
-                        Colors.transparent,
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Hero(
-                        tag: 'skill_${widget.skill.label}_${widget.isMobile}_${widget.isActive}',
-                        child: Image.asset(
-                          widget.skill.assetPath,
-                          width: widget.isMobile ? 100 : 80,
-                          height: widget.isMobile ? 100 : 80,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) => Icon(
-                            Icons.code,
-                            size: 60,
-                            color: primaryColor.withValues(alpha: 0.5),
-                          ),
-                        ),
-                      )
-                      .animate(
-                        target: widget.isMobile
-                            ? (widget.isActive ? 1 : 0)
-                            : (_isHovered ? 1 : 0),
-                      )
-                      .shimmer(
-                        duration: 1200.ms,
-                        color: primaryColor.withValues(alpha: 0.3),
-                      )
-                      .scale(
-                        begin: const Offset(1, 1),
-                        end: const Offset(1.15, 1.15),
-                        curve: Curves.easeOutBack,
-                      )
-                      .rotate(
-                        begin: 0,
-                        end: widget.isMobile ? 0 : 0.05,
-                        curve: Curves.easeOutBack,
-                      ),
-                  const SizedBox(height: 16),
-                  Text(
-                        widget.skill.label,
-                        style: TextStyle(
-                          fontSize: widget.isMobile ? 18 : 16,
-                          fontWeight: FontWeight.bold,
-                          color: widget.isDark ? Colors.white : AppColors.primaryDark,
-                          letterSpacing: 1.1,
-                        ),
-                      )
-                      .animate(
-                        target: widget.isMobile
-                            ? (widget.isActive ? 1 : 0)
-                            : (_isHovered ? 1 : 0),
-                      )
-                      .fadeIn()
-                      .slideY(begin: 0.2, end: 0)
-                      .tint(color: primaryColor, begin: 0, end: 0.2),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+      ],
     );
+  }
 
-    // Wrap desktop cards with 3D tilt; mobile uses scale only
-    if (!widget.isMobile) {
-      return TiltCard(
-        maxTilt: 15,
-        scale: widget.isActive ? 1.05 : 1.0,
-        glareOpacity: 0.12,
-        child: MouseRegion(
-          onEnter: (_) => setState(() => _isHovered = true),
-          onExit: (_) => setState(() => _isHovered = false),
-          child: card,
-        ),
-      );
-    }
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedScale(
-        scale: widget.isActive ? 1.0 : 0.8,
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeOutBack,
-        child: card,
+  Widget _buildDesktopSkeleton(BuildContext context) {
+    return SizedBox(
+      height: 220,
+      child: ListView.builder(
+        controller: _desktopScrollController,
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 6,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: const _SkillSkeletonCard(isMobile: false),
+          );
+        },
       ),
     );
   }
 }
+
+class _SkillSkeletonCard extends StatelessWidget {
+  final bool isMobile;
+  const _SkillSkeletonCard({required this.isMobile});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = isDark ? AppColors.primaryLight : AppColors.primaryDark;
+    final skeletonColor = isDark ? Colors.white12 : Colors.black12;
+
+    return Container(
+      width: isMobile ? 220 : 200,
+      height: isMobile ? 220 : 200,
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF112240) : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: primaryColor.withValues(alpha: 0.1),
+          width: 2,
+        ),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: isMobile ? 100 : 80,
+              height: isMobile ? 100 : 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: skeletonColor,
+              ),
+            ).animate(onPlay: (controller) => controller.repeat()).shimmer(duration: 1200.ms, color: Colors.white24),
+            const SizedBox(height: 16),
+            Container(
+              width: isMobile ? 120 : 100,
+              height: 18,
+              color: skeletonColor,
+            ).animate(onPlay: (controller) => controller.repeat()).shimmer(duration: 1200.ms, color: Colors.white24),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+

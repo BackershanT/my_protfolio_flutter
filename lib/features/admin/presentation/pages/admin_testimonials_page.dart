@@ -9,7 +9,7 @@ import 'package:my_protfolio/features/admin/presentation/widgets/testimonial/tes
 import 'package:my_protfolio/features/admin/presentation/widgets/testimonial/testimonial_delete_dialog.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/testimonial/testimonial_stats_bar.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/custom_snackbar.dart';
-import 'package:my_protfolio/features/admin/presentation/widgets/loading_overlay.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 /// Admin page for managing testimonials with full CRUD operations.
 ///
@@ -119,13 +119,9 @@ class _AdminTestimonialsPageState extends State<AdminTestimonialsPage> {
   Widget build(BuildContext context) {
     return Consumer<TestimonialProvider>(
       builder: (context, provider, _) {
-        return LoadingOverlay(
-          isLoading: provider.isLoading,
-          message: 'Loading testimonials...',
-          child: RefreshIndicator(
-            onRefresh: provider.loadTestimonials,
-            child: _buildContent(provider),
-          ),
+        return RefreshIndicator(
+          onRefresh: provider.loadTestimonials,
+          child: _buildContent(provider),
         );
       },
     );
@@ -189,8 +185,10 @@ class _AdminTestimonialsPageState extends State<AdminTestimonialsPage> {
             ),
           ),
 
-        // Empty state or grid
-        if (!provider.isLoading && testimonials.isEmpty)
+        // Skeleton loading, empty state, or grid
+        if (provider.isLoading && testimonials.isEmpty)
+          _buildSkeletonGrid()
+        else if (!provider.isLoading && testimonials.isEmpty)
           SliverFillRemaining(
             hasScrollBody: false,
             child: TestimonialEmptyState(onAddFirst: _handleAdd),
@@ -232,5 +230,128 @@ class _AdminTestimonialsPageState extends State<AdminTestimonialsPage> {
         ),
       ],
     );
+  }
+
+  Widget _buildSkeletonGrid() {
+    return SliverPadding(
+      padding: const EdgeInsets.only(top: 20),
+      sliver: SliverLayoutBuilder(
+        builder: (context, constraints) {
+          final crossAxisCount = _getCrossAxisCount(
+            constraints.crossAxisExtent,
+          );
+          return SliverGrid(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: crossAxisCount == 1 ? 2.5 : 1.6,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => _buildSkeletonCard(),
+              childCount: 6,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSkeletonCard() {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withValues(alpha: 0.2),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 120,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withValues(alpha: 0.25),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        width: 80,
+                        height: 11,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withValues(alpha: 0.18),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            Container(
+              width: 90,
+              height: 12,
+              decoration: BoxDecoration(
+                color: Colors.grey.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+            const SizedBox(height: 14),
+            Container(
+              width: double.infinity,
+              height: 10,
+              decoration: BoxDecoration(
+                color: Colors.grey.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Container(
+              width: double.infinity,
+              height: 10,
+              decoration: BoxDecoration(
+                color: Colors.grey.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Container(
+              width: 160,
+              height: 10,
+              decoration: BoxDecoration(
+                color: Colors.grey.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ],
+        ),
+      ),
+    )
+        .animate(onPlay: (controller) => controller.repeat())
+        .shimmer(
+          duration: 1200.ms,
+          color: Colors.white.withValues(alpha: 0.4),
+        );
   }
 }

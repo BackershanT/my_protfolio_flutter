@@ -10,7 +10,7 @@ import 'package:my_protfolio/core/providers/cursor_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:my_protfolio/features/admin/data/providers/testimonial_provider.dart';
-
+import 'package:my_protfolio/features/admin/data/providers/skill_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => CursorProvider()),
         ChangeNotifierProvider(create: (_) => TestimonialProvider()),
+        ChangeNotifierProvider(create: (_) => SkillProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {

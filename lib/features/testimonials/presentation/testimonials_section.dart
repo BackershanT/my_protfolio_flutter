@@ -6,8 +6,9 @@ import 'package:my_protfolio/core/constants/colors.dart';
 import 'package:my_protfolio/core/utils/responsive.dart';
 import 'package:my_protfolio/core/utils/threed_effects.dart';
 import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
-import 'package:my_protfolio/features/testimonials/data/models/testimonial_model.dart';
 import 'package:my_protfolio/features/testimonials/data/models/testimonial_data.dart';
+import 'package:provider/provider.dart';
+import 'package:my_protfolio/features/admin/data/providers/testimonial_provider.dart';
 
 class TestimonialsSection extends StatefulWidget {
   const TestimonialsSection({super.key});
@@ -17,7 +18,6 @@ class TestimonialsSection extends StatefulWidget {
 }
 
 class _TestimonialsSectionState extends State<TestimonialsSection> {
-  late List<Testimonial> _testimonials;
   final PageController _pageController = PageController();
   int _currentPage = 0;
   Timer? _timer;
@@ -25,20 +25,19 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
   @override
   void initState() {
     super.initState();
-    _testimonials = TestimonialData.getAllTestimonials();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<TestimonialProvider>().loadTestimonials();
       _startAutoScroll();
     });
   }
 
   void _startAutoScroll() {
-    if (_testimonials.length <= 1) return;
-
     _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       if (_pageController.hasClients) {
-        int nextPage = (_currentPage + 1) % _testimonials.length;
+        // We calculate the length dynamically where it's used now.
+        final page = _pageController.page?.toInt() ?? 0;
         _pageController.animateToPage(
-          nextPage,
+          page + 1,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
@@ -67,16 +66,35 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
         children: [
           SectionTitle(title: AppTexts.testimonialsTitle),
           SizedBox(height: MediaQuery.of(context).size.width < 850 ? 40 : 50),
-          Responsive(
-            mobile: _buildMobileLayout(context),
-            desktop: _buildDesktopLayout(context),
+          Consumer<TestimonialProvider>(
+            builder: (context, provider, child) {
+              final isLoading = provider.isLoading;
+              List<dynamic> items = provider.testimonials;
+              if (items.isEmpty && !isLoading) {
+                items = TestimonialData.getAllTestimonials();
+              }
+              
+              if (isLoading && items.isEmpty) {
+                 // Use Skeleton
+                 return Responsive(
+                   mobile: _buildMobileSkeleton(context),
+                   desktop: _buildDesktopSkeleton(context),
+                 );
+              }
+
+              return Responsive(
+                mobile: _buildMobileLayout(context, items),
+                desktop: _buildDesktopLayout(context, items),
+              );
+            },
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMobileLayout(BuildContext context) {
+  Widget _buildMobileLayout(BuildContext context, List<dynamic> items) {
+    if (items.isEmpty) return const SizedBox.shrink();
     return Column(
       children: [
         SizedBox(
@@ -85,12 +103,11 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
             controller: _pageController,
             onPageChanged: (index) {
               setState(() {
-                _currentPage = index;
+                _currentPage = index % items.length;
               });
             },
-            itemCount: _testimonials.length,
             itemBuilder: (context, index) {
-              return _buildTestimonialCard(context, _testimonials[index], true);
+              return _buildTestimonialCard(context, items[index % items.length], true);
             },
           ),
         ),
@@ -98,7 +115,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
         // Page indicator
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(_testimonials.length, (index) {
+          children: List.generate(items.length > 5 ? 5 : items.length, (index) {
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 4),
               width: 8,
@@ -116,7 +133,8 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
     );
   }
 
-  Widget _buildDesktopLayout(BuildContext context) {
+  Widget _buildDesktopLayout(BuildContext context, List<dynamic> items) {
+    if (items.isEmpty) return const SizedBox.shrink();
     return Column(
       children: [
         // Display testimonials in a row like the about section
@@ -124,7 +142,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
           height: 300,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: _testimonials
+            children: items.take(3)
                 .map(
                   (testimonial) => Expanded(
                     child: Padding(
@@ -140,9 +158,35 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
     );
   }
 
+  Widget _buildMobileSkeleton(BuildContext context) {
+    return SizedBox(
+      height: 350,
+      child: Center(
+        child: const _SkeletonCard(isMobile: true),
+      ),
+    );
+  }
+
+  Widget _buildDesktopSkeleton(BuildContext context) {
+    return SizedBox(
+      height: 300,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: List.generate(3, (index) {
+          return const Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: _SkeletonCard(isMobile: false),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
   Widget _buildTestimonialCard(
     BuildContext context,
-    Testimonial testimonial,
+    dynamic testimonial, // Use dynamic to handle both admin model and fallback model
     bool isMobile,
   ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -299,5 +343,89 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
       );
     }
     return card;
+  }
+}
+
+class _SkeletonCard extends StatelessWidget {
+  final bool isMobile;
+  const _SkeletonCard({required this.isMobile});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = isDark ? AppColors.primaryLight : AppColors.primaryDark;
+    
+    final cardWidth = isMobile ? 280.0 : 350.0;
+    final padding = isMobile ? 20.0 : 30.0;
+    final skeletonColor = isDark ? Colors.white12 : Colors.black12;
+
+    final cardInner = Container(
+      width: isMobile ? cardWidth : null,
+      padding: EdgeInsets.all(padding),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF112240) : Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: primaryColor.withValues(alpha: 0.1),
+          width: 1.5,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 30,
+            height: 30,
+            color: skeletonColor,
+          ).animate(onPlay: (controller) => controller.repeat()).shimmer(duration: 1200.ms, color: Colors.white24),
+          const SizedBox(height: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(height: 14, width: double.infinity, color: skeletonColor),
+                const SizedBox(height: 8),
+                Container(height: 14, width: double.infinity, color: skeletonColor),
+                const SizedBox(height: 8),
+                Container(height: 14, width: cardWidth * 0.6, color: skeletonColor),
+              ],
+            ).animate(onPlay: (controller) => controller.repeat()).shimmer(duration: 1200.ms, color: Colors.white24),
+          ),
+          SizedBox(height: isMobile ? 20 : 28),
+          Row(
+            children: [
+              Container(
+                width: isMobile ? 44 : 52,
+                height: isMobile ? 44 : 52,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: skeletonColor,
+                ),
+              ).animate(onPlay: (controller) => controller.repeat()).shimmer(duration: 1200.ms, color: Colors.white24),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(height: 16, width: 100, color: skeletonColor),
+                    const SizedBox(height: 6),
+                    Container(height: 12, width: 150, color: skeletonColor),
+                  ],
+                ).animate(onPlay: (controller) => controller.repeat()).shimmer(duration: 1200.ms, color: Colors.white24),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+
+    if (isMobile) {
+      return Container(
+        width: cardWidth,
+        margin: const EdgeInsets.symmetric(horizontal: 10),
+        child: cardInner,
+      );
+    }
+    return cardInner;
   }
 }
