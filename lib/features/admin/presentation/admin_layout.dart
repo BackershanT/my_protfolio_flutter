@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:my_protfolio/core/presentation/widgets/custom_cursor.dart';
 import 'package:my_protfolio/features/admin/presentation/pages/admin_testimonials_page.dart';
 import 'package:my_protfolio/features/admin/presentation/pages/admin_skills_page.dart';
+import 'package:my_protfolio/features/admin/presentation/pages/admin_blogs_page.dart';
 
 class AdminLayout extends StatefulWidget {
   final Widget? child; // The active dashboard content
@@ -44,8 +45,9 @@ class _AdminLayoutState extends State<AdminLayout> {
         return const AdminTestimonialsPage();
       case 2:
         return const AdminSkillsPage();
-      case 0:
       case 3:
+        return const AdminBlogsPage();
+      case 0:
       default:
         return _buildPlaceholder(theme);
     }

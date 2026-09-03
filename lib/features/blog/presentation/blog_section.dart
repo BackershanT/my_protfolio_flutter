@@ -6,6 +6,9 @@ import 'package:my_protfolio/core/constants/colors.dart';
 import 'package:my_protfolio/core/utils/threed_effects.dart';
 import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:my_protfolio/features/admin/data/providers/admin_blog_provider.dart';
 
 class BlogSection extends StatefulWidget {
   const BlogSection({super.key});
@@ -15,40 +18,14 @@ class BlogSection extends StatefulWidget {
 }
 
 class _BlogSectionState extends State<BlogSection> {
-  List<BlogPost> _posts = [];
-  bool _isLoading = true;
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _loadPosts();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _loadPosts() async {
-    try {
-      // Use static posts since we removed the Medium fetching
-      final posts = BlogData.getAllPosts();
-      if (mounted) {
-        setState(() {
-          _posts = posts;
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _posts = BlogData.getAllPosts();
-          _isLoading = false;
-        });
-      }
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AdminBlogProvider>().loadBlogs();
+    });
   }
 
   Future<void> _launchUrl(String url) async {
@@ -112,17 +89,130 @@ class _BlogSectionState extends State<BlogSection> {
             subtitle: 'Thoughts on Flutter, React, and Frontend Development',
           ),
           SizedBox(height: isMobile ? 30 : 50),
-          if (_isLoading)
-            const Center(child: CircularProgressIndicator())
-          else
-            _buildBlogPosts(context, isMobile, isDark),
+          Consumer<AdminBlogProvider>(
+            builder: (context, provider, _) {
+              if (provider.isLoading && provider.blogs.isEmpty) {
+                return _buildSkeletonPosts(context, isMobile, isDark);
+              }
+
+              final List<BlogPost> posts;
+              if (provider.blogs.isNotEmpty) {
+                posts = provider.blogs.map((b) {
+                  return BlogPost(
+                    id: b.title,
+                    title: b.title,
+                    excerpt: b.description.length > 130
+                        ? '${b.description.substring(0, 130)}...'
+                        : b.description,
+                    content: b.description,
+                    category: b.technologies.isNotEmpty ? b.technologies.first : 'Tech',
+                    imageUrl: b.imageUrl,
+                    publishedDate: DateTime.tryParse(b.date) ?? DateTime.now(),
+                    readTime: 5,
+                    tags: b.technologies,
+                  );
+                }).toList();
+              } else {
+                posts = BlogData.getAllPosts();
+              }
+
+              return _buildBlogPosts(context, posts, isMobile, isDark);
+            },
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildBlogPosts(BuildContext context, bool isMobile, bool isDark) {
-    if (_posts.isEmpty) {
+  Widget _buildSkeletonPosts(BuildContext context, bool isMobile, bool isDark) {
+    return SizedBox(
+      height: isMobile ? 500 : 600,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        itemCount: 4,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: EdgeInsets.only(right: isMobile ? 20 : 30),
+            width: isMobile ? 300 : 380,
+            height: isMobile ? 500 : 580,
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF112240) : Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: isDark ? Colors.white10 : Colors.black12,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: isMobile ? 180 : 200,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.white12 : Colors.grey.shade200,
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 18,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: isDark ? Colors.white12 : Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        height: 18,
+                        width: 160,
+                        decoration: BoxDecoration(
+                          color: isDark ? Colors.white12 : Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        height: 12,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: isDark ? Colors.white10 : Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        height: 12,
+                        width: 220,
+                        decoration: BoxDecoration(
+                          color: isDark ? Colors.white10 : Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+              .animate(onPlay: (controller) => controller.repeat())
+              .shimmer(
+                duration: 1200.ms,
+                color: Colors.white.withValues(alpha: isDark ? 0.08 : 0.35),
+              );
+        },
+      ),
+    );
+  }
+
+  Widget _buildBlogPosts(BuildContext context, List<BlogPost> posts, bool isMobile, bool isDark) {
+    if (posts.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(20),
         child: Text(
@@ -142,14 +232,14 @@ class _BlogSectionState extends State<BlogSection> {
         child: ListView.builder(
           controller: _scrollController,
           scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(vertical: 20),
-          itemCount: _posts.length,
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          itemCount: posts.length,
           itemBuilder: (context, index) {
-            final post = _posts[index];
+            final post = posts[index];
             return Container(
               margin: EdgeInsets.only(right: isMobile ? 20 : 30),
-              width: isMobile ? 300 : (isMobile ? 350 : 400),
-              height: isMobile ? 500 : (isMobile ? 550 : 600),
+              width: isMobile ? 300 : 400,
+              height: isMobile ? 500 : 600,
               child: _buildBlogCard(context, post, isMobile, isDark),
             );
           },
