@@ -4,12 +4,14 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:my_protfolio/core/constants/app_texts.dart';
 import 'package:my_protfolio/core/constants/colors.dart';
 import 'package:my_protfolio/core/utils/responsive.dart';
 import 'package:my_protfolio/core/constants/app_assets.dart';
 import 'package:my_protfolio/core/utils/threed_effects.dart';
+import 'package:my_protfolio/core/constants/app_texts.dart';
+import 'package:my_protfolio/features/hero/presentation/widgets/floating_cubes_overlay.dart';
+import 'package:my_protfolio/features/hero/presentation/widgets/hero_profile_avatar.dart';
+import 'package:my_protfolio/features/hero/presentation/widgets/hero_text_content.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
@@ -178,7 +180,6 @@ class _HeroSectionState extends State<HeroSection>
                   child: AnimatedBuilder(
                     animation: _starController,
                     builder: (context, _) {
-                      // Animate star Z positions (fly-through effect)
                       for (final s in _stars) {
                         s.z -= s.speed * 4;
                         if (s.z <= 10) {
@@ -219,7 +220,7 @@ class _HeroSectionState extends State<HeroSection>
                 ),
               ),
 
-              // ── Subtle gradient overlay (depth fog) ──
+              // ── Depth Fog Gradient Overlay ──
               Positioned.fill(
                 child: Container(
                   decoration: BoxDecoration(
@@ -242,43 +243,9 @@ class _HeroSectionState extends State<HeroSection>
               ),
 
               // ── Decorative floating 3D cubes ──
-              Positioned(
-                top: 80,
-                left: screenWidth * 0.08,
-                child: FloatingWidget(
-                  amplitude: 15,
-                  duration: const Duration(seconds: 5),
-                  child: RotatingCube(
-                    size: 38,
-                    color: isDark
-                        ? AppColors.primaryLight
-                        : AppColors.primaryDark,
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 120,
-                right: screenWidth * 0.06,
-                child: FloatingWidget(
-                  amplitude: 12,
-                  duration: const Duration(seconds: 7),
-                  child: RotatingCube(
-                    size: 28,
-                    color: isDark ? Colors.purpleAccent : Colors.blue,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 200,
-                right: screenWidth * 0.15,
-                child: FloatingWidget(
-                  amplitude: 8,
-                  duration: const Duration(seconds: 6),
-                  child: RotatingCube(
-                    size: 20,
-                    color: isDark ? Colors.cyanAccent : Colors.indigo,
-                  ),
-                ),
+              FloatingCubesOverlay(
+                screenWidth: screenWidth,
+                isDark: isDark,
               ),
 
               // ── Main content ──
@@ -307,9 +274,13 @@ class _HeroSectionState extends State<HeroSection>
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _buildProfileImage(),
+        const HeroProfileAvatar(),
         const SizedBox(height: 30),
-        _buildTextContent(),
+        HeroTextContent(
+          currentIndex: _currentIndex,
+          onDownloadResume: _downloadResume,
+          onViewProjects: widget.onViewProjects ?? () {},
+        ),
       ],
     );
   }
@@ -322,320 +293,22 @@ class _HeroSectionState extends State<HeroSection>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(flex: 3, child: _buildTextContent()),
+        Expanded(
+          flex: 3,
+          child: HeroTextContent(
+            currentIndex: _currentIndex,
+            onDownloadResume: _downloadResume,
+            onViewProjects: widget.onViewProjects ?? () {},
+          ),
+        ),
         SizedBox(width: spacing),
-        Flexible(flex: 2, child: Center(child: _buildProfileImage())),
-      ],
-    );
-  }
-
-  Widget _buildProfileImage() {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final radius = screenWidth < 850
-        ? 80.0
-        : (screenWidth < 1200 ? 100.0 : 130.0);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final primaryColor =
-        isDark ? AppColors.primaryLight : AppColors.primaryDark;
-
-    return FloatingWidget(
-      amplitude: 14,
-      duration: const Duration(seconds: 4),
-      child: TiltCard(
-        maxTilt: 20,
-        scale: 1.0,
-        glareOpacity: 0.2,
-        borderRadius: BorderRadius.circular(500),
-        child: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: primaryColor.withValues(alpha: 0.4),
-                blurRadius: 40,
-                spreadRadius: 8,
-                offset: const Offset(0, 20),
-              ),
-              BoxShadow(
-                color: primaryColor.withValues(alpha: 0.15),
-                blurRadius: 80,
-                spreadRadius: 20,
-              ),
-            ],
-          ),
-          child: CircleAvatar(
-            radius: radius,
-            backgroundColor: primaryColor,
-            child: CircleAvatar(
-              radius: radius - 4,
-              backgroundColor: isDark
-                  ? AppColors.darkBackground
-                  : Colors.white,
-              child: CircleAvatar(
-                radius: radius - 12,
-                backgroundImage: AssetImage(AppAssets.profileAvatar),
-              ).animate().scale(
-                    delay: 300.ms,
-                    duration: 800.ms,
-                    curve: Curves.elasticOut,
-                  ),
-            ),
+        const Flexible(
+          flex: 2,
+          child: Center(
+            child: HeroProfileAvatar(),
           ),
         ),
-      ),
-    ).animate().fadeIn(delay: 200.ms, duration: 800.ms);
-  }
-
-  Widget _buildTextContent() {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 850;
-    final isTablet = screenWidth >= 850 && screenWidth < 1200;
-    final isDesktop = screenWidth >= 1200;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Glowing caption
-        Text(
-          'I am',
-          style: TextStyle(
-            fontSize: isMobile ? 12 : 14,
-            letterSpacing: 3,
-            fontWeight: FontWeight.w600,
-            color: isDark
-                ? AppColors.primaryLight.withValues(alpha: 0.8)
-                : AppColors.primaryDark.withValues(alpha: 0.7),
-          ),
-        )
-            .animate()
-            .fadeIn(delay: 200.ms, duration: 600.ms)
-            .slideX(begin: -0.3, end: 0),
-        const SizedBox(height: 12),
-        // Large bold headline
-        Text(
-          AppTexts.heroName,
-          style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                fontSize: isMobile ? 32 : (isTablet ? 40 : 60),
-                fontWeight: FontWeight.bold,
-                height: 1.05,
-                letterSpacing: -1.5,
-                color: isDark ? AppColors.primaryLight : null,
-                shadows: [
-                  Shadow(
-                    color: (isDark
-                            ? AppColors.primaryLight
-                            : AppColors.primaryDark)
-                        .withValues(alpha: 0.3),
-                    blurRadius: 30,
-                  ),
-                ],
-              ),
-        )
-            .animate()
-            .fadeIn(delay: 400.ms, duration: 600.ms)
-            .slide(
-              begin: const Offset(0, 0.2),
-              duration: 600.ms,
-              curve: Curves.easeOutCubic,
-            ),
-        SizedBox(height: isMobile ? 15 : 24),
-        // Animated role switcher
-        SizedBox(
-          height: isMobile ? 50 : 70,
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 500),
-            transitionBuilder: (child, animation) {
-              return FadeTransition(
-                opacity: animation,
-                child: SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, 0.3),
-                    end: Offset.zero,
-                  ).animate(animation),
-                  child: child,
-                ),
-              );
-            },
-            child: Text(
-              AppTexts.heroRoles[_currentIndex],
-              key: ValueKey<int>(_currentIndex),
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontSize: isMobile ? 20 : (isTablet ? 26 : 38),
-                    fontWeight: FontWeight.w600,
-                    color:
-                        isDark ? AppColors.primaryLight : AppColors.primaryDark,
-                    height: 1.2,
-                  ),
-            ),
-          ),
-        ).animate().fadeIn(delay: 600.ms, duration: 600.ms),
-        SizedBox(height: isMobile ? 20 : 30),
-        // Description
-        ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: isDesktop ? 700 : (isTablet ? 500 : double.infinity),
-          ),
-          child: Text(
-            AppTexts.heroDescription,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontSize: isMobile ? 14 : (isTablet ? 16 : 18),
-                  height: 1.7,
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.color
-                      ?.withValues(alpha: 0.8),
-                ),
-          ),
-        )
-            .animate()
-            .fadeIn(delay: 800.ms, duration: 600.ms)
-            .slide(
-              begin: const Offset(0, 0.2),
-              duration: 600.ms,
-              curve: Curves.easeOutCubic,
-            ),
-        SizedBox(height: isMobile ? 30 : 40),
-        _buildActionButtons(),
       ],
-    );
-  }
-
-  Widget _buildActionButtons() {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 850;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Wrap(
-      spacing: isMobile ? 12 : 20,
-      runSpacing: 16,
-      children: [
-        // Primary CTA
-        _Btn3D(
-          onPressed: _downloadResume,
-          filled: true,
-          isDark: isDark,
-          label: AppTexts.resumeButtonText,
-          isMobile: isMobile,
-        ).animate().fadeIn(delay: 1000.ms, duration: 600.ms).scale(
-              begin: const Offset(0.9, 0.9),
-              duration: 600.ms,
-              curve: Curves.easeOutBack,
-            ),
-        // Secondary CTA
-        _Btn3D(
-          onPressed: widget.onViewProjects ?? () {},
-          filled: false,
-          isDark: isDark,
-          label: AppTexts.viewProjects,
-          isMobile: isMobile,
-        ).animate().fadeIn(delay: 1200.ms, duration: 600.ms).scale(
-              begin: const Offset(0.9, 0.9),
-              duration: 600.ms,
-              curve: Curves.easeOutBack,
-            ),
-      ],
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────
-//  3D-styled button with tilt + glow effect
-// ─────────────────────────────────────────────────────────────────
-class _Btn3D extends StatefulWidget {
-  final VoidCallback onPressed;
-  final bool filled;
-  final bool isDark;
-  final String label;
-  final bool isMobile;
-
-  const _Btn3D({
-    required this.onPressed,
-    required this.filled,
-    required this.isDark,
-    required this.label,
-    required this.isMobile,
-  });
-
-  @override
-  State<_Btn3D> createState() => _Btn3DState();
-}
-
-class _Btn3DState extends State<_Btn3D> {
-  bool _hovered = false;
-  double _rotY = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    final primaryColor = widget.isDark
-        ? AppColors.primaryLight
-        : AppColors.primaryDark;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() {
-        _hovered = false;
-        _rotY = 0;
-      }),
-      onHover: (e) {
-        final w = widget.isMobile ? 150.0 : 180.0;
-        setState(() {
-          _rotY = ((e.localPosition.dx / w) - 0.5) * 0.3; // slight tilt
-        });
-      },
-      child: AnimatedScale(
-        scale: _hovered ? 1.06 : 1.0,
-        duration: const Duration(milliseconds: 200),
-        child: Transform(
-          alignment: Alignment.center,
-          transform: Matrix4.identity()
-            ..setEntry(3, 2, 0.001)
-            ..rotateY(_rotY),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: EdgeInsets.symmetric(
-              horizontal: widget.isMobile ? 24 : 32,
-              vertical: widget.isMobile ? 14 : 18,
-            ),
-            decoration: BoxDecoration(
-              color: widget.filled
-                  ? (widget.isDark
-                      ? AppColors.primaryLight
-                      : AppColors.primaryDark)
-                  : Colors.transparent,
-              border: Border.all(color: primaryColor, width: 2),
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: _hovered
-                  ? [
-                      BoxShadow(
-                        color: primaryColor.withValues(alpha: 0.5),
-                        blurRadius: 20,
-                        spreadRadius: 2,
-                        offset: const Offset(0, 8),
-                      ),
-                    ]
-                  : [],
-            ),
-            child: GestureDetector(
-              onTap: widget.onPressed,
-              child: Text(
-                widget.label,
-                style: TextStyle(
-                  fontSize: widget.isMobile ? 14 : 16,
-                  fontWeight: FontWeight.w600,
-                  color: widget.filled
-                      ? (widget.isDark
-                          ? AppColors.darkBackground
-                          : Colors.white)
-                      : primaryColor,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
