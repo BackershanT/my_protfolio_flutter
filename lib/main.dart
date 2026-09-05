@@ -38,17 +38,11 @@ void main() async {
 
   final supabaseUrl = (envUrl ?? '').isNotEmpty
       ? envUrl!
-      : const String.fromEnvironment(
-          'SUPABASE_URL',
-          defaultValue: 'https://vdyhzrpnenvxumbwwlmv.supabase.co',
-        );
+      : const String.fromEnvironment('SUPABASE_URL');
 
   final supabaseKey = (envKey ?? '').isNotEmpty
       ? envKey!
-      : const String.fromEnvironment(
-          'SUPABASE_ANON_KEY',
-          defaultValue: 'sb_publishable_-6OweH6PKxYmdAKkjRBtlw_ajuTVJKC',
-        );
+      : const String.fromEnvironment('SUPABASE_ANON_KEY');
 
   if (supabaseUrl.isNotEmpty && supabaseKey.isNotEmpty) {
     try {
