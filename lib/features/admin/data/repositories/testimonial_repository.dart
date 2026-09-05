@@ -3,13 +3,23 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:my_protfolio/features/admin/data/models/testimonial_model.dart';
 class TestimonialRepository {
-  SupabaseClient get _client => Supabase.instance.client;
+  SupabaseClient? get _client {
+    try {
+      return Supabase.instance.client;
+    } catch (e) {
+      debugPrint('Supabase client not initialized: $e');
+      return null;
+    }
+  }
   static const String _table = 'testimonials';
 
   /// Fetches all testimonials ordered by created_at descending.
   Future<List<TestimonialModel>> fetchAll() async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) return [];
+
+      final response = await client
           .from(_table)
           .select()
           .order('created_at', ascending: false);
@@ -19,10 +29,10 @@ class TestimonialRepository {
           .toList();
     } on PostgrestException catch (e) {
       debugPrint('Supabase fetchAll error: ${e.code} - ${e.message}');
-      throw Exception('Failed to fetch testimonials: ${e.message}');
+      return [];
     } catch (e) {
       debugPrint('Unknown fetchAll error: $e');
-      throw Exception('Failed to fetch testimonials: ${e.toString()}');
+      return [];
     }
   }
 

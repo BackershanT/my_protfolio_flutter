@@ -4,7 +4,14 @@ import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:my_protfolio/features/admin/data/models/admin_project_model.dart';
 
 class AdminProjectRepository {
-  SupabaseClient get _client => Supabase.instance.client;
+  SupabaseClient? get _client {
+    try {
+      return Supabase.instance.client;
+    } catch (e) {
+      debugPrint('Supabase client not initialized: $e');
+      return null;
+    }
+  }
   static const String _table = 'projects';
   static const String _coverBucket = 'projects';
   static const String _screenshotsBucket = 'project_screenshots';
@@ -12,7 +19,10 @@ class AdminProjectRepository {
   /// Fetches all projects.
   Future<List<AdminProjectModel>> fetchAll() async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) return [];
+
+      final response = await client
           .from(_table)
           .select()
           .order('created_at', ascending: false);
@@ -22,10 +32,10 @@ class AdminProjectRepository {
           .toList();
     } on PostgrestException catch (e) {
       debugPrint('Supabase fetchAll projects error: ${e.code} - ${e.message}');
-      throw Exception('Failed to fetch projects: ${e.message}');
+      return [];
     } catch (e) {
       debugPrint('Unknown fetchAll projects error: $e');
-      throw Exception('Failed to fetch projects: ${e.toString()}');
+      return [];
     }
   }
 

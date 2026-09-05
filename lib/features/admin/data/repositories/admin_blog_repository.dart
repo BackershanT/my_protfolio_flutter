@@ -4,14 +4,24 @@ import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:my_protfolio/features/admin/data/models/admin_blog_model.dart';
 
 class AdminBlogRepository {
-  SupabaseClient get _client => Supabase.instance.client;
+  SupabaseClient? get _client {
+    try {
+      return Supabase.instance.client;
+    } catch (e) {
+      debugPrint('Supabase client not initialized: $e');
+      return null;
+    }
+  }
   static const String _table = 'blogs';
   static const String _bucket = 'blog';
 
   /// Fetches all blogs ordered by date descending.
   Future<List<AdminBlogModel>> fetchAll() async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) return [];
+
+      final response = await client
           .from(_table)
           .select()
           .order('date', ascending: false);
@@ -21,10 +31,10 @@ class AdminBlogRepository {
           .toList();
     } on PostgrestException catch (e) {
       debugPrint('Supabase fetchAll blogs error: ${e.code} - ${e.message}');
-      throw Exception('Failed to fetch blogs: ${e.message}');
+      return [];
     } catch (e) {
       debugPrint('Unknown fetchAll blogs error: $e');
-      throw Exception('Failed to fetch blogs: ${e.toString()}');
+      return [];
     }
   }
 

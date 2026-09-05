@@ -3,12 +3,22 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:my_protfolio/features/admin/data/models/translation_model.dart';
 
 class TranslationRepository {
-  final SupabaseClient _client = Supabase.instance.client;
+  SupabaseClient? get _client {
+    try {
+      return Supabase.instance.client;
+    } catch (e) {
+      debugPrint('Supabase client not initialized: $e');
+      return null;
+    }
+  }
 
   /// Fetch all translations ordered by category, then key
   Future<List<TranslationModel>> fetchAll() async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) return [];
+
+      final response = await client
           .from('app_translations')
           .select()
           .order('category', ascending: true)
@@ -30,7 +40,10 @@ class TranslationRepository {
   /// Update translation entry
   Future<TranslationModel> update(TranslationModel item) async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      final response = await client
           .from('app_translations')
           .update({
             'en': item.en,
@@ -52,7 +65,10 @@ class TranslationRepository {
   /// Create or insert new translation entry
   Future<TranslationModel> create(TranslationModel item) async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      final response = await client
           .from('app_translations')
           .insert(item.toJson())
           .select()
@@ -68,7 +84,10 @@ class TranslationRepository {
   /// Delete translation entry
   Future<void> delete(String key) async {
     try {
-      await _client
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      await client
           .from('app_translations')
           .delete()
           .eq('key', key);

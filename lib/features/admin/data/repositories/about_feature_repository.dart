@@ -3,12 +3,22 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:my_protfolio/features/admin/data/models/about_feature_model.dart';
 
 class AboutFeatureRepository {
-  final SupabaseClient _client = Supabase.instance.client;
+  SupabaseClient? get _client {
+    try {
+      return Supabase.instance.client;
+    } catch (e) {
+      debugPrint('Supabase client not initialized: $e');
+      return null;
+    }
+  }
 
   /// Fetch all feature cards ordered by sort_order
   Future<List<AboutFeatureModel>> fetchAll() async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) return [];
+
+      final response = await client
           .from('about_features')
           .select()
           .order('sort_order', ascending: true);
@@ -29,7 +39,10 @@ class AboutFeatureRepository {
   /// Create new feature card
   Future<AboutFeatureModel> create(AboutFeatureModel feature) async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      final response = await client
           .from('about_features')
           .insert(feature.toJson())
           .select()
@@ -45,7 +58,10 @@ class AboutFeatureRepository {
   /// Update existing feature card
   Future<AboutFeatureModel> update(String id, AboutFeatureModel feature) async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      final response = await client
           .from('about_features')
           .update(feature.toJson())
           .eq('id', id)
@@ -62,7 +78,10 @@ class AboutFeatureRepository {
   /// Delete feature card
   Future<void> delete(String id) async {
     try {
-      await _client
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      await client
           .from('about_features')
           .delete()
           .eq('id', id);
