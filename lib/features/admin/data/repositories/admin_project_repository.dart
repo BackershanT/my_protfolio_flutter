@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:my_protfolio/features/admin/data/models/admin_project_model.dart';
 
 class AdminProjectRepository {
-  final _client = Supabase.instance.client;
+  SupabaseClient get _client => Supabase.instance.client;
   static const String _table = 'projects';
   static const String _coverBucket = 'projects';
   static const String _screenshotsBucket = 'project_screenshots';

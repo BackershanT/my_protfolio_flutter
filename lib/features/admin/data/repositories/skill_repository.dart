@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:my_protfolio/features/skills/data/models/skill_model.dart';
 
 class SkillRepository {
-  final _client = Supabase.instance.client;
+  SupabaseClient get _client => Supabase.instance.client;
   static const String _table = 'skills';
 
   /// Fetches all skills ordered by id ascending.

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:my_protfolio/features/admin/data/models/admin_blog_model.dart';
 
 class AdminBlogRepository {
-  final _client = Supabase.instance.client;
+  SupabaseClient get _client => Supabase.instance.client;
   static const String _table = 'blogs';
   static const String _bucket = 'blog';
 
