@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:my_protfolio/features/blog/data/models/blog_post_model.dart';
-
-import 'package:my_protfolio/core/constants/colors.dart';
-import 'package:my_protfolio/core/utils/threed_effects.dart';
-import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
 import 'package:my_protfolio/features/admin/data/providers/admin_blog_provider.dart';
+import 'package:my_protfolio/features/blog/data/models/blog_post_model.dart';
+import 'package:my_protfolio/features/blog/presentation/widgets/blog_detail_dialog.dart';
+import 'package:my_protfolio/features/blog/presentation/widgets/blog_posts_list.dart';
+import 'package:my_protfolio/features/blog/presentation/widgets/blog_skeleton_posts.dart';
 
 class BlogSection extends StatefulWidget {
   const BlogSection({super.key});
@@ -26,6 +26,12 @@ class _BlogSectionState extends State<BlogSection> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AdminBlogProvider>().loadBlogs();
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Future<void> _launchUrl(String url) async {
@@ -70,6 +76,22 @@ class _BlogSectionState extends State<BlogSection> {
     return '${date.day}/${date.month}/${date.year}';
   }
 
+  void _showBlogDetailDialog(BlogPost post, bool isMobile, bool isDark) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return BlogDetailDialog(
+          post: post,
+          isMobile: isMobile,
+          isDark: isDark,
+          getCategoryIcon: _getCategoryIcon,
+          formatDate: _formatDate,
+          onLaunchUrl: _launchUrl,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -84,7 +106,7 @@ class _BlogSectionState extends State<BlogSection> {
       ),
       child: Column(
         children: [
-          SectionTitle(
+          const SectionTitle(
             title: 'Latest Blog Posts',
             subtitle: 'Thoughts on Flutter, React, and Frontend Development',
           ),
@@ -92,622 +114,59 @@ class _BlogSectionState extends State<BlogSection> {
           Consumer<AdminBlogProvider>(
             builder: (context, provider, _) {
               if (provider.isLoading && provider.blogs.isEmpty) {
-                return _buildSkeletonPosts(context, isMobile, isDark);
+                return BlogSkeletonPosts(
+                  isMobile: isMobile,
+                  isDark: isDark,
+                );
               }
 
               if (provider.blogs.isEmpty) {
-                return _buildBlogPosts(context, [], isMobile, isDark);
+                return BlogPostsList(
+                  posts: const [],
+                  isMobile: isMobile,
+                  isDark: isDark,
+                  scrollController: _scrollController,
+                  getCategoryIcon: _getCategoryIcon,
+                  formatDate: _formatDate,
+                  onLaunchUrl: _launchUrl,
+                  onShowDetailDialog: (post) =>
+                      _showBlogDetailDialog(post, isMobile, isDark),
+                );
               }
 
               final posts = provider.blogs.map((b) {
-                  return BlogPost(
-                    id: b.title,
-                    title: b.title,
-                    excerpt: b.description.length > 130
-                        ? '${b.description.substring(0, 130)}...'
-                        : b.description,
-                    content: b.description,
-                    category: b.technologies.isNotEmpty ? b.technologies.first : 'Tech',
-                    imageUrl: b.imageUrl,
-                    publishedDate: DateTime.tryParse(b.date) ?? DateTime.now(),
-                    readTime: 5,
-                    tags: b.technologies,
-                  );
-                }).toList();
+                return BlogPost(
+                  id: b.title,
+                  title: b.title,
+                  excerpt: b.description.length > 130
+                      ? '${b.description.substring(0, 130)}...'
+                      : b.description,
+                  content: b.description,
+                  category: b.technologies.isNotEmpty
+                      ? b.technologies.first
+                      : 'Tech',
+                  imageUrl: b.imageUrl,
+                  publishedDate: DateTime.tryParse(b.date) ?? DateTime.now(),
+                  readTime: 5,
+                  tags: b.technologies,
+                );
+              }).toList();
 
-              return _buildBlogPosts(context, posts, isMobile, isDark);
+              return BlogPostsList(
+                posts: posts,
+                isMobile: isMobile,
+                isDark: isDark,
+                scrollController: _scrollController,
+                getCategoryIcon: _getCategoryIcon,
+                formatDate: _formatDate,
+                onLaunchUrl: _launchUrl,
+                onShowDetailDialog: (post) =>
+                    _showBlogDetailDialog(post, isMobile, isDark),
+              );
             },
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildSkeletonPosts(BuildContext context, bool isMobile, bool isDark) {
-    return SizedBox(
-      height: isMobile ? 500 : 600,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        itemCount: 4,
-        itemBuilder: (context, index) {
-          return Container(
-            margin: EdgeInsets.only(right: isMobile ? 20 : 30),
-            width: isMobile ? 300 : 380,
-            height: isMobile ? 500 : 580,
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF112240) : Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: isDark ? Colors.white10 : Colors.black12,
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: isMobile ? 180 : 200,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: isDark ? Colors.white12 : Colors.grey.shade200,
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 18,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: isDark ? Colors.white12 : Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Container(
-                        height: 18,
-                        width: 160,
-                        decoration: BoxDecoration(
-                          color: isDark ? Colors.white12 : Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Container(
-                        height: 12,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: isDark ? Colors.white10 : Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Container(
-                        height: 12,
-                        width: 220,
-                        decoration: BoxDecoration(
-                          color: isDark ? Colors.white10 : Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )
-              .animate(onPlay: (controller) => controller.repeat())
-              .shimmer(
-                duration: 1200.ms,
-                color: Colors.white.withValues(alpha: isDark ? 0.08 : 0.35),
-              );
-        },
-      ),
-    );
-  }
-
-  Widget _buildBlogPosts(BuildContext context, List<BlogPost> posts, bool isMobile, bool isDark) {
-    if (posts.isEmpty) {
-      return Container(
-        padding: const EdgeInsets.all(20),
-        child: Text(
-          'No blog posts available.',
-          style: TextStyle(
-            color: isDark ? Colors.white70 : Colors.black54,
-            fontSize: 16,
-          ),
-        ),
-      );
-    }
-
-    return SizedBox(
-      height: isMobile ? 500 : 600,
-      child: Scrollbar(
-        controller: _scrollController,
-        child: ListView.builder(
-          controller: _scrollController,
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          itemCount: posts.length,
-          itemBuilder: (context, index) {
-            final post = posts[index];
-            return Container(
-              margin: EdgeInsets.only(right: isMobile ? 20 : 30),
-              width: isMobile ? 300 : 400,
-              height: isMobile ? 500 : 600,
-              child: _buildBlogCard(context, post, isMobile, isDark),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBlogCard(
-    BuildContext context,
-    BlogPost post,
-    bool isMobile,
-    bool isDark,
-  ) {
-    final primaryColor = isDark ? AppColors.primaryLight : AppColors.primaryDark;
-
-    return TiltCard(
-      maxTilt: isMobile ? 0 : 14,
-      scale: isMobile ? 1.0 : 1.03,
-      glareOpacity: 0.12,
-      child: Container(
-        decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF112240) : Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: primaryColor.withValues(alpha: 0.15),
-            width: 1.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: primaryColor.withValues(alpha: isDark ? 0.12 : 0.06),
-              blurRadius: 30,
-              spreadRadius: 2,
-              offset: const Offset(0, 12),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Blog image container
-            Container(
-              height: isMobile ? 180 : 200,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(20),
-                ),
-                image: post.imageUrl.isNotEmpty
-                    ? DecorationImage(
-                        image: NetworkImage(post.imageUrl),
-                        fit: BoxFit.fill,
-                      )
-                    : null,
-                color: post.imageUrl.isEmpty
-                    ? (isDark ? const Color(0xFF1E3A5F) : const Color(0xFFEFF3FF))
-                    : null,
-              ),
-              child: post.imageUrl.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            _getCategoryIcon(post.category),
-                            size: isMobile ? 56 : 72,
-                            color: primaryColor.withValues(alpha: 0.6),
-                          ),
-                          const SizedBox(height: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: primaryColor.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              post.category.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: primaryColor,
-                                letterSpacing: 1,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : null,
-            ),
-
-            // Content area
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.all(isMobile ? 20 : 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Blog title
-                    Text(
-                      post.title,
-                      style: TextStyle(
-                        fontSize: isMobile ? 18 : 22,
-                        fontWeight: FontWeight.bold,
-                        color: isDark ? Colors.white : Colors.black87,
-                        height: 1.3,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    // Tags
-                    Wrap(
-                      spacing: 6,
-                      runSpacing: 6,
-                      children: post.tags.take(3).map((tag) {
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: primaryColor.withValues(alpha: 0.10),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            '#$tag',
-                            style: TextStyle(
-                              fontSize: isMobile ? 11 : 12,
-                              fontWeight: FontWeight.w500,
-                              color: primaryColor,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    // Blog excerpt
-                    Flexible(
-                      child: Text(
-                        post.excerpt,
-                        style: TextStyle(
-                          fontSize: isMobile ? 13 : 14,
-                          height: 1.55,
-                          color: isDark ? Colors.white60 : Colors.black54,
-                        ),
-                        overflow: TextOverflow.fade,
-                        softWrap: true,
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    // Meta row + button
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5,
-                              ),
-                              decoration: BoxDecoration(
-                                color: primaryColor.withValues(alpha: 0.12),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                post.category.toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: primaryColor,
-                                  letterSpacing: 0.8,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              '${post.readTime} min read',
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: isDark ? Colors.white54 : Colors.black38,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 6),
-
-                        Text(
-                          _formatDate(post.publishedDate),
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: isDark ? Colors.white38 : Colors.black26,
-                          ),
-                        ),
-
-                        const SizedBox(height: 10),
-
-                        // Action button
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              if (post.externalUrl != null &&
-                                  post.externalUrl!.isNotEmpty) {
-                                _launchUrl(post.externalUrl!);
-                              } else {
-                                _showBlogDetailDialog(context, post, isMobile, isDark);
-                              }
-                            },
-                            icon: const Icon(Icons.open_in_new, size: 16),
-                            label: const Text('Read Article'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: primaryColor,
-                              foregroundColor: isDark
-                                  ? AppColors.darkBackground
-                                  : Colors.white,
-                              padding: EdgeInsets.symmetric(
-                                horizontal: isMobile ? 14 : 18,
-                                vertical: isMobile ? 10 : 12,
-                              ),
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showBlogDetailDialog(
-    BuildContext context,
-    BlogPost post,
-    bool isMobile,
-    bool isDark,
-  ) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Container(
-            width: isMobile ? double.infinity : 800,
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.8,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Header with close button
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? const Color(0xFF1E2D3D)
-                          : const Color(0xFFEFEFEF),
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(20),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          post.category.toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: isDark
-                                ? const Color(0xFF64FFDA)
-                                : const Color(0xFF0A192F),
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.close,
-                            color: isDark ? Colors.white70 : Colors.black54,
-                          ),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Blog image
-                  if (post.imageUrl.isNotEmpty)
-                    Container(
-                      height: isMobile ? 200 : 300,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(post.imageUrl),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    )
-                  else
-                    Container(
-                      height: isMobile ? 200 : 300,
-                      width: double.infinity,
-                      color: isDark
-                          ? const Color(0xFF2A3D4F)
-                          : const Color(0xFFEFEFEF),
-                      child: Icon(
-                        _getCategoryIcon(post.category),
-                        size: isMobile ? 80 : 120,
-                        color: isDark
-                            ? const Color(0xFF64FFDA)
-                            : const Color(0xFF0A192F),
-                      ),
-                    ),
-
-                  // Content
-                  Padding(
-                    padding: EdgeInsets.all(isMobile ? 20 : 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Title
-                        Text(
-                          post.title,
-                          style: TextStyle(
-                            fontSize: isMobile ? 24 : 32,
-                            fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : Colors.black87,
-                          ),
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // Metadata
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isDark
-                                    ? const Color(
-                                        0xFF64FFDA,
-                                      ).withValues(alpha: 0.15)
-                                    : const Color(
-                                        0xFF0A192F,
-                                      ).withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                '${post.readTime} min read',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: isDark
-                                      ? const Color(0xFF64FFDA)
-                                      : const Color(0xFF0A192F),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Text(
-                              _formatDate(post.publishedDate),
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: isDark ? Colors.white70 : Colors.black54,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        // Tags
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: post.tags.take(3).map((tag) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isDark
-                                    ? const Color(
-                                        0xFF64FFDA,
-                                      ).withValues(alpha: 0.15)
-                                    : const Color(
-                                        0xFF0A192F,
-                                      ).withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                '#$tag',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: isDark
-                                      ? const Color(0xFF64FFDA)
-                                      : const Color(0xFF0A192F),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-
-                        const SizedBox(height: 24),
-
-                        // Content
-                        Text(
-                          post.content.isNotEmpty ? post.content : post.excerpt,
-                          style: TextStyle(
-                            fontSize: isMobile ? 16 : 18,
-                            height: 1.8,
-                            color: isDark ? Colors.white70 : Colors.black87,
-                          ),
-                        ),
-
-                        const SizedBox(height: 30),
-
-                        // External link button (if available)
-                        if (post.externalUrl != null &&
-                            post.externalUrl!.isNotEmpty)
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton.icon(
-                              onPressed: () => _launchUrl(post.externalUrl!),
-                              icon: const Icon(Icons.open_in_new),
-                              label: const Text('Read Full Article on Medium'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF64FFDA),
-                                foregroundColor: const Color(0xFF0A192F),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 16,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 }
