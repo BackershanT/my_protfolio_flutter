@@ -1,0 +1,8 @@
+[build]
+  command = "printf \"SUPABASE_URL=$SUPABASE_URL\\nSUPABASE_ANON_KEY=$SUPABASE_ANON_KEY\\n\" > .env && if [ -d \"flutter\" ]; then cd flutter && git pull && cd ..; else git clone https://github.com/flutter/flutter.git; fi; flutter/bin/flutter build web --release --dart-define=SUPABASE_URL=$SUPABASE_URL --dart-define=SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY"
+  publish = "build/web"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
