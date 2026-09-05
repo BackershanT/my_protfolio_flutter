@@ -27,15 +27,20 @@ class _NavBarState extends State<NavBar> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Logo/Name
-            Text(
-              AppTexts.heroName,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? AppColors.primaryLight
-                    : AppColors.primaryDark,
-                fontWeight: FontWeight.bold,
+            Flexible(
+              child: Text(
+                AppTexts.heroName,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppColors.primaryLight
+                      : AppColors.primaryDark,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
+            const SizedBox(width: 10),
             // Navigation Items (Responsive)
             Row(
               children: [
@@ -176,7 +181,6 @@ class ResponsiveNavigation extends StatelessWidget {
       AppTexts.navSkills,
       AppTexts.navTechnologies,
       AppTexts.navProjects,
-      AppTexts.navProfiles,
       AppTexts.navTestimonials,
       AppTexts.navBlog,
       AppTexts.navContact,

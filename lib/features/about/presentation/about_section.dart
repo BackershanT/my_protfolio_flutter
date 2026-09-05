@@ -1,19 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:provider/provider.dart';
 import 'package:my_protfolio/features/about/data/models/about_data.dart';
+import 'package:my_protfolio/features/admin/data/providers/about_feature_provider.dart';
 import 'package:my_protfolio/core/constants/app_texts.dart';
 import 'package:my_protfolio/core/constants/colors.dart';
 import 'package:my_protfolio/core/utils/responsive.dart';
 import 'package:my_protfolio/core/utils/threed_effects.dart';
 import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
 
-class AboutSection extends StatelessWidget {
+class AboutSection extends StatefulWidget {
   const AboutSection({super.key});
+
+  @override
+  State<AboutSection> createState() => _AboutSectionState();
+}
+
+class _AboutSectionState extends State<AboutSection> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AboutFeatureProvider>().loadFeatures();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
@@ -24,20 +39,52 @@ class AboutSection extends StatelessWidget {
         children: [
           SectionTitle(title: AppTexts.aboutTitle),
           SizedBox(height: screenWidth < 850 ? 40 : 60),
-          // Flutter.dev style: Feature cards
-          Responsive(
-            mobile: _buildMobileLayout(context),
-            desktop: _buildDesktopLayout(context),
+          Consumer<AboutFeatureProvider>(
+            builder: (context, provider, child) {
+              final features = _getDisplayFeatures(provider);
+
+              return Responsive(
+                mobile: _buildMobileLayout(context, features),
+                tablet: _buildTabletLayout(context, features),
+                desktop: _buildDesktopLayout(context, features),
+              );
+            },
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMobileLayout(BuildContext context) {
+  List<_FeatureDisplayItem> _getDisplayFeatures(AboutFeatureProvider provider) {
+    if (provider.features.isNotEmpty) {
+      int index = 0;
+      return provider.features.map((f) {
+        index++;
+        return _FeatureDisplayItem(
+          title: f.title,
+          description: f.description,
+          icon: f.iconData,
+          delay: index * 200,
+        );
+      }).toList();
+    }
+
+    // Static fallback
+    int index = 0;
+    return AboutData.getAllFeatures().map((f) {
+      index++;
+      return _FeatureDisplayItem(
+        title: f.title,
+        description: f.description,
+        icon: f.icon,
+        delay: index * 200,
+      );
+    }).toList();
+  }
+
+  Widget _buildMobileLayout(BuildContext context, List<_FeatureDisplayItem> features) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final features = AboutData.getAllFeatures();
-    
+
     return Column(
       children: features
           .map((feature) => Padding(
@@ -48,8 +95,41 @@ class AboutSection extends StatelessWidget {
     );
   }
 
-  Widget _buildDesktopLayout(BuildContext context) {
-    final features = AboutData.getAllFeatures();
+  Widget _buildTabletLayout(BuildContext context, List<_FeatureDisplayItem> features) {
+    if (features.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: _buildFeatureCard(context, features[0]),
+              ),
+            ),
+            if (features.length > 1)
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: _buildFeatureCard(context, features[1]),
+                ),
+              ),
+          ],
+        ),
+        if (features.length > 2)
+          ...features.skip(2).map(
+                (f) => Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: _buildFeatureCard(context, f),
+                ),
+              ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopLayout(BuildContext context, List<_FeatureDisplayItem> features) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: features
@@ -65,7 +145,7 @@ class AboutSection extends StatelessWidget {
 
   Widget _buildFeatureCard(
     BuildContext context,
-    FeatureCard feature,
+    _FeatureDisplayItem feature,
   ) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 850;
@@ -74,7 +154,7 @@ class AboutSection extends StatelessWidget {
     final iconSize = isMobile ? 32.0 : (screenWidth < 1200 ? 36.0 : 40.0);
     final titleSize = isMobile ? 18.0 : (screenWidth < 1200 ? 20.0 : 24.0);
     final descSize = isMobile ? 14.0 : 16.0;
-    
+
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final primaryColor = isDark ? AppColors.primaryLight : AppColors.primaryDark;
 
@@ -165,4 +245,18 @@ class AboutSection extends StatelessWidget {
           curve: Curves.easeOutCubic,
         );
   }
+}
+
+class _FeatureDisplayItem {
+  final String title;
+  final String description;
+  final IconData icon;
+  final int delay;
+
+  _FeatureDisplayItem({
+    required this.title,
+    required this.description,
+    required this.icon,
+    required this.delay,
+  });
 }

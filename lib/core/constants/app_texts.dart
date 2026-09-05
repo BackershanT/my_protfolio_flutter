@@ -81,7 +81,6 @@ class AppTexts {
   static String get navTechnologies => 'navTechnologies'.tr();
   static String get navSkills => 'navSkills'.tr();
   static String get navProjects => 'navProjects'.tr();
-  static String get navProfiles => 'navProfiles'.tr();
   static String get navCertifications => 'navCertifications'.tr();
   static String get navBlog => 'navBlog'.tr();
   static String get navTestimonials => 'navTestimonials'.tr();

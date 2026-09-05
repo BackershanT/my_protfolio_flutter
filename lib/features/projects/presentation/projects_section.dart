@@ -490,7 +490,7 @@ class _ProjectsSectionState extends State<ProjectsSection>
         SizedBox(height: isMobile ? 15 : 20),
         // Horizontal scrollable list
         SizedBox(
-          height: isMobile ? 570 : 615,
+          height: isMobile ? 610 : 650,
           child: Scrollbar(
             controller: _scrollController,
             child: ListView.builder(

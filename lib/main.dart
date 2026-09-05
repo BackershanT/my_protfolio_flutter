@@ -9,10 +9,15 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:my_protfolio/core/providers/cursor_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:my_protfolio/core/localization/supabase_asset_loader.dart';
 import 'package:my_protfolio/features/admin/data/providers/testimonial_provider.dart';
 import 'package:my_protfolio/features/admin/data/providers/skill_provider.dart';
 import 'package:my_protfolio/features/admin/data/providers/admin_blog_provider.dart';
 import 'package:my_protfolio/features/admin/data/providers/admin_project_provider.dart';
+import 'package:my_protfolio/features/admin/data/providers/admin_contact_provider.dart';
+import 'package:my_protfolio/features/admin/data/providers/about_feature_provider.dart';
+import 'package:my_protfolio/features/admin/data/providers/translation_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
@@ -34,6 +39,7 @@ void main() async {
       supportedLocales: const [Locale('en'), Locale('ar')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
+      assetLoader: const SupabaseAssetLoader(),
       child: const MyApp(),
     ),
   );
@@ -52,6 +58,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SkillProvider()),
         ChangeNotifierProvider(create: (_) => AdminBlogProvider()),
         ChangeNotifierProvider(create: (_) => AdminProjectProvider()),
+        ChangeNotifierProvider(create: (_) => AdminContactProvider()),
+        ChangeNotifierProvider(create: (_) => AboutFeatureProvider()),
+        ChangeNotifierProvider(create: (_) => TranslationProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {

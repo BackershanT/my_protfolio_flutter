@@ -98,7 +98,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
     return Column(
       children: [
         SizedBox(
-          height: 350,
+          height: 380,
           child: PageView.builder(
             controller: _pageController,
             onPageChanged: (index) {
@@ -139,7 +139,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
       children: [
         // Display testimonials in a row like the about section
         SizedBox(
-          height: 300,
+          height: 350,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: items.take(3)

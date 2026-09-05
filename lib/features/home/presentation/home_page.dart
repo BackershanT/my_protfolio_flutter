@@ -10,7 +10,6 @@ import 'package:my_protfolio/features/home/presentation/footer_section.dart';
 import 'package:my_protfolio/core/presentation/widgets/nav_bar.dart';
 import 'package:my_protfolio/features/testimonials/presentation/testimonials_section.dart';
 import 'package:my_protfolio/core/presentation/widgets/custom_cursor.dart';
-import 'package:my_protfolio/features/profiles/presentation/profiles_section.dart';
 import 'package:provider/provider.dart';
 import 'package:my_protfolio/core/theme/app_theme.dart';
 import 'package:my_protfolio/core/constants/app_texts.dart';
@@ -52,7 +51,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _sectionKeys = List.generate(9, (index) => GlobalKey());
+    _sectionKeys = List.generate(8, (index) => GlobalKey());
     _scrollController.addListener(_scrollListener);
 
     // Initialize animation controller for the chain
@@ -184,10 +183,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           SkillsSection(key: _sectionKeys[2]),
                           TechnologiesSection(key: _sectionKeys[3]),
                           ProjectsSection(key: _sectionKeys[4]),
-                          ProfilesSection(key: _sectionKeys[5]),
-                          TestimonialsSection(key: _sectionKeys[6]),
-                          BlogSection(key: _sectionKeys[7]),
-                          ContactSection(key: _sectionKeys[8]),
+                          TestimonialsSection(key: _sectionKeys[5]),
+                          BlogSection(key: _sectionKeys[6]),
+                          ContactSection(key: _sectionKeys[7]),
                           const FooterSection(),
                         ],
                       ),
@@ -236,7 +234,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       AppTexts.navSkills,
       AppTexts.navTechnologies,
       AppTexts.navProjects,
-      AppTexts.navProfiles,
       AppTexts.navTestimonials,
       AppTexts.navBlog,
       AppTexts.navContact,

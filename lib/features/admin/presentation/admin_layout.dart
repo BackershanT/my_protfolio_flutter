@@ -6,6 +6,9 @@ import 'package:my_protfolio/features/admin/presentation/pages/admin_testimonial
 import 'package:my_protfolio/features/admin/presentation/pages/admin_skills_page.dart';
 import 'package:my_protfolio/features/admin/presentation/pages/admin_blogs_page.dart';
 import 'package:my_protfolio/features/admin/presentation/pages/admin_projects_page.dart';
+import 'package:my_protfolio/features/admin/presentation/pages/admin_messages_page.dart';
+import 'package:my_protfolio/features/admin/presentation/pages/admin_about_page.dart';
+import 'package:my_protfolio/features/admin/presentation/pages/admin_translations_page.dart';
 
 class AdminLayout extends StatefulWidget {
   final Widget? child; // The active dashboard content
@@ -24,6 +27,9 @@ class _AdminLayoutState extends State<AdminLayout> {
     _NavItem(title: 'Testimonials', icon: Icons.format_quote_outlined, selectedIcon: Icons.format_quote),
     _NavItem(title: 'Skills', icon: Icons.psychology_outlined, selectedIcon: Icons.psychology),
     _NavItem(title: 'Blogs', icon: Icons.article_outlined, selectedIcon: Icons.article),
+    _NavItem(title: 'Messages', icon: Icons.mail_outlined, selectedIcon: Icons.mail),
+    _NavItem(title: 'About Me', icon: Icons.info_outlined, selectedIcon: Icons.info),
+    _NavItem(title: 'Translations', icon: Icons.translate_outlined, selectedIcon: Icons.translate),
   ];
 
   Future<void> _logout() async {
@@ -50,6 +56,12 @@ class _AdminLayoutState extends State<AdminLayout> {
         return const AdminSkillsPage();
       case 3:
         return const AdminBlogsPage();
+      case 4:
+        return const AdminMessagesPage();
+      case 5:
+        return const AdminAboutPage();
+      case 6:
+        return const AdminTranslationsPage();
       default:
         return _buildPlaceholder(theme);
     }
