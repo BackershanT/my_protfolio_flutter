@@ -230,7 +230,7 @@ class _AdminBlogsPageState extends State<AdminBlogsPage> {
                   crossAxisCount: crossAxisCount,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: crossAxisCount == 1 ? 1.6 : 0.85,
+                  childAspectRatio: crossAxisCount == 1 ? 1.4 : (crossAxisCount == 2 ? 0.78 : 0.75),
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -263,7 +263,7 @@ class _AdminBlogsPageState extends State<AdminBlogsPage> {
             crossAxisCount: crossAxisCount,
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
-            childAspectRatio: crossAxisCount == 1 ? 1.6 : 0.85,
+            childAspectRatio: crossAxisCount == 1 ? 1.4 : (crossAxisCount == 2 ? 0.78 : 0.75),
           ),
           delegate: SliverChildBuilderDelegate(
             (context, index) => _buildSkeletonCard(),

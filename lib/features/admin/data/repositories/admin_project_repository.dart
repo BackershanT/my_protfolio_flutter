@@ -15,7 +15,7 @@ class AdminProjectRepository {
       final response = await _client
           .from(_table)
           .select()
-          .order('created_at', ascending: true, nullsFirst: true);
+          .order('created_at', ascending: false);
 
       return (response as List)
           .map((json) => AdminProjectModel.fromJson(json as Map<String, dynamic>))
