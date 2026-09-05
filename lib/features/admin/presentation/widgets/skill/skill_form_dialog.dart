@@ -35,6 +35,7 @@ class _SkillFormDialogState extends State<SkillFormDialog> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
   late final TextEditingController _iconUrlController;
+  late bool _isActive;
   bool _isUploading = false;
   final _repository = SkillRepository();
 
@@ -46,6 +47,7 @@ class _SkillFormDialogState extends State<SkillFormDialog> {
     final s = widget.skill;
     _nameController = TextEditingController(text: s?.name ?? '');
     _iconUrlController = TextEditingController(text: s?.image ?? '');
+    _isActive = s?.isActive ?? true;
   }
 
   Future<void> _pickImage() async {
@@ -92,6 +94,7 @@ class _SkillFormDialogState extends State<SkillFormDialog> {
       id: widget.skill?.id,
       name: _nameController.text.trim(),
       image: _iconUrlController.text.trim(),
+      isActive: _isActive,
       createdAt: widget.skill?.createdAt,
       updatedAt: DateTime.now(),
     );
@@ -206,6 +209,25 @@ class _SkillFormDialogState extends State<SkillFormDialog> {
                     labelText: 'Icon URL',
                     hintText: 'https://...',
                     border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Active / Inactive Switch
+                SwitchListTile(
+                  value: _isActive,
+                  onChanged: (val) => setState(() => _isActive = val),
+                  contentPadding: EdgeInsets.zero,
+                  activeThumbColor: theme.colorScheme.primary,
+                  title: const Text(
+                    'Active on Website',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                  ),
+                  subtitle: Text(
+                    _isActive ? 'Visible to website visitors' : 'Inactive (Hidden from website)',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: _isActive ? Colors.green : Colors.orange.shade700,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),

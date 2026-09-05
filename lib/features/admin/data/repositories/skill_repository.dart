@@ -7,13 +7,13 @@ class SkillRepository {
   final _client = Supabase.instance.client;
   static const String _table = 'skills';
 
-  /// Fetches all skills ordered by created_at descending.
+  /// Fetches all skills ordered by id ascending.
   Future<List<SkillModel>> fetchAll() async {
     try {
       final response = await _client
           .from(_table)
           .select()
-          .order('created_at', ascending: false);
+          .order('id', ascending: true);
 
       return (response as List)
           .map((json) => SkillModel.fromJson(json as Map<String, dynamic>))
@@ -24,6 +24,27 @@ class SkillRepository {
     } catch (e) {
       debugPrint('Unknown fetchAll error: $e');
       throw Exception('Failed to fetch skills: ${e.toString()}');
+    }
+  }
+
+  /// Fetches only active skills from Supabase.
+  Future<List<SkillModel>> fetchActiveOnly() async {
+    try {
+      final response = await _client
+          .from(_table)
+          .select()
+          .eq('is_active', true)
+          .order('id', ascending: true);
+
+      return (response as List)
+          .map((json) => SkillModel.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } on PostgrestException catch (e) {
+      debugPrint('Supabase fetchActiveOnly error: ${e.code} - ${e.message}');
+      throw Exception('Failed to fetch active skills: ${e.message}');
+    } catch (e) {
+      debugPrint('Unknown fetchActiveOnly error: $e');
+      throw Exception('Failed to fetch active skills: ${e.toString()}');
     }
   }
 
@@ -67,6 +88,29 @@ class SkillRepository {
     } catch (e) {
       debugPrint('Unknown update error: $e');
       throw Exception('Failed to update skill: ${e.toString()}');
+    }
+  }
+
+  /// Toggles the active status of a skill by ID.
+  Future<SkillModel> toggleActive(int id, bool isActive) async {
+    try {
+      final response = await _client
+          .from(_table)
+          .update({
+            'is_active': isActive,
+            'updated_at': DateTime.now().toIso8601String(),
+          })
+          .eq('id', id)
+          .select()
+          .single();
+
+      return SkillModel.fromJson(response);
+    } on PostgrestException catch (e) {
+      debugPrint('Supabase toggleActive error: ${e.code} - ${e.message}');
+      throw Exception('Failed to update skill status: ${e.message}');
+    } catch (e) {
+      debugPrint('Unknown toggleActive error: $e');
+      throw Exception('Failed to update skill status: ${e.toString()}');
     }
   }
 

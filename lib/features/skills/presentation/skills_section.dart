@@ -144,16 +144,17 @@ class _SkillsSectionState extends State<SkillsSection> {
           Consumer<SkillProvider>(
             builder: (context, provider, child) {
               final isLoading = provider.isLoading;
-              var items = provider.skills;
-              if (items.isEmpty && !isLoading) {
-                items = SkillData.getAllSkills();
-              }
+              final items = provider.activeSkills;
               
               if (isLoading && items.isEmpty) {
                  return Responsive(
                    mobile: _buildMobileSkeleton(context),
                    desktop: _buildDesktopSkeleton(context),
                  );
+              }
+
+              if (items.isEmpty) {
+                return const SizedBox.shrink();
               }
 
               return Responsive(
@@ -167,7 +168,7 @@ class _SkillsSectionState extends State<SkillsSection> {
     );
   }
 
-  Widget _buildMobileCarousel(BuildContext context, List<dynamic> skills) {
+  Widget _buildMobileCarousel(BuildContext context, List<SkillModel> skills) {
     if (skills.isEmpty) return const SizedBox.shrink();
     
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -251,7 +252,7 @@ class _SkillsSectionState extends State<SkillsSection> {
     );
   }
 
-  Widget _buildDesktopGrid(BuildContext context, List<dynamic> skills) {
+  Widget _buildDesktopGrid(BuildContext context, List<SkillModel> skills) {
     if (skills.isEmpty) return const SizedBox.shrink();
     
     final isDark = Theme.of(context).brightness == Brightness.dark;

@@ -1,9 +1,8 @@
-import 'package:my_protfolio/core/constants/app_assets.dart';
-
 class SkillModel {
   final int? id;
   final String name;
   final String image;
+  final bool isActive;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -11,6 +10,7 @@ class SkillModel {
     this.id,
     required this.name,
     required this.image,
+    this.isActive = true,
     this.createdAt,
     this.updatedAt,
   });
@@ -20,6 +20,7 @@ class SkillModel {
       id: json['id'] as int?,
       name: json['name'] as String,
       image: json['image'] as String,
+      isActive: json['is_active'] as bool? ?? true,
       createdAt: json['created_at'] != null 
           ? DateTime.parse(json['created_at'] as String) 
           : null,
@@ -34,6 +35,7 @@ class SkillModel {
       if (id != null) 'id': id,
       'name': name,
       'image': image,
+      'is_active': isActive,
       if (createdAt != null) 'created_at': createdAt?.toIso8601String(),
       if (updatedAt != null) 'updated_at': updatedAt?.toIso8601String(),
     };
@@ -43,6 +45,7 @@ class SkillModel {
     int? id,
     String? name,
     String? image,
+    bool? isActive,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -50,71 +53,9 @@ class SkillModel {
       id: id ?? this.id,
       name: name ?? this.name,
       image: image ?? this.image,
+      isActive: isActive ?? this.isActive,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
-}
-
-class SkillData {
-  static const skills = [
-    SkillModel(
-      image: AppAssets.skillsFlutter,
-      name: 'Flutter',
-    ),
-    SkillModel(
-      image: AppAssets.skillsReact,
-      name: 'React',
-    ),
-    SkillModel(
-      image: AppAssets.skillsJavascript,
-      name: 'JavaScript',
-    ),
-    SkillModel(
-      image: AppAssets.skillsFirebase,
-      name: 'Firebase',
-    ),
-    SkillModel(
-      image: AppAssets.skillsBloc,
-      name: 'BLoC',
-    ),
-    SkillModel(
-      image: AppAssets.skillsRedux,
-      name: 'Redux',
-    ),
-    SkillModel(
-      image: AppAssets.skillsNextjs,
-      name: 'Next.js',
-    ),
-    SkillModel(
-      image: AppAssets.skillsSocket,
-      name: 'Socket.IO',
-    ),
-    SkillModel(
-      image: AppAssets.skillsSupabase,
-      name: 'Supabase',
-    ),
-    SkillModel(
-      image: AppAssets.skillsNeon,
-      name: 'Neon',
-    ),
-    SkillModel(
-      image: AppAssets.skillsHtml,
-      name: 'Html',
-    ),
-    SkillModel(
-      image: AppAssets.skillsCss,
-      name: 'Css',
-    ),
-    SkillModel(
-      image: AppAssets.skillsFigma,
-      name: 'Figma',
-    ),
-    SkillModel(
-      image: AppAssets.skillsXd,
-      name: 'Xd',
-    ),
-  ];
-
-  static List<SkillModel> getAllSkills() => skills;
 }

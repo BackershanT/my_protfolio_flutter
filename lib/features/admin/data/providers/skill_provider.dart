@@ -10,16 +10,25 @@ class SkillProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
   String _searchQuery = '';
+  String _statusFilter = 'all'; // 'all', 'active', 'inactive'
 
   // Getters
-  List<SkillModel> get skills =>
-      _searchQuery.isEmpty ? _skills : _filteredSkills;
+  List<SkillModel> get skills => _filteredSkills;
+  List<SkillModel> get allSkills => _skills;
+
+  /// Returns only active skills (for public website)
+  List<SkillModel> get activeSkills =>
+      _skills.where((s) => s.isActive).toList();
+
   bool get isLoading => _isLoading;
   String? get error => _error;
   String get searchQuery => _searchQuery;
+  String get statusFilter => _statusFilter;
 
   // Stats
   int get totalCount => _skills.length;
+  int get activeCount => _skills.where((s) => s.isActive).length;
+  int get inactiveCount => _skills.where((s) => !s.isActive).length;
 
   /// Loads all skills from Supabase.
   Future<void> loadSkills() async {
@@ -29,9 +38,7 @@ class SkillProvider extends ChangeNotifier {
 
     try {
       _skills = await _repository.fetchAll();
-      // If we don't have any skills from DB yet, we could potentially seed them from SkillData,
-      // but for now we'll just show what's in the DB.
-      _applySearchFilter();
+      _applyFilters();
     } catch (e) {
       _error = e.toString().replaceFirst('Exception: ', '');
     } finally {
@@ -49,7 +56,7 @@ class SkillProvider extends ChangeNotifier {
     try {
       final created = await _repository.create(skill);
       _skills.insert(0, created);
-      _applySearchFilter();
+      _applyFilters();
       _isLoading = false;
       notifyListeners();
       return true;
@@ -73,13 +80,31 @@ class SkillProvider extends ChangeNotifier {
       if (index != -1) {
         _skills[index] = updated;
       }
-      _applySearchFilter();
+      _applyFilters();
       _isLoading = false;
       notifyListeners();
       return true;
     } catch (e) {
       _error = e.toString().replaceFirst('Exception: ', '');
       _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  /// Toggles active status of a skill directly.
+  Future<bool> toggleSkillActive(int id, bool isActive) async {
+    try {
+      final updated = await _repository.toggleActive(id, isActive);
+      final index = _skills.indexWhere((s) => s.id == id);
+      if (index != -1) {
+        _skills[index] = updated;
+      }
+      _applyFilters();
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _error = e.toString().replaceFirst('Exception: ', '');
       notifyListeners();
       return false;
     }
@@ -94,7 +119,7 @@ class SkillProvider extends ChangeNotifier {
     try {
       await _repository.delete(id);
       _skills.removeWhere((s) => s.id == id);
-      _applySearchFilter();
+      _applyFilters();
       _isLoading = false;
       notifyListeners();
       return true;
@@ -109,7 +134,14 @@ class SkillProvider extends ChangeNotifier {
   /// Updates the search query and filters skills.
   void setSearchQuery(String query) {
     _searchQuery = query;
-    _applySearchFilter();
+    _applyFilters();
+    notifyListeners();
+  }
+
+  /// Sets the status filter ('all', 'active', 'inactive')
+  void setStatusFilter(String filter) {
+    _statusFilter = filter;
+    _applyFilters();
     notifyListeners();
   }
 
@@ -119,15 +151,19 @@ class SkillProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _applySearchFilter() {
-    if (_searchQuery.isEmpty) {
-      _filteredSkills = _skills;
-      return;
-    }
+  void _applyFilters() {
+    final query = _searchQuery.trim().toLowerCase();
 
-    final query = _searchQuery.toLowerCase();
     _filteredSkills = _skills.where((s) {
-      return s.name.toLowerCase().contains(query);
+      final matchesSearch = query.isEmpty || s.name.toLowerCase().contains(query);
+
+      final matchesStatus = switch (_statusFilter) {
+        'active' => s.isActive,
+        'inactive' => !s.isActive,
+        _ => true,
+      };
+
+      return matchesSearch && matchesStatus;
     }).toList();
   }
 }

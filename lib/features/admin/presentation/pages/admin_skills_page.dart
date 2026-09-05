@@ -5,6 +5,7 @@ import 'package:my_protfolio/features/admin/data/providers/skill_provider.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/skill/skill_form_dialog.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/skill/skill_delete_dialog.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/skill/skill_empty_state.dart';
+import 'package:my_protfolio/features/admin/presentation/widgets/skill/admin_skill_card.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/custom_snackbar.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -73,6 +74,29 @@ class _AdminSkillsPageState extends State<AdminSkillsPage> {
     }
   }
 
+  Future<void> _handleToggleActive(SkillModel skill, bool isActive) async {
+    if (skill.id == null) return;
+    final provider = context.read<SkillProvider>();
+    final success = await provider.toggleSkillActive(skill.id!, isActive);
+
+    if (!mounted) return;
+    if (success) {
+      CustomSnackbar.show(
+        context,
+        message: isActive
+            ? '${skill.name} activated & visible on website!'
+            : '${skill.name} deactivated & hidden from website',
+        type: SnackbarType.info,
+      );
+    } else {
+      CustomSnackbar.show(
+        context,
+        message: provider.error ?? 'Failed to update status',
+        type: SnackbarType.error,
+      );
+    }
+  }
+
   Future<void> _handleDelete(SkillModel skill) async {
     if (skill.id == null) return;
 
@@ -115,6 +139,7 @@ class _AdminSkillsPageState extends State<AdminSkillsPage> {
 
   Widget _buildContent(SkillProvider provider) {
     final skills = provider.skills;
+    final theme = Theme.of(context);
 
     return CustomScrollView(
       slivers: [
@@ -122,20 +147,63 @@ class _AdminSkillsPageState extends State<AdminSkillsPage> {
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Text(
-                    'Manage Skills (${provider.totalCount})',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Manage Skills',
+                            style: theme.textTheme.headlineSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Control which skills appear on the website and toggle active status',
+                            style: theme.textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: _handleAdd,
+                      icon: const Icon(Icons.add),
+                      label: const Text('Add Skill'),
+                    ),
+                  ],
                 ),
-                ElevatedButton.icon(
-                  onPressed: _handleAdd,
-                  icon: const Icon(Icons.add),
-                  label: const Text('Add Skill'),
+                const SizedBox(height: 16),
+                // Status Filter Chips
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    _buildFilterChip(
+                      label: 'All (${provider.totalCount})',
+                      filterValue: 'all',
+                      currentFilter: provider.statusFilter,
+                      onSelected: () => provider.setStatusFilter('all'),
+                    ),
+                    _buildFilterChip(
+                      label: 'Active (${provider.activeCount})',
+                      filterValue: 'active',
+                      currentFilter: provider.statusFilter,
+                      onSelected: () => provider.setStatusFilter('active'),
+                      color: Colors.green,
+                    ),
+                    _buildFilterChip(
+                      label: 'Inactive (${provider.inactiveCount})',
+                      filterValue: 'inactive',
+                      currentFilter: provider.statusFilter,
+                      onSelected: () => provider.setStatusFilter('inactive'),
+                      color: Colors.amber,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -156,8 +224,7 @@ class _AdminSkillsPageState extends State<AdminSkillsPage> {
             ),
           ),
 
-                                // Empty state or grid
-        // Empty state or grid
+        // Skeleton or empty or grid
         if (provider.isLoading && skills.isEmpty)
           SliverPadding(
             padding: const EdgeInsets.all(16),
@@ -166,44 +233,18 @@ class _AdminSkillsPageState extends State<AdminSkillsPage> {
                 maxCrossAxisExtent: 250,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 1,
+                childAspectRatio: 0.88,
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   return Card(
                     clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            color: Colors.grey.withValues(alpha: 0.2),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  height: 20,
-                                  color: Colors.grey.withValues(alpha: 0.2),
-                                ),
-                              ),
-                              const SizedBox(width: 48), // Space for icons
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: Container(color: Colors.grey.withValues(alpha: 0.1)),
                   )
                       .animate(onPlay: (controller) => controller.repeat())
-                      .shimmer(
-                        duration: 1200.ms,
-                        color: Colors.white.withValues(alpha: 0.5),
-                      );
+                      .shimmer(duration: 1200.ms, color: Colors.white24);
                 },
-                childCount: 8, // Show 8 skeleton cards
+                childCount: 8,
               ),
             ),
           )
@@ -220,96 +261,17 @@ class _AdminSkillsPageState extends State<AdminSkillsPage> {
                 maxCrossAxisExtent: 250,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 1,
+                childAspectRatio: 0.88,
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   final skill = skills[index];
-                  return Card(
-                    clipBehavior: Clip.antiAlias,
-                    elevation: 0,
-                    color: Theme.of(context).cardColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(
-                        color: Theme.of(context).dividerColor.withValues(alpha: 0.15),
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            color: Theme.of(context).primaryColor.withValues(alpha: 0.04),
-                            padding: const EdgeInsets.all(20),
-                            alignment: Alignment.center,
-                            child: skill.image.isNotEmpty
-                                ? (skill.image.startsWith('http')
-                                    ? Image.network(
-                                        skill.image,
-                                        fit: BoxFit.contain,
-                                        errorBuilder: (_, __, ___) => const Icon(
-                                          Icons.broken_image_rounded,
-                                          size: 48,
-                                          color: Colors.grey,
-                                        ),
-                                      )
-                                    : Image.asset(
-                                        skill.image,
-                                        fit: BoxFit.contain,
-                                        errorBuilder: (_, __, ___) => const Icon(
-                                          Icons.broken_image_rounded,
-                                          size: 48,
-                                          color: Colors.grey,
-                                        ),
-                                      ))
-                                : const Icon(
-                                    Icons.image_rounded,
-                                    size: 48,
-                                    color: Colors.grey,
-                                  ),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
-                              ),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  skill.name,
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.edit_outlined, size: 18, color: Colors.blue),
-                                tooltip: 'Edit Skill',
-                                onPressed: () => _handleEdit(skill),
-                                splashRadius: 16,
-                                constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-                                padding: EdgeInsets.zero,
-                              ),
-                              const SizedBox(width: 4),
-                              IconButton(
-                                icon: const Icon(Icons.delete_outline_rounded, size: 18, color: Colors.red),
-                                tooltip: 'Delete Skill',
-                                onPressed: () => _handleDelete(skill),
-                                splashRadius: 16,
-                                constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-                                padding: EdgeInsets.zero,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                  return AdminSkillCard(
+                    skill: skill,
+                    provider: provider,
+                    onEdit: () => _handleEdit(skill),
+                    onDelete: () => _handleDelete(skill),
+                    onToggleActive: (val) => _handleToggleActive(skill, val),
                   );
                 },
                 childCount: skills.length,
@@ -317,6 +279,32 @@ class _AdminSkillsPageState extends State<AdminSkillsPage> {
             ),
           ),
       ],
+    );
+  }
+
+  Widget _buildFilterChip({
+    required String label,
+    required String filterValue,
+    required String currentFilter,
+    required VoidCallback onSelected,
+    Color? color,
+  }) {
+    final isSelected = currentFilter == filterValue;
+    final theme = Theme.of(context);
+
+    return FilterChip(
+      selected: isSelected,
+      label: Text(
+        label,
+        style: TextStyle(
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          color: isSelected ? Colors.white : null,
+          fontSize: 12,
+        ),
+      ),
+      selectedColor: color ?? theme.colorScheme.primary,
+      checkmarkColor: Colors.white,
+      onSelected: (_) => onSelected(),
     );
   }
 }
