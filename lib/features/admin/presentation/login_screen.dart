@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/custom_text_field.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/custom_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:my_protfolio/core/providers/cursor_provider.dart';
 import 'package:my_protfolio/core/presentation/widgets/custom_cursor.dart';
 
 class AdminLoginScreen extends StatefulWidget {
@@ -78,13 +77,13 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               ),
             ],
             border: Border.all(
-              color: theme.dividerColor.withOpacity(0.1),
+              color: theme.dividerColor.withValues(alpha: 0.1),
             ),
           ),
           child: Form(
@@ -116,9 +115,9 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                     padding: const EdgeInsets.all(12),
                     margin: const EdgeInsets.only(bottom: 20),
                     decoration: BoxDecoration(
-                      color: Colors.red.withOpacity(0.1),
+                      color: Colors.red.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.red.withOpacity(0.5)),
+                      border: Border.all(color: Colors.red.withValues(alpha: 0.5)),
                     ),
                     child: Text(
                       _errorMessage!,

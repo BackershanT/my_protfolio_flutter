@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ import 'package:my_protfolio/core/constants/colors.dart';
 import 'package:my_protfolio/core/utils/responsive.dart';
 import 'package:my_protfolio/core/constants/app_assets.dart';
 import 'package:my_protfolio/core/utils/threed_effects.dart';
-import 'package:dio/dio.dart';
+import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 // Conditional imports for web vs non-web platforms
@@ -31,6 +32,7 @@ class _HeroSectionState extends State<HeroSection>
   late AnimationController _floatController;
   int _currentIndex = 0;
   Offset _mousePosition = Offset.zero;
+  Timer? _roleTimer;
 
   final List<StarParticle> _stars = [];
   final Random _rng = Random();
@@ -55,10 +57,17 @@ class _HeroSectionState extends State<HeroSection>
     )..repeat(reverse: true);
 
     _generateStars();
-    Future.delayed(const Duration(seconds: 3), _rotateRole);
+
+    _roleTimer = Timer.periodic(const Duration(seconds: 3), (_) {
+      if (mounted) {
+        setState(() {
+          _currentIndex = (_currentIndex + 1) % AppTexts.heroRoles.length;
+        });
+      }
+    });
   }
 
-  void _generateStars() {
+  void _generateStars({int count = 100}) {
     _stars.clear();
     final colors = [
       const Color(0xFF64FFDA),
@@ -66,7 +75,7 @@ class _HeroSectionState extends State<HeroSection>
       const Color(0xFF7B9FFF),
       const Color(0xFFC0CCFF),
     ];
-    for (int i = 0; i < 180; i++) {
+    for (int i = 0; i < count; i++) {
       _stars.add(StarParticle(
         x: _rng.nextDouble() * 1920,
         y: _rng.nextDouble() * 1080,
@@ -77,17 +86,9 @@ class _HeroSectionState extends State<HeroSection>
     }
   }
 
-  void _rotateRole() {
-    if (mounted) {
-      setState(() {
-        _currentIndex = (_currentIndex + 1) % AppTexts.heroRoles.length;
-      });
-      Future.delayed(const Duration(seconds: 3), _rotateRole);
-    }
-  }
-
   @override
   void dispose() {
+    _roleTimer?.cancel();
     _starController.dispose();
     _gridController.dispose();
     _floatController.dispose();
@@ -119,8 +120,10 @@ class _HeroSectionState extends State<HeroSection>
       } else {
         final dir = await getApplicationDocumentsDirectory();
         final savePath = '${dir.path}/BACKERSHAN_T.pdf';
-        final dio = Dio();
-        await dio.download(AppAssets.resume, savePath);
+        final ByteData data = await rootBundle.load(AppAssets.resume);
+        final Uint8List bytes = data.buffer.asUint8List();
+        final file = File(savePath);
+        await file.writeAsBytes(bytes);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
