@@ -8,6 +8,7 @@ import 'package:my_protfolio/features/admin/presentation/widgets/project/admin_p
 import 'package:my_protfolio/features/admin/presentation/widgets/project/admin_project_tech_input.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/project/admin_ai_suggest_sheet.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/project/ai_suggest_button.dart';
+import 'package:my_protfolio/features/admin/presentation/widgets/project/admin_project_types_selector.dart';
 
 /// Form dialog for creating and editing projects.
 class AdminProjectFormDialog extends StatefulWidget {
@@ -244,113 +245,11 @@ class _AdminProjectFormDialogState extends State<AdminProjectFormDialog> {
                         const SizedBox(height: 18),
 
                         // Project Types
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Project Type / Categories *',
-                              style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              'Select one or more',
-                              style: TextStyle(fontSize: 12, color: theme.hintColor),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            ..._presetProjectTypes.map((type) {
-                              final isSelected = _types.any((t) => t.toLowerCase() == type.toLowerCase());
-                              return FilterChip(
-                                label: Text(type),
-                                selected: isSelected,
-                                selectedColor: theme.primaryColor.withValues(alpha: 0.2),
-                                checkmarkColor: theme.primaryColor,
-                                labelStyle: TextStyle(
-                                  color: isSelected ? theme.primaryColor : theme.textTheme.bodyMedium?.color,
-                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                                  fontSize: 13,
-                                ),
-                                side: BorderSide(
-                                  color: isSelected ? theme.primaryColor : theme.dividerColor.withValues(alpha: 0.3),
-                                ),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                onSelected: (selected) {
-                                  setState(() {
-                                    if (selected) {
-                                      if (!_types.any((t) => t.toLowerCase() == type.toLowerCase())) {
-                                        _types.add(type);
-                                      }
-                                    } else {
-                                      _types.removeWhere((t) => t.toLowerCase() == type.toLowerCase());
-                                    }
-                                  });
-                                },
-                              );
-                            }),
-                            ..._types.where((t) => !_presetProjectTypes.any((p) => p.toLowerCase() == t.toLowerCase())).map((customType) {
-                              return Chip(
-                                label: Text(customType),
-                                deleteIcon: const Icon(Icons.close, size: 14),
-                                onDeleted: () {
-                                  setState(() {
-                                    _types.remove(customType);
-                                  });
-                                },
-                                backgroundColor: theme.primaryColor.withValues(alpha: 0.15),
-                                labelStyle: TextStyle(color: theme.primaryColor, fontWeight: FontWeight.bold, fontSize: 13),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                              );
-                            }),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: _customTypeController,
-                                decoration: InputDecoration(
-                                  hintText: 'Add custom type (e.g. AI / Web3)...',
-                                  isDense: true,
-                                  filled: true,
-                                  fillColor: theme.cardColor,
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                                ),
-                                onFieldSubmitted: (val) {
-                                  final trimmed = val.trim();
-                                  if (trimmed.isNotEmpty && !_types.any((t) => t.toLowerCase() == trimmed.toLowerCase())) {
-                                    setState(() {
-                                      _types.add(trimmed);
-                                      _customTypeController.clear();
-                                    });
-                                  }
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            OutlinedButton.icon(
-                              onPressed: () {
-                                final trimmed = _customTypeController.text.trim();
-                                if (trimmed.isNotEmpty && !_types.any((t) => t.toLowerCase() == trimmed.toLowerCase())) {
-                                  setState(() {
-                                    _types.add(trimmed);
-                                    _customTypeController.clear();
-                                  });
-                                }
-                              },
-                              icon: const Icon(Icons.add, size: 16),
-                              label: const Text('Add'),
-                              style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                              ),
-                            ),
-                          ],
+                        AdminProjectTypesSelector(
+                          types: _types,
+                          presetProjectTypes: _presetProjectTypes,
+                          customTypeController: _customTypeController,
+                          setState: setState,
                         ),
                         const SizedBox(height: 18),
 
