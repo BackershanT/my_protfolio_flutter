@@ -6,6 +6,8 @@ import 'package:my_protfolio/features/admin/presentation/widgets/project/admin_p
 import 'package:my_protfolio/features/admin/presentation/widgets/project/admin_project_screenshots_picker.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/project/admin_project_links_form.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/project/admin_project_tech_input.dart';
+import 'package:my_protfolio/features/admin/presentation/widgets/project/admin_ai_suggest_sheet.dart';
+import 'package:my_protfolio/features/admin/presentation/widgets/project/ai_suggest_button.dart';
 
 /// Form dialog for creating and editing projects.
 class AdminProjectFormDialog extends StatefulWidget {
@@ -353,9 +355,30 @@ class _AdminProjectFormDialogState extends State<AdminProjectFormDialog> {
                         const SizedBox(height: 18),
 
                         // Overview Description
-                        Text(
-                          'Project Overview Description *',
-                          style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Project Overview Description *',
+                              style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                            ),
+                            AiSuggestButton(
+                              onPressed: () {
+                                AdminAiSuggestSheet.show(
+                                  context,
+                                  projectName: _nameController.text.trim(),
+                                  technologies: _technologies,
+                                  types: _types,
+                                  companyName: _companyController.text.trim(),
+                                  onAccept: (desc) {
+                                    setState(() {
+                                      _descriptionController.text = desc;
+                                    });
+                                  },
+                                );
+                              },
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 8),
                         TextFormField(

@@ -1,7 +1,6 @@
-﻿/// Local rule-based AI project suggestion engine.
-/// Generates project overview descriptions, key feature ideas, and improvement
-/// suggestions based on project name, technologies, and project types.
-library project_ai_suggester;
+// Local rule-based AI project suggestion engine.
+// Generates project overview descriptions, key feature ideas, and improvement
+// suggestions based on project name, technologies, and project types.
 
 class ProjectSuggestion {
   final String description;
