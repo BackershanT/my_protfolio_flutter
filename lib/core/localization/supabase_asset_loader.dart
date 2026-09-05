@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Custom AssetLoader for EasyLocalization that fetches translations
@@ -12,11 +14,21 @@ class SupabaseAssetLoader extends AssetLoader {
   @override
   Future<Map<String, dynamic>?> load(String path, Locale locale) async {
     Map<String, dynamic> translations = {};
+    final langCode = locale.languageCode.toLowerCase();
 
-    // Fetch translations from Supabase
+    // 1. Load local fallback JSON file first (assets/translations/en.json or ar.json)
+    try {
+      final jsonString = await rootBundle.loadString('$path/$langCode.json');
+      final Map<String, dynamic> localData = json.decode(jsonString);
+      translations.addAll(localData);
+      log('SupabaseAssetLoader: Loaded ${localData.length} local fallback translations for [$langCode]');
+    } catch (e) {
+      log('SupabaseAssetLoader: Failed to load local asset fallback: $e');
+    }
+
+    // 2. Fetch translations from Supabase app_translations table and merge/override
     try {
       final client = Supabase.instance.client;
-      final langCode = locale.languageCode.toLowerCase();
       final targetColumn = langCode == 'ar' ? 'ar' : 'en';
 
       final response = await client
@@ -32,9 +44,9 @@ class SupabaseAssetLoader extends AssetLoader {
           translations[key] = val;
         }
       }
-      log('SupabaseAssetLoader: Successfully loaded ${rows.length} translations for locale [$langCode]');
+      log('SupabaseAssetLoader: Successfully merged ${rows.length} Supabase translations for [$langCode]');
     } catch (e) {
-      log('SupabaseAssetLoader: Failed to load translations: $e');
+      log('SupabaseAssetLoader: Supabase fetch note (using local fallbacks): $e');
     }
 
     return translations;
