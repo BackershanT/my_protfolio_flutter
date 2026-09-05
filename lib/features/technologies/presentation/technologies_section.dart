@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:provider/provider.dart';
 import 'package:my_protfolio/core/constants/app_texts.dart';
-import 'package:my_protfolio/core/constants/colors.dart';
 import 'package:my_protfolio/core/utils/responsive.dart';
-import 'package:my_protfolio/core/utils/threed_effects.dart';
 import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
 import 'package:my_protfolio/features/technologies/data/models/technology_model.dart';
-import 'dart:math' as math;
+import 'package:my_protfolio/features/admin/data/providers/skill_provider.dart';
+import 'package:my_protfolio/features/technologies/presentation/widgets/tech_orbit_circle_widget.dart';
+import 'package:my_protfolio/features/technologies/presentation/widgets/tech_text_content_widget.dart';
 
 class TechnologiesSection extends StatefulWidget {
   const TechnologiesSection({super.key});
@@ -18,7 +18,6 @@ class TechnologiesSection extends StatefulWidget {
 class _TechnologiesSectionState extends State<TechnologiesSection>
     with SingleTickerProviderStateMixin {
   late AnimationController _rotationController;
-  int _hoveredIndex = -1;
 
   @override
   void initState() {
@@ -27,6 +26,12 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
       duration: const Duration(seconds: 20),
       vsync: this,
     )..repeat();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<SkillProvider>().loadSkills();
+      }
+    });
   }
 
   @override
@@ -83,18 +88,16 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
   Widget _buildMobileLayout(BuildContext context, TechnologySection section) {
     return Column(
       children: [
-        _buildIconCircle(
-          context,
-          section.centerAsset,
-          section.technologies,
+        TechOrbitCircleWidget(
+          section: section,
+          rotationController: _rotationController,
           isMobile: true,
         ),
         const SizedBox(height: 60),
-        _buildTextContent(
-          context,
-          section.subtitle,
-          section.headline,
-          section.description,
+        TechTextContentWidget(
+          subtitle: section.subtitle,
+          headline: section.headline,
+          description: section.description,
         ),
       ],
     );
@@ -115,10 +118,9 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
     final iconWidget = Flexible(
       flex: flexRatio,
       child: Center(
-        child: _buildIconCircle(
-          context,
-          section.centerAsset,
-          section.technologies,
+        child: TechOrbitCircleWidget(
+          section: section,
+          rotationController: _rotationController,
           isMobile: false,
         ),
       ),
@@ -126,364 +128,20 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
 
     final textWidget = Expanded(
       flex: 3,
-      child: _buildTextContent(
-        context,
-        section.subtitle,
-        section.headline,
-        section.description,
+      child: TechTextContentWidget(
+        subtitle: section.subtitle,
+        headline: section.headline,
+        description: section.description,
       ),
     );
 
-    // Determine layout order: Flutter and MERN sections show icon on left, React shows text on left
     final bool showIconOnLeft = isFirst || section.name.contains('MERN');
-    
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: showIconOnLeft
           ? [iconWidget, SizedBox(width: spacing), textWidget]
           : [textWidget, SizedBox(width: spacing), iconWidget],
     );
-  }
-
-  Widget _buildTextContent(
-    BuildContext context,
-    String subtitle,
-    String headline,
-    String description,
-  ) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 850;
-    final isTablet = screenWidth >= 850 && screenWidth < 1200;
-    final isDesktop = screenWidth >= 1200;
-
-    final smallTitleSize = isMobile ? 14.0 : (isTablet ? 15.0 : 16.0);
-    final headlineSize = isMobile ? 24.0 : (isTablet ? 32.0 : 42.0);
-    final bodySize = isMobile ? 14.0 : (isTablet ? 16.0 : 18.0);
-    final titleSpacing = isMobile ? 15.0 : 20.0;
-    final headlineSpacing = isMobile ? 16.0 : (isTablet ? 20.0 : 24.0);
-
-    return Column(
-      crossAxisAlignment: isDesktop
-          ? CrossAxisAlignment.start
-          : CrossAxisAlignment.center,
-      children: [
-        Text(
-          subtitle,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? AppColors.primaryLight
-                : AppColors.primaryDark,
-            fontSize: smallTitleSize,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 1.2,
-          ),
-          textAlign: isDesktop ? TextAlign.left : TextAlign.center,
-        ).animate().fadeIn(delay: 200.ms, duration: 600.ms),
-        SizedBox(height: titleSpacing),
-        Text(
-              headline,
-              style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                fontSize: headlineSize,
-                fontWeight: FontWeight.bold,
-                height: 1.2,
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? AppColors
-                          .primaryLight // Cyan color for dark mode
-                    : null, // Use default color for light mode
-              ),
-              textAlign: isDesktop ? TextAlign.left : TextAlign.center,
-            )
-            .animate()
-            .fadeIn(delay: 400.ms, duration: 600.ms)
-            .slide(
-              begin: const Offset(0, 0.2),
-              duration: 600.ms,
-              curve: Curves.easeOutCubic,
-            ),
-        SizedBox(height: headlineSpacing),
-        Text(
-          description,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontSize: bodySize,
-            height: 1.7,
-            color: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
-          ),
-          textAlign: isDesktop ? TextAlign.left : TextAlign.center,
-        ).animate().fadeIn(delay: 600.ms, duration: 600.ms),
-      ],
-    );
-  }
-
-  Widget _buildIconCircle(
-    BuildContext context,
-    String centerAsset,
-    List<TechnologyModel> technologies, {
-    required bool isMobile,
-  }) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth >= 850 && screenWidth < 1200;
-
-    // Responsive sizing
-    final radius = isMobile ? 120.0 : (isTablet ? 140.0 : 180.0);
-    final iconSize = isMobile ? 50.0 : (isTablet ? 55.0 : 60.0);
-    final centerIconSize = isMobile ? 90.0 : (isTablet ? 100.0 : 120.0);
-
-    return RepaintBoundary(
-      child: SizedBox(
-        height: radius * 2.5,
-        width: radius * 2.5,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-          // 3D floating center logo with layered glow rings
-          FloatingWidget(
-            amplitude: 12,
-            duration: const Duration(seconds: 4),
-            child: TiltCard(
-              maxTilt: 18,
-              scale: 1.0,
-              glareOpacity: 0.18,
-              borderRadius: BorderRadius.circular(500),
-              child: Container(
-                width: centerIconSize,
-                height: centerIconSize,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? AppColors.primaryLight.withValues(alpha: 0.08)
-                      : AppColors.primaryDark.withValues(alpha: 0.08),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? AppColors.primaryLight
-                        : AppColors.primaryDark,
-                    width: 2.5,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: (Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.primaryLight
-                              : AppColors.primaryDark)
-                          .withValues(alpha: 0.45),
-                      blurRadius: 40,
-                      spreadRadius: 6,
-                    ),
-                    BoxShadow(
-                      color: (Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.primaryLight
-                              : AppColors.primaryDark)
-                          .withValues(alpha: 0.15),
-                      blurRadius: 80,
-                      spreadRadius: 16,
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: Image.asset(
-                    centerAsset,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) => Icon(
-                      Icons.flutter_dash,
-                      size: centerIconSize * 0.6,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? AppColors.primaryLight
-                          : AppColors.primaryDark,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ).animate().scale(
-            delay: 200.ms,
-            duration: 800.ms,
-            curve: Curves.elasticOut,
-          ),
-          // Surrounding tech icons
-          ...List.generate(technologies.length, (index) {
-            final angle = (2 * math.pi / technologies.length) * index;
-
-            return AnimatedBuilder(
-              animation: _rotationController,
-              builder: (context, child) {
-                final rotationAngle = _rotationController.value * 2 * math.pi;
-                final newX = radius * math.cos(angle + rotationAngle);
-                final newY = radius * math.sin(angle + rotationAngle);
-
-                return Transform.translate(
-                  offset: Offset(newX, newY),
-                  child: child,
-                );
-              },
-              child: MouseRegion(
-                onEnter: (_) => setState(() => _hoveredIndex = index),
-                onExit: (_) => setState(() => _hoveredIndex = -1),
-                child: _buildTechIcon(
-                  context,
-                  technologies[index],
-                  index,
-                  iconSize,
-                ),
-              ),
-            );
-          }),
-          // Connection lines
-          ...List.generate(technologies.length, (index) {
-            return AnimatedBuilder(
-              animation: _rotationController,
-              builder: (context, child) {
-                final angle =
-                    (2 * math.pi / technologies.length) * index +
-                    _rotationController.value * 2 * math.pi;
-                return CustomPaint(
-                  size: Size(radius * 2, radius * 2),
-                  painter: _ConnectionLinePainter(
-                    angle: angle,
-                    radius: radius,
-                    color:
-                        (Theme.of(context).brightness == Brightness.dark
-                                ? AppColors.primaryLight
-                                : AppColors.primaryDark)
-                            .withValues(alpha: 0.2),
-                  ),
-                );
-              },
-            );
-          }),
-        ],
-      ),
-    ),
-  );
-}
-
-  Widget _buildTechIcon(
-    BuildContext context,
-    TechnologyModel tech,
-    int index,
-    double size,
-  ) {
-    final isHovered = _hoveredIndex == index;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final iconWidget = AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
-      width: isHovered ? size * 1.22 : size,
-      height: isHovered ? size * 1.22 : size,
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: isHovered
-              ? tech.color
-              : (isDark ? Colors.white : Colors.black).withValues(alpha: 0.1),
-          width: isHovered ? 2.5 : 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isHovered
-                ? tech.color.withValues(alpha: 0.55)
-                : Colors.black.withValues(alpha: 0.12),
-            blurRadius: isHovered ? 28 : 10,
-            spreadRadius: isHovered ? 4 : 0,
-          ),
-          if (isHovered)
-            BoxShadow(
-              color: tech.color.withValues(alpha: 0.20),
-              blurRadius: 50,
-              spreadRadius: 10,
-            ),
-        ],
-      ),
-      child: ClipOval(
-        child: tech.assetPath != null
-            ? Padding(
-                padding: EdgeInsets.all(size * 0.22),
-                child: Image.asset(
-                  tech.assetPath!,
-                  fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) => Icon(
-                    tech.iconData ?? Icons.code_rounded,
-                    size: size * 0.5,
-                    color: isHovered ? tech.color : tech.color.withValues(alpha: 0.7),
-                  ),
-                ),
-              )
-            : Icon(
-                tech.iconData ?? Icons.code_rounded,
-                size: size * 0.5,
-                color: isHovered ? tech.color : tech.color.withValues(alpha: 0.7),
-              ),
-      ),
-    );
-
-    // Tooltip label on hover
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.center,
-      children: [
-        iconWidget,
-        if (isHovered)
-          Positioned(
-            bottom: -(size * 0.55),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: tech.color,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: tech.color.withValues(alpha: 0.4),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Text(
-                tech.name,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _ConnectionLinePainter extends CustomPainter {
-  final double angle;
-  final double radius;
-  final Color color;
-
-  _ConnectionLinePainter({
-    required this.angle,
-    required this.radius,
-    required this.color,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke;
-
-    final center = Offset(size.width / 2, size.height / 2);
-    final endPoint = Offset(
-      center.dx + radius * math.cos(angle),
-      center.dy + radius * math.sin(angle),
-    );
-
-    canvas.drawLine(center, endPoint, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant _ConnectionLinePainter oldDelegate) {
-    return oldDelegate.angle != angle;
   }
 }
