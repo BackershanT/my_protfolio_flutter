@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:my_protfolio/features/hero/data/models/hero_data.dart';
 import 'package:my_protfolio/core/constants/app_texts.dart';
 import 'package:my_protfolio/core/constants/colors.dart';
 import 'package:my_protfolio/core/utils/responsive.dart';
@@ -98,7 +97,7 @@ class _HeroSectionState extends State<HeroSection>
   Future<void> _downloadResume() async {
     try {
       if (kIsWeb) {
-        final assetPath = HeroData.getResumeUrl();
+        final assetPath = AppAssets.resume;
         final ByteData data = await rootBundle.load(assetPath);
         final Uint8List bytes = data.buffer.asUint8List();
         final blob = html.Blob([bytes]);
@@ -121,7 +120,7 @@ class _HeroSectionState extends State<HeroSection>
         final dir = await getApplicationDocumentsDirectory();
         final savePath = '${dir.path}/BACKERSHAN_T.pdf';
         final dio = Dio();
-        await dio.download(HeroData.getResumeUrl(), savePath);
+        await dio.download(AppAssets.resume, savePath);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

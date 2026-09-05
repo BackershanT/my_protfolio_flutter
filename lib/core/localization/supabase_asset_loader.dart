@@ -11,18 +11,9 @@ class SupabaseAssetLoader extends AssetLoader {
 
   @override
   Future<Map<String, dynamic>?> load(String path, Locale locale) async {
-    // 1. Load local fallback bundled JSON first
     Map<String, dynamic> translations = {};
-    try {
-      final fallbackData = await const RootBundleAssetLoader().load(path, locale);
-      if (fallbackData != null) {
-        translations.addAll(fallbackData);
-      }
-    } catch (e) {
-      log('SupabaseAssetLoader: Local fallback load warning: $e');
-    }
 
-    // 2. Fetch remote translations from Supabase
+    // Fetch translations from Supabase
     try {
       final client = Supabase.instance.client;
       final langCode = locale.languageCode.toLowerCase();
@@ -43,7 +34,7 @@ class SupabaseAssetLoader extends AssetLoader {
       }
       log('SupabaseAssetLoader: Successfully loaded ${rows.length} translations for locale [$langCode]');
     } catch (e) {
-      log('SupabaseAssetLoader: Network/Supabase fetch failed, using fallback assets: $e');
+      log('SupabaseAssetLoader: Failed to load translations: $e');
     }
 
     return translations;

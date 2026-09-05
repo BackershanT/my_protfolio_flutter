@@ -125,7 +125,7 @@ class _AdminMessagesPageState extends State<AdminMessagesPage> {
           ),
           const SizedBox(height: 6),
           Text(
-            'Messages sent through your Contact Us form will appear here.',
+            'When someone sends you a message, it will appear here.',
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.hintColor,
             ),

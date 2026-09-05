@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import 'package:my_protfolio/features/about/data/models/about_data.dart';
 import 'package:my_protfolio/features/admin/data/providers/about_feature_provider.dart';
 import 'package:my_protfolio/core/constants/app_texts.dart';
 import 'package:my_protfolio/core/constants/colors.dart';
@@ -56,27 +55,13 @@ class _AboutSectionState extends State<AboutSection> {
   }
 
   List<_FeatureDisplayItem> _getDisplayFeatures(AboutFeatureProvider provider) {
-    if (provider.features.isNotEmpty) {
-      int index = 0;
-      return provider.features.map((f) {
-        index++;
-        return _FeatureDisplayItem(
-          title: f.title,
-          description: f.description,
-          icon: f.iconData,
-          delay: index * 200,
-        );
-      }).toList();
-    }
-
-    // Static fallback
     int index = 0;
-    return AboutData.getAllFeatures().map((f) {
+    return provider.features.map((f) {
       index++;
       return _FeatureDisplayItem(
         title: f.title,
         description: f.description,
-        icon: f.icon,
+        icon: f.iconData,
         delay: index * 200,
       );
     }).toList();

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:my_protfolio/features/blog/data/models/blog_post_model.dart';
-import 'package:my_protfolio/features/blog/data/models/blog_data.dart';
+
 import 'package:my_protfolio/core/constants/colors.dart';
 import 'package:my_protfolio/core/utils/threed_effects.dart';
 import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
@@ -95,9 +95,11 @@ class _BlogSectionState extends State<BlogSection> {
                 return _buildSkeletonPosts(context, isMobile, isDark);
               }
 
-              final List<BlogPost> posts;
-              if (provider.blogs.isNotEmpty) {
-                posts = provider.blogs.map((b) {
+              if (provider.blogs.isEmpty) {
+                return _buildBlogPosts(context, [], isMobile, isDark);
+              }
+
+              final posts = provider.blogs.map((b) {
                   return BlogPost(
                     id: b.title,
                     title: b.title,
@@ -112,9 +114,6 @@ class _BlogSectionState extends State<BlogSection> {
                     tags: b.technologies,
                   );
                 }).toList();
-              } else {
-                posts = BlogData.getAllPosts();
-              }
 
               return _buildBlogPosts(context, posts, isMobile, isDark);
             },

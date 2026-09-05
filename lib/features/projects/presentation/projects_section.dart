@@ -6,7 +6,7 @@ import 'package:my_protfolio/core/utils/responsive.dart';
 import 'package:my_protfolio/core/utils/threed_effects.dart';
 import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
 import 'package:my_protfolio/features/projects/data/models/project_model.dart';
-import 'package:my_protfolio/features/projects/data/models/project_data.dart';
+
 import 'package:my_protfolio/features/projects/presentation/project_details_page.dart';
 import 'package:my_protfolio/features/projects/presentation/widgets/project_screenshots_dialog.dart';
 import 'package:my_protfolio/core/presentation/widgets/custom_cursor.dart';
@@ -214,9 +214,11 @@ class _ProjectsSectionState extends State<ProjectsSection>
                 );
               }
 
-              final List<Project> all;
-              if (provider.projects.isNotEmpty) {
-                all = provider.projects.map((p) {
+              if (provider.projects.isEmpty) {
+                return const SizedBox.shrink();
+              }
+
+              final all = provider.projects.map((p) {
                   final rawTypes = p.types.isNotEmpty ? p.types : [p.projectType];
                   final mappedTypes = rawTypes.map((typeStr) {
                     final s = typeStr.toLowerCase().replaceAll(RegExp(r'[^a-z]'), '');
@@ -247,9 +249,6 @@ class _ProjectsSectionState extends State<ProjectsSection>
                     createdAt: p.createdAt,
                   );
                 }).toList();
-              } else {
-                all = ProjectData.getAllProjects(fifo: true);
-              }
 
               final filtered = _getFilteredProjects(all);
 

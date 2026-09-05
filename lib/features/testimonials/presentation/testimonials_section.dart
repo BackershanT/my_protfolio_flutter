@@ -6,7 +6,7 @@ import 'package:my_protfolio/core/constants/colors.dart';
 import 'package:my_protfolio/core/utils/responsive.dart';
 import 'package:my_protfolio/core/utils/threed_effects.dart';
 import 'package:my_protfolio/core/presentation/widgets/section_title.dart';
-import 'package:my_protfolio/features/testimonials/data/models/testimonial_data.dart';
+
 import 'package:provider/provider.dart';
 import 'package:my_protfolio/features/admin/data/providers/testimonial_provider.dart';
 
@@ -69,10 +69,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
           Consumer<TestimonialProvider>(
             builder: (context, provider, child) {
               final isLoading = provider.isLoading;
-              List<dynamic> items = provider.testimonials;
-              if (items.isEmpty && !isLoading) {
-                items = TestimonialData.getAllTestimonials();
-              }
+              final items = provider.testimonials;
               
               if (isLoading && items.isEmpty) {
                  // Use Skeleton
@@ -282,14 +279,14 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                   color: isDark
                       ? Colors.white.withValues(alpha: 0.08)
                       : Colors.black.withValues(alpha: 0.05),
-                  image: testimonial.avatarUrl.isNotEmpty
+                  image: (testimonial.avatarUrl ?? '').isNotEmpty
                       ? DecorationImage(
-                          image: AssetImage(testimonial.avatarUrl),
+                          image: NetworkImage(testimonial.avatarUrl!),
                           fit: BoxFit.cover,
                         )
                       : null,
                 ),
-                child: testimonial.avatarUrl.isEmpty
+                child: (testimonial.avatarUrl ?? '').isEmpty
                     ? Icon(
                         Icons.person,
                         size: isMobile ? 22 : 26,
@@ -312,7 +309,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                     ).animate().fadeIn(delay: 200.ms, duration: 600.ms),
                     const SizedBox(height: 3),
                     Text(
-                      '${testimonial.role} · ${testimonial.company}',
+                      '${testimonial.role}${testimonial.company != null && testimonial.company.toString().isNotEmpty ? ' · ${testimonial.company}' : ''}',
                       style: TextStyle(
                         fontSize: roleSize,
                         color: primaryColor.withValues(alpha: 0.75),
