@@ -39,7 +39,10 @@ class TestimonialRepository {
   /// Creates a new testimonial and returns the inserted record.
   Future<TestimonialModel> create(TestimonialModel testimonial) async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      final response = await client
           .from(_table)
           .insert(testimonial.toJson())
           .select()
@@ -62,7 +65,10 @@ class TestimonialRepository {
         throw Exception('Cannot update testimonial without an ID');
       }
 
-      final response = await _client
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      final response = await client
           .from(_table)
           .update(testimonial.toJson())
           .eq('id', testimonial.id!)
@@ -82,7 +88,10 @@ class TestimonialRepository {
   /// Deletes a testimonial by ID.
   Future<void> delete(int id) async {
     try {
-      await _client.from(_table).delete().eq('id', id);
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      await client.from(_table).delete().eq('id', id);
     } on PostgrestException catch (e) {
       debugPrint('Supabase delete error: ${e.code} - ${e.message}');
       throw Exception('Failed to delete testimonial: ${e.message}');
@@ -95,17 +104,20 @@ class TestimonialRepository {
   /// Uploads an avatar image to Supabase Storage and returns the public URL.
   Future<String> uploadAvatar(Uint8List fileBytes, String fileName) async {
     try {
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
       final fileExtension = fileName.split('.').last;
       final uniqueFileName = '${DateTime.now().millisecondsSinceEpoch}_${fileName.hashCode}.$fileExtension';
       final path = 'avatars/$uniqueFileName';
 
-      await _client.storage.from('testimonials').uploadBinary(
+      await client.storage.from('testimonials').uploadBinary(
         path,
         fileBytes,
         fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
       );
 
-      final publicUrl = _client.storage.from('testimonials').getPublicUrl(path);
+      final publicUrl = client.storage.from('testimonials').getPublicUrl(path);
       return publicUrl;
     } catch (e) {
       debugPrint('Supabase uploadAvatar error: $e');

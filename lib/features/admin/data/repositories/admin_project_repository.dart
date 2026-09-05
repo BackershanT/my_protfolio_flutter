@@ -42,7 +42,10 @@ class AdminProjectRepository {
   /// Creates a new project.
   Future<AdminProjectModel> create(AdminProjectModel project) async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      final response = await client
           .from(_table)
           .insert(project.toJson())
           .select()
@@ -61,7 +64,10 @@ class AdminProjectRepository {
   /// Updates an existing project by matching original name.
   Future<AdminProjectModel> update(String originalName, AdminProjectModel project) async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      final response = await client
           .from(_table)
           .update(project.toJson())
           .eq('name', originalName)
@@ -81,7 +87,10 @@ class AdminProjectRepository {
   /// Deletes a project by name.
   Future<void> delete(String name) async {
     try {
-      await _client.from(_table).delete().eq('name', name);
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      await client.from(_table).delete().eq('name', name);
     } on PostgrestException catch (e) {
       debugPrint('Supabase delete project error: ${e.code} - ${e.message}');
       throw Exception('Failed to delete project: ${e.message}');
@@ -94,17 +103,20 @@ class AdminProjectRepository {
   /// Uploads cover image to 'projects' storage bucket.
   Future<String> uploadCoverImage(Uint8List fileBytes, String fileName) async {
     try {
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
       final fileExtension = fileName.split('.').last;
       final uniqueFileName = '${DateTime.now().millisecondsSinceEpoch}_${fileName.hashCode}.$fileExtension';
       final path = 'covers/$uniqueFileName';
 
-      await _client.storage.from(_coverBucket).uploadBinary(
+      await client.storage.from(_coverBucket).uploadBinary(
         path,
         fileBytes,
         fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
       );
 
-      return _client.storage.from(_coverBucket).getPublicUrl(path);
+      return client.storage.from(_coverBucket).getPublicUrl(path);
     } catch (e) {
       debugPrint('Supabase uploadCoverImage error: $e');
       throw Exception('Failed to upload cover image: ${e.toString()}');
@@ -114,17 +126,20 @@ class AdminProjectRepository {
   /// Uploads screenshot to 'project_screenshots' storage bucket.
   Future<String> uploadScreenshot(Uint8List fileBytes, String fileName) async {
     try {
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
       final fileExtension = fileName.split('.').last;
       final uniqueFileName = '${DateTime.now().millisecondsSinceEpoch}_${fileName.hashCode}.$fileExtension';
       final path = 'screenshots/$uniqueFileName';
 
-      await _client.storage.from(_screenshotsBucket).uploadBinary(
+      await client.storage.from(_screenshotsBucket).uploadBinary(
         path,
         fileBytes,
         fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
       );
 
-      return _client.storage.from(_screenshotsBucket).getPublicUrl(path);
+      return client.storage.from(_screenshotsBucket).getPublicUrl(path);
     } catch (e) {
       debugPrint('Supabase uploadScreenshot error: $e');
       throw Exception('Failed to upload screenshot: ${e.toString()}');

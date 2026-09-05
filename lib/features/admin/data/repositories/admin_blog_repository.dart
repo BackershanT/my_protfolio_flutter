@@ -41,7 +41,10 @@ class AdminBlogRepository {
   /// Creates a new blog post.
   Future<AdminBlogModel> create(AdminBlogModel blog) async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      final response = await client
           .from(_table)
           .insert(blog.toJson())
           .select()
@@ -60,7 +63,10 @@ class AdminBlogRepository {
   /// Updates an existing blog by matching original title.
   Future<AdminBlogModel> update(String originalTitle, AdminBlogModel blog) async {
     try {
-      final response = await _client
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      final response = await client
           .from(_table)
           .update(blog.toJson())
           .eq('title', originalTitle)
@@ -80,7 +86,10 @@ class AdminBlogRepository {
   /// Deletes a blog by title.
   Future<void> delete(String title) async {
     try {
-      await _client.from(_table).delete().eq('title', title);
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
+      await client.from(_table).delete().eq('title', title);
     } on PostgrestException catch (e) {
       debugPrint('Supabase delete blog error: ${e.code} - ${e.message}');
       throw Exception('Failed to delete blog: ${e.message}');
@@ -93,17 +102,20 @@ class AdminBlogRepository {
   /// Uploads a cover image to the Supabase 'blog' storage bucket.
   Future<String> uploadCoverImage(Uint8List fileBytes, String fileName) async {
     try {
+      final client = _client;
+      if (client == null) throw Exception('Database client not initialized');
+
       final fileExtension = fileName.split('.').last;
       final uniqueFileName = '${DateTime.now().millisecondsSinceEpoch}_${fileName.hashCode}.$fileExtension';
       final path = 'covers/$uniqueFileName';
 
-      await _client.storage.from(_bucket).uploadBinary(
+      await client.storage.from(_bucket).uploadBinary(
         path,
         fileBytes,
         fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
       );
 
-      final publicUrl = _client.storage.from(_bucket).getPublicUrl(path);
+      final publicUrl = client.storage.from(_bucket).getPublicUrl(path);
       return publicUrl;
     } catch (e) {
       debugPrint('Supabase uploadCoverImage error: $e');
