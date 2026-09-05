@@ -29,13 +29,26 @@ void main() async {
     debugPrint("dotenv load note: $e");
   }
 
-  final supabaseUrl = (dotenv.env['SUPABASE_URL'] ?? '').isNotEmpty
-      ? dotenv.env['SUPABASE_URL']!
-      : const String.fromEnvironment('SUPABASE_URL');
+  String? envUrl;
+  String? envKey;
+  if (dotenv.isInitialized) {
+    envUrl = dotenv.env['SUPABASE_URL'];
+    envKey = dotenv.env['SUPABASE_ANON_KEY'];
+  }
 
-  final supabaseKey = (dotenv.env['SUPABASE_ANON_KEY'] ?? '').isNotEmpty
-      ? dotenv.env['SUPABASE_ANON_KEY']!
-      : const String.fromEnvironment('SUPABASE_ANON_KEY');
+  final supabaseUrl = (envUrl ?? '').isNotEmpty
+      ? envUrl!
+      : const String.fromEnvironment(
+          'SUPABASE_URL',
+          defaultValue: 'https://vdyhzrpnenvxumbwwlmv.supabase.co',
+        );
+
+  final supabaseKey = (envKey ?? '').isNotEmpty
+      ? envKey!
+      : const String.fromEnvironment(
+          'SUPABASE_ANON_KEY',
+          defaultValue: 'sb_publishable_-6OweH6PKxYmdAKkjRBtlw_ajuTVJKC',
+        );
 
   if (supabaseUrl.isNotEmpty && supabaseKey.isNotEmpty) {
     try {
