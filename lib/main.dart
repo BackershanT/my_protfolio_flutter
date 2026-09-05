@@ -23,11 +23,23 @@ void main() async {
   usePathUrlStrategy();
   await EasyLocalization.ensureInitialized();
   
-  await dotenv.load(fileName: ".env");
-  
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    debugPrint("dotenv load note: $e");
+  }
+
+  final supabaseUrl = (dotenv.env['SUPABASE_URL'] ?? '').isNotEmpty
+      ? dotenv.env['SUPABASE_URL']!
+      : const String.fromEnvironment('SUPABASE_URL');
+
+  final supabaseKey = (dotenv.env['SUPABASE_ANON_KEY'] ?? '').isNotEmpty
+      ? dotenv.env['SUPABASE_ANON_KEY']!
+      : const String.fromEnvironment('SUPABASE_ANON_KEY');
+
   await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL'] ?? '',
-    publishableKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
+    url: supabaseUrl,
+    publishableKey: supabaseKey,
     authOptions: const FlutterAuthClientOptions(
       authFlowType: AuthFlowType.pkce,
       autoRefreshToken: true,
