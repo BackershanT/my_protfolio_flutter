@@ -148,7 +148,7 @@ class _AdminSkillsPageState extends State<AdminSkillsPage> {
             child: Container(
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(14),
-              color: Colors.red.withOpacity(0.1),
+              color: Colors.red.withValues(alpha: 0.1),
               child: Text(
                 provider.error!,
                 style: const TextStyle(color: Colors.red),
@@ -227,49 +227,83 @@ class _AdminSkillsPageState extends State<AdminSkillsPage> {
                   final skill = skills[index];
                   return Card(
                     clipBehavior: Clip.antiAlias,
+                    elevation: 0,
+                    color: Theme.of(context).cardColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      side: BorderSide(
+                        color: Theme.of(context).dividerColor.withValues(alpha: 0.15),
+                      ),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Expanded(
-                          child: skill.image.isNotEmpty
-                              ? skill.image.startsWith('http')
-                                  ? Image.network(
-                                      skill.image,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (_, __, ___) =>
-                                          const Icon(Icons.broken_image, size: 50),
-                                    )
-                                  : Image.asset(
-                                      skill.image,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (_, __, ___) =>
-                                          const Icon(Icons.broken_image, size: 50),
-                                    )
-                              : const Icon(Icons.image, size: 50),
+                          child: Container(
+                            color: Theme.of(context).primaryColor.withValues(alpha: 0.04),
+                            padding: const EdgeInsets.all(20),
+                            alignment: Alignment.center,
+                            child: skill.image.isNotEmpty
+                                ? (skill.image.startsWith('http')
+                                    ? Image.network(
+                                        skill.image,
+                                        fit: BoxFit.contain,
+                                        errorBuilder: (_, __, ___) => const Icon(
+                                          Icons.broken_image_rounded,
+                                          size: 48,
+                                          color: Colors.grey,
+                                        ),
+                                      )
+                                    : Image.asset(
+                                        skill.image,
+                                        fit: BoxFit.contain,
+                                        errorBuilder: (_, __, ___) => const Icon(
+                                          Icons.broken_image_rounded,
+                                          size: 48,
+                                          color: Colors.grey,
+                                        ),
+                                      ))
+                                : const Icon(
+                                    Icons.image_rounded,
+                                    size: 48,
+                                    color: Colors.grey,
+                                  ),
+                          ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+                              ),
+                            ),
+                          ),
                           child: Row(
                             children: [
                               Expanded(
                                 child: Text(
                                   skill.name,
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.edit, size: 20),
+                                icon: const Icon(Icons.edit_outlined, size: 18, color: Colors.blue),
+                                tooltip: 'Edit Skill',
                                 onPressed: () => _handleEdit(skill),
+                                splashRadius: 16,
+                                constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                                 padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
                               ),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 4),
                               IconButton(
-                                icon: const Icon(Icons.delete, size: 20, color: Colors.red),
+                                icon: const Icon(Icons.delete_outline_rounded, size: 18, color: Colors.red),
+                                tooltip: 'Delete Skill',
                                 onPressed: () => _handleDelete(skill),
+                                splashRadius: 16,
+                                constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                                 padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
                               ),
                             ],
                           ),

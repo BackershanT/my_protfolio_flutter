@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_protfolio/features/skills/data/models/skill_model.dart';
 import 'package:my_protfolio/features/admin/data/repositories/skill_repository.dart';
-import 'package:my_protfolio/features/admin/presentation/widgets/custom_text_field.dart';
 
 class SkillFormDialog extends StatefulWidget {
   final SkillModel? skill;
@@ -116,7 +115,7 @@ class _SkillFormDialogState extends State<SkillFormDialog> {
             color: theme.scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: theme.dividerColor.withOpacity(0.1),
+              color: theme.dividerColor.withValues(alpha: 0.1),
             ),
           ),
           child: Form(
@@ -140,18 +139,16 @@ class _SkillFormDialogState extends State<SkillFormDialog> {
                       Container(
                         width: 80,
                         height: 80,
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: theme.primaryColor.withOpacity(0.1),
+                          color: theme.primaryColor.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
                         child: _iconUrlController.text.isNotEmpty 
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(40),
-                                child: Image.network(
-                                  _iconUrlController.text,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
-                                ),
+                            ? Image.network(
+                                _iconUrlController.text,
+                                fit: BoxFit.contain,
+                                errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
                               )
                             : const Icon(Icons.image, size: 30),
                       ),

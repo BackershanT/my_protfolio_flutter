@@ -73,31 +73,33 @@ class _SkillCardWidgetState extends State<SkillCardWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Icon with Hero and animations
-              Hero(
-                tag: 'skill_${widget.skill.name}_${widget.isMobile}_${widget.isActive}',
-                child: widget.skill.image.startsWith('http')
-                    ? Image.network(
-                        widget.skill.image,
-                        width: iconSize,
-                        height: iconSize,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) => Icon(
-                          Icons.code,
-                          size: 60,
-                          color: primaryColor.withValues(alpha: 0.5),
-                        ),
-                      )
-                    : Image.asset(
-                        widget.skill.image,
-                        width: iconSize,
-                        height: iconSize,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) => Icon(
-                          Icons.code,
-                          size: 60,
-                          color: primaryColor.withValues(alpha: 0.5),
-                        ),
-                      ),
+              SizedBox(
+                height: iconSize,
+                width: cardWidth - 40,
+                child: Center(
+                  child: Hero(
+                    tag: 'skill_${widget.skill.name}_${widget.isMobile}_${widget.isActive}',
+                    child: widget.skill.image.startsWith('http')
+                        ? Image.network(
+                            widget.skill.image,
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) => Icon(
+                              Icons.code,
+                              size: 50,
+                              color: primaryColor.withValues(alpha: 0.5),
+                            ),
+                          )
+                        : Image.asset(
+                            widget.skill.image,
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) => Icon(
+                              Icons.code,
+                              size: 50,
+                              color: primaryColor.withValues(alpha: 0.5),
+                            ),
+                          ),
+                  ),
+                ),
               )
                   .animate(target: isHighlighted ? 1 : 0)
                   .scale(

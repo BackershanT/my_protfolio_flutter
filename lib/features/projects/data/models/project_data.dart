@@ -408,7 +408,9 @@ class ProjectData {
 
   ];
 
-  static List<Project> getAllProjects() => List.from(projects.reversed);
+  /// Returns projects in FIFO order (First In, First Out) by default.
+  static List<Project> getAllProjects({bool fifo = true}) =>
+      fifo ? List.from(projects) : List.from(projects.reversed);
 
   static List<ProjectDesign> getDesigns(bool isDark, bool isMobile) {
     return [
