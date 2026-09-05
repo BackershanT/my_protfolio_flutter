@@ -45,8 +45,6 @@ dependencies:
   font_awesome_flutter: ^11.0.0
   provider: ^6.1.2
   http: ^1.2.0
-  xml: ^6.5.0
-  dio: ^5.7.0
   path_provider: ^2.1.4
   easy_localization: ^3.0.8
   supabase_flutter: ^2.17.2
@@ -80,34 +78,7 @@ flutter:
   assets:
     - .env
     - assets/images/
-    - assets/lottie/
-    - assets/skills/
-    - assets/projects/ychat_admin/
-    - assets/projects/ychat/
-    - assets/projects/mybus/
-    - assets/projects/ck/
-    - assets/projects/calculator/
-    - assets/projects/ecommerce/
-    - assets/projects/mahathma/
-    - assets/projects/movie_app/
-    - assets/projects/netflix/
-    - assets/projects/yachii/
-    - assets/projects/mygame/
-    - assets/projects/dortodor24/
-    - assets/projects/leo_inspector/
-    - assets/projects/leo_inspector_admin/
-    - assets/projects/leo_rigging_calculator/
-    - assets/projects/reachout/
-    - assets/projects/calender/
-    - assets/projects/clan_logo/
-    - assets/projects/threads/
-    - assets/projects/darvasa/
-    - assets/projects/sellora/
-    - assets/projects/mahallu_management/
-
-
     - assets/resume/
-    - assets/testimonial/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
