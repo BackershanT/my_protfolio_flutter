@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_protfolio/core/constants/app_assets.dart';
 import 'package:my_protfolio/core/constants/app_texts.dart';
 
 class TechnologyModel {
@@ -21,7 +20,7 @@ class TechnologySection {
   final String subtitle;
   final String headline;
   final String description;
-  final String centerAsset;
+  final String? centerAsset;
   final List<TechnologyModel> technologies;
 
   const TechnologySection({
@@ -29,7 +28,7 @@ class TechnologySection {
     required this.subtitle,
     required this.headline,
     required this.description,
-    required this.centerAsset,
+    this.centerAsset,
     required this.technologies,
   });
 }
@@ -40,35 +39,28 @@ class TechnologyData {
     subtitle: AppTexts.techFlutterSubtitle,
     headline: AppTexts.techFlutterHeadline,
     description: AppTexts.techFlutterDescription,
-    centerAsset: AppAssets.skillsFlutter,
     technologies: const [
       TechnologyModel(
-        assetPath: AppAssets.skillsFirebase,
         name: 'Firebase',
         color: Color(0xFFFFCA28),
       ),
       TechnologyModel(
-        assetPath: AppAssets.skillsBloc,
         name: 'BLoC',
         color: Color(0xFF0175C2),
       ),
       TechnologyModel(
-        assetPath: AppAssets.skillsSocket,
         name: 'Socket.IO',
         color: Colors.black,
       ),
       TechnologyModel(
-        assetPath: AppAssets.skillsHive,
         name: 'Hive',
         color: Color(0xFF5E5CE6),
       ),
       TechnologyModel(
-        assetPath: AppAssets.skillsFastlane,
         name: 'Fastline',
         color: Color(0xFF00A6ED),
       ),
-       TechnologyModel(
-        assetPath: AppAssets.skillsFlame,
+      TechnologyModel(
         name: 'Flame',
         color: Color(0xFF00A6ED),
       ),
@@ -80,30 +72,24 @@ class TechnologyData {
     subtitle: AppTexts.techReactSubtitle,
     headline: AppTexts.techReactHeadline,
     description: AppTexts.techReactDescription,
-    centerAsset: AppAssets.skillsReact,
     technologies: const [
       TechnologyModel(
-        assetPath: AppAssets.skillsJavascript,
         name: 'JavaScript',
         color: Color(0xFFF7DF1E),
       ),
       TechnologyModel(
-        assetPath: AppAssets.skillsNextjs,
         name: 'Next.js',
         color: Colors.black,
       ),
       TechnologyModel(
-        assetPath: AppAssets.skillsRedux,
         name: 'Redux',
         color: Color(0xFF764ABC),
       ),
       TechnologyModel(
-        assetPath: AppAssets.skillsVite,
         name: 'Vite',
         color: Color(0xFF007FFF),
       ),
       TechnologyModel(
-        assetPath: AppAssets.skillsTailwind,
         name: 'Tailwind.css',
         color: Color(0xFF3178C6),
       ),

@@ -1,29 +1,4 @@
 class AppAssets {
-  // Skills images
-  static const String skillsFlutter = 'assets/skills/flutter.png';
-  static const String skillsReact = 'assets/skills/react.png';
-  static const String skillsJavascript = 'assets/skills/javascript.png';
-  static const String skillsFirebase = 'assets/skills/firebase.png';
-  static const String skillsBloc = 'assets/skills/bloc.png';
-  static const String skillsRedux = 'assets/skills/redux.png';
-  static const String skillsNextjs = 'assets/skills/nextjs.webp';
-  static const String skillsSocket = 'assets/skills/socket.png';
-  static const String skillsHtml = 'assets/skills/html.png';
-  static const String skillsCss = 'assets/skills/css.png';
-  static const String skillsFigma = 'assets/skills/figma.png';
-  static const String skillsXd = 'assets/skills/xd.png';
-  static const String skillsExpressJs = 'assets/skills/expressjs.png';
-  static const String skillsMongoDb = 'assets/skills/mongo.png';
-  static const String skillsAws = 'assets/skills/aws.png';
-  static const String skillsMern = 'assets/skills/mern.png';
-  static const String skillsHive = 'assets/skills/hive.png';
-  static const String skillsFastlane = 'assets/skills/fastlane.png';
-  static const String skillsTailwind = 'assets/skills/tailwind.png';
-  static const String skillsVite = 'assets/skills/vite.png';
-  static const String skillsFlame = 'assets/skills/flame.png';
-  static const String skillsNodejs = 'assets/skills/nodejs.png';
-  static const String skillsSupabase = 'assets/skills/supabase.png';
-  static const String skillsNeon = 'assets/skills/neon.png';
 
 
 
