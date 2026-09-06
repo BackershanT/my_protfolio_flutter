@@ -32,16 +32,24 @@ class _Btn3DState extends State<Btn3D> {
         : AppColors.primaryDark;
 
     return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() {
-        _hovered = false;
-        _rotY = 0;
-      }),
+      onEnter: (_) {
+        if (mounted) setState(() => _hovered = true);
+      },
+      onExit: (_) {
+        if (mounted) {
+          setState(() {
+            _hovered = false;
+            _rotY = 0;
+          });
+        }
+      },
       onHover: (e) {
         final w = widget.isMobile ? 150.0 : 180.0;
-        setState(() {
-          _rotY = ((e.localPosition.dx / w) - 0.5) * 0.3; // slight tilt
-        });
+        if (mounted) {
+          setState(() {
+            _rotY = ((e.localPosition.dx / w) - 0.5) * 0.3; // slight tilt
+          });
+        }
       },
       child: AnimatedScale(
         scale: _hovered ? 1.06 : 1.0,

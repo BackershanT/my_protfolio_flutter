@@ -62,9 +62,12 @@ class _HeroSectionState extends State<HeroSection>
 
     _roleTimer = Timer.periodic(const Duration(seconds: 3), (_) {
       if (mounted) {
-        setState(() {
-          _currentIndex = (_currentIndex + 1) % AppTexts.heroRoles.length;
-        });
+        final roles = AppTexts.heroRoles;
+        if (roles.isNotEmpty) {
+          setState(() {
+            _currentIndex = (_currentIndex + 1) % roles.length;
+          });
+        }
       }
     });
   }
@@ -166,9 +169,11 @@ class _HeroSectionState extends State<HeroSection>
     return LayoutBuilder(builder: (context, constraints) {
       return MouseRegion(
         onHover: (event) {
-          setState(() {
-            _mousePosition = event.localPosition;
-          });
+          if (mounted) {
+            setState(() {
+              _mousePosition = event.localPosition;
+            });
+          }
         },
         child: SizedBox(
           width: double.infinity,

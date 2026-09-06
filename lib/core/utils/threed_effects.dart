@@ -57,9 +57,12 @@ class _TiltCardState extends State<TiltCard>
     final w = constraints.maxWidth;
     final h = constraints.maxHeight;
 
+    if (w <= 0 || h <= 0) return;
+
     final normX = (dx / w - 0.5) * 2; // -1 .. 1
     final normY = (dy / h - 0.5) * 2; // -1 .. 1
 
+    if (!mounted) return;
     setState(() {
       _rotY = normX * widget.maxTilt * (pi / 180);
       _rotX = -normY * widget.maxTilt * (pi / 180);
@@ -70,6 +73,7 @@ class _TiltCardState extends State<TiltCard>
   }
 
   void _onExit() {
+    if (!mounted) return;
     setState(() {
       _rotX = 0;
       _rotY = 0;
@@ -337,6 +341,8 @@ class Grid3DPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (size.width <= 0 || size.height <= 0) return;
+
     final paint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.5

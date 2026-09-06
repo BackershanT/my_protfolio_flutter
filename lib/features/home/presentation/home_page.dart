@@ -96,21 +96,26 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     for (int i = 0; i < _sectionKeys.length; i++) {
       final key = _sectionKeys[i];
-      if (key.currentContext != null) {
-        final renderBox = key.currentContext?.findRenderObject() as RenderBox?;
-        if (renderBox != null && renderBox.hasSize) {
-          final position = renderBox.localToGlobal(Offset.zero);
-          final sectionTop = position.dy;
-          final sectionBottom = sectionTop + renderBox.size.height;
+      final ctx = key.currentContext;
+      if (ctx != null && ctx.mounted) {
+        final renderObject = ctx.findRenderObject();
+        if (renderObject is RenderBox && renderObject.attached && renderObject.hasSize) {
+          try {
+            final position = renderObject.localToGlobal(Offset.zero);
+            final sectionTop = position.dy;
+            final sectionBottom = sectionTop + renderObject.size.height;
 
-          if (sectionTop <= screenHeight / 2 &&
-              sectionBottom >= screenHeight / 2) {
-            if (_currentIndex != i) {
-              setState(() {
-                _currentIndex = i;
-              });
+            if (sectionTop <= screenHeight / 2 &&
+                sectionBottom >= screenHeight / 2) {
+              if (_currentIndex != i) {
+                setState(() {
+                  _currentIndex = i;
+                });
+              }
+              break;
             }
-            break;
+          } catch (_) {
+            // Ignore temporary paint/layout detachment assertions during web scroll animations
           }
         }
       }
@@ -120,12 +125,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void _scrollToSection(int index) {
     if (index >= 0 && index < _sectionKeys.length) {
       final key = _sectionKeys[index];
-      if (key.currentContext != null) {
-        Scrollable.ensureVisible(
-          key.currentContext!,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
+      final ctx = key.currentContext;
+      if (ctx != null && ctx.mounted) {
+        final renderObj = ctx.findRenderObject();
+        if (renderObj != null && renderObj.attached) {
+          Scrollable.ensureVisible(
+            ctx,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        }
       }
     }
   }
