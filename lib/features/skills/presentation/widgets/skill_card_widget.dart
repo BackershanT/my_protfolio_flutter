@@ -79,25 +79,38 @@ class _SkillCardWidgetState extends State<SkillCardWidget> {
                 child: Center(
                   child: Hero(
                     tag: 'skill_${widget.skill.name}_${widget.isMobile}_${widget.isActive}',
-                    child: widget.skill.image.startsWith('http')
-                        ? Image.network(
-                            widget.skill.image,
-                            fit: BoxFit.contain,
-                            errorBuilder: (context, error, stackTrace) => Icon(
-                              Icons.code,
-                              size: 50,
-                              color: primaryColor.withValues(alpha: 0.5),
-                            ),
-                          )
-                        : Image.asset(
-                            widget.skill.image,
-                            fit: BoxFit.contain,
-                            errorBuilder: (context, error, stackTrace) => Icon(
-                              Icons.code,
-                              size: 50,
-                              color: primaryColor.withValues(alpha: 0.5),
-                            ),
+                    child: () {
+                      final imageUrl = widget.skill.image.trim();
+                      if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+                        return Image.network(
+                          imageUrl,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) => Icon(
+                            Icons.code_rounded,
+                            size: 45,
+                            color: primaryColor.withValues(alpha: 0.6),
                           ),
+                        );
+                      }
+
+                      // Fallback if local asset is provided
+                      String cleanAssetPath = imageUrl;
+                      if (cleanAssetPath.startsWith('assets/assets/')) {
+                        cleanAssetPath = cleanAssetPath.replaceFirst('assets/assets/', 'assets/');
+                      } else if (cleanAssetPath.startsWith('/assets/')) {
+                        cleanAssetPath = cleanAssetPath.substring(1);
+                      }
+
+                      return Image.asset(
+                        cleanAssetPath,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) => Icon(
+                          Icons.code_rounded,
+                          size: 45,
+                          color: primaryColor.withValues(alpha: 0.6),
+                        ),
+                      );
+                    }(),
                   ),
                 ),
               )

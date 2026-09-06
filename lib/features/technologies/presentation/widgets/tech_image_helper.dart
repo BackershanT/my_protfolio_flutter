@@ -4,17 +4,27 @@ import 'package:my_protfolio/features/skills/data/models/skill_model.dart';
 class TechImageHelper {
   static String resolveImagePath(String techName, String? defaultAssetPath, List<SkillModel> skills) {
     final nameLower = techName.trim().toLowerCase();
+    String resultPath = defaultAssetPath ?? '';
+
     for (final skill in skills) {
       final skillNameLower = skill.name.trim().toLowerCase();
       if (skillNameLower == nameLower ||
           nameLower.contains(skillNameLower) ||
           skillNameLower.contains(nameLower)) {
         if (skill.image.isNotEmpty) {
-          return skill.image;
+          resultPath = skill.image;
+          break;
         }
       }
     }
-    return defaultAssetPath ?? '';
+
+    if (resultPath.startsWith('assets/assets/')) {
+      resultPath = resultPath.replaceFirst('assets/assets/', 'assets/');
+    } else if (resultPath.startsWith('/assets/')) {
+      resultPath = resultPath.substring(1);
+    }
+
+    return resultPath;
   }
 
   static Widget buildDynamicImage(

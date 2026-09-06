@@ -43,11 +43,10 @@ class _SkillsSectionState extends State<SkillsSection> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Update viewport fraction if screen size changes
-    // This method is called after initState and whenever dependencies (like MediaQuery) change
-    final newFraction = Responsive.isMobile(context) ? 0.7 : 0.85;
+    final newFraction = Responsive.isMobile(context) 
+        ? 0.7 
+        : (Responsive.isTablet(context) ? 0.45 : 0.85);
 
-    // Only recreate if necessary to prevent loop/unnecessary overhead
     if (_pageController.viewportFraction != newFraction) {
       final oldController = _pageController;
       final currentPage = oldController.hasClients
@@ -58,10 +57,6 @@ class _SkillsSectionState extends State<SkillsSection> {
         viewportFraction: newFraction,
         initialPage: currentPage.toInt(),
       );
-
-      // Note: We don't dispose the old controller immediately here as it might be in use
-      // by the current frame's build. The GC will handle it, or we could track and dispose later.
-      // For this specific use case, it's acceptable.
     }
   }
 
@@ -159,6 +154,7 @@ class _SkillsSectionState extends State<SkillsSection> {
 
               return Responsive(
                 mobile: _buildMobileCarousel(context, items),
+                tablet: _buildMobileCarousel(context, items),
                 desktop: _buildDesktopGrid(context, items),
               );
             },
@@ -218,37 +214,42 @@ class _SkillsSectionState extends State<SkillsSection> {
   }
 
   Widget _buildPaginationDots(int count, bool isDark) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(count, (index) {
-        final isActive = _currentPage == index;
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          margin: const EdgeInsets.symmetric(horizontal: 6),
-          width: isActive ? 28 : 10,
-          height: 10,
-          decoration: BoxDecoration(
-            color: isActive
-                ? (isDark ? AppColors.primaryLight : AppColors.primaryDark)
-                : (isDark ? AppColors.primaryLight : AppColors.primaryDark)
-                      .withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(5),
-            boxShadow: isActive
-                ? [
-                    BoxShadow(
-                      color:
-                          (isDark
-                                  ? AppColors.primaryLight
-                                  : AppColors.primaryDark)
-                              .withValues(alpha: 0.4),
-                      blurRadius: 8,
-                      spreadRadius: 1,
-                    ),
-                  ]
-                : [],
-          ),
-        );
-      }),
+    if (count <= 1) return const SizedBox.shrink();
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(count, (index) {
+          final isActive = _currentPage == index;
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            width: isActive ? 24 : 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: isActive
+                  ? (isDark ? AppColors.primaryLight : AppColors.primaryDark)
+                  : (isDark ? AppColors.primaryLight : AppColors.primaryDark)
+                        .withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(4),
+              boxShadow: isActive
+                  ? [
+                      BoxShadow(
+                        color:
+                            (isDark
+                                    ? AppColors.primaryLight
+                                    : AppColors.primaryDark)
+                                .withValues(alpha: 0.4),
+                        blurRadius: 6,
+                        spreadRadius: 1,
+                      ),
+                    ]
+                  : [],
+            ),
+          );
+        }),
+      ),
     );
   }
 

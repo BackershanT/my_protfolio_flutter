@@ -248,9 +248,11 @@ class _HeroSectionState extends State<HeroSection>
               ),
 
               // ── Decorative floating 3D cubes ──
-              FloatingCubesOverlay(
-                screenWidth: screenWidth,
-                isDark: isDark,
+              Positioned.fill(
+                child: FloatingCubesOverlay(
+                  screenWidth: screenWidth,
+                  isDark: isDark,
+                ),
               ),
 
               // ── Main content ──
