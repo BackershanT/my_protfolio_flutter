@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 /// Shimmer skeleton shown while AI suggestions are being generated.
 class AiSuggestSkeleton extends StatelessWidget {
@@ -19,8 +19,8 @@ class AiSuggestSkeleton extends StatelessWidget {
         final t = (shimmer.value * 2).clamp(0.0, 2.0);
         final lerp = t > 1 ? 2 - t : t;
         final shimmerColor = isDark
-            ? Color.lerp(const Color(0xFF1A1A2E), const Color(0xFF2A2A45), lerp)!
-            : Color.lerp(Colors.grey.shade200, Colors.grey.shade100, lerp)!;
+            ? (Color.lerp(const Color(0xFF1A1A2E), const Color(0xFF2A2A45), lerp) ?? const Color(0xFF1A1A2E))
+            : (Color.lerp(Colors.grey.shade200, Colors.grey.shade100, lerp) ?? Colors.grey.shade200);
 
         return Padding(
           padding: const EdgeInsets.all(20),

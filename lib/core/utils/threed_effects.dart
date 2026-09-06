@@ -358,8 +358,8 @@ class Grid3DPainter extends CustomPainter {
       final y = size.height / 2 + row * cellH - yOffset;
       if (y < size.height / 2 - 10 || y > size.height + 5) continue;
       final t = (y - size.height / 2) / (size.height / 2);
-      final leftX = lerpDouble(vp.dx, 0, t)!;
-      final rightX = lerpDouble(vp.dx, size.width, t)!;
+      final leftX = lerpDouble(vp.dx, 0, t) ?? 0.0;
+      final rightX = lerpDouble(vp.dx, size.width, t) ?? size.width;
       canvas.drawLine(Offset(leftX, y), Offset(rightX, y), paint);
     }
 
@@ -368,9 +368,9 @@ class Grid3DPainter extends CustomPainter {
       final x = col * cellW;
       final t0 = 0.0;
       final t1 = 1.0;
-      final x0 = lerpDouble(vp.dx, x, t0)!;
-      final x1 = lerpDouble(vp.dx, x, t1)!;
-      final y1 = lerpDouble(vp.dy, size.height, t1)!;
+      final x0 = lerpDouble(vp.dx, x, t0) ?? vp.dx;
+      final x1 = lerpDouble(vp.dx, x, t1) ?? x;
+      final y1 = lerpDouble(vp.dy, size.height, t1) ?? size.height;
       canvas.drawLine(Offset(x0, size.height / 2), Offset(x1, y1), paint);
     }
   }

@@ -48,11 +48,15 @@ class ProjectDetailsAvatar extends StatelessWidget {
               color: isDark ? const Color(0xFF2A3D4F) : const Color(0xFFEFEFEF),
             ),
             child: Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded /
-                        loadingProgress.expectedTotalBytes!
-                    : null,
+              child: Builder(
+                builder: (context) {
+                  final expected = loadingProgress.expectedTotalBytes;
+                  return CircularProgressIndicator(
+                    value: expected != null && expected > 0
+                        ? loadingProgress.cumulativeBytesLoaded / expected
+                        : null,
+                  );
+                },
               ),
             ),
           );

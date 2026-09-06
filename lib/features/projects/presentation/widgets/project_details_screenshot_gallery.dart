@@ -145,21 +145,21 @@ class ProjectDetailsScreenshotGallery extends StatelessWidget {
   }
 
   Widget _buildImageLoadingIndicator(ImageChunkEvent loadingProgress) {
+    final expected = loadingProgress.expectedTotalBytes;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(
-            value: loadingProgress.expectedTotalBytes != null
-                ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes!
+            value: expected != null && expected > 0
+                ? loadingProgress.cumulativeBytesLoaded / expected
                 : null,
           ),
-          if (loadingProgress.expectedTotalBytes != null)
+          if (expected != null && expected > 0)
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: Text(
-                '${(loadingProgress.cumulativeBytesLoaded / 1024).round()} KB / ${(loadingProgress.expectedTotalBytes! / 1024).round()} KB',
+                '${(loadingProgress.cumulativeBytesLoaded / 1024).round()} KB / ${(expected / 1024).round()} KB',
                 style: const TextStyle(fontSize: 12),
               ),
             ),
