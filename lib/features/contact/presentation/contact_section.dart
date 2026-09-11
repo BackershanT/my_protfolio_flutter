@@ -388,7 +388,9 @@ class _SocialLinkState extends State<SocialLink> {
               ),
             ],
           ),
-          child: FaIcon(widget.icon, color: Colors.white, size: iconSize),
+          child: Center(
+            child: FaIcon(widget.icon, color: Colors.white, size: iconSize),
+          ),
         ),
       ),
     );
