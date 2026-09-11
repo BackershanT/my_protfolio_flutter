@@ -19,6 +19,8 @@ class TechImageHelper {
     final fallback = defaultAssetPath ?? '';
     if (fallback.startsWith('assets/assets/')) {
       return fallback.replaceFirst('assets/assets/', 'assets/');
+
+      
     } else if (fallback.startsWith('/assets/')) {
       return fallback.substring(1);
     }
