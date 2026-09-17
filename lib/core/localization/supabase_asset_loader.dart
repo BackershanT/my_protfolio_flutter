@@ -26,29 +26,37 @@ class SupabaseAssetLoader extends AssetLoader {
       log('SupabaseAssetLoader: Failed to load local asset fallback: $e');
     }
 
-    // 2. Fetch translations from Supabase app_translations table and merge/override
+    // 2. Fetch translations from Supabase app_translations table in background without blocking app startup
+    _fetchRemoteTranslationsAsync(langCode, translations);
+
+    return translations;
+  }
+
+  void _fetchRemoteTranslationsAsync(
+      String langCode, Map<String, dynamic> targetMap) {
     try {
       final client = Supabase.instance.client;
       final targetColumn = langCode == 'ar' ? 'ar' : 'en';
 
-      final response = await client
+      client
           .from('app_translations')
           .select('key, $targetColumn')
-          .timeout(const Duration(seconds: 5));
-
-      final rows = response as List<dynamic>;
-      for (final row in rows) {
-        final key = row['key'] as String?;
-        final val = row[targetColumn] as String?;
-        if (key != null && val != null && val.isNotEmpty) {
-          translations[key] = val;
+          .timeout(const Duration(seconds: 4))
+          .then((response) {
+        final rows = response as List<dynamic>;
+        for (final row in rows) {
+          final key = row['key'] as String?;
+          final val = row[targetColumn] as String?;
+          if (key != null && val != null && val.isNotEmpty) {
+            targetMap[key] = val;
+          }
         }
-      }
-      log('SupabaseAssetLoader: Successfully merged ${rows.length} Supabase translations for [$langCode]');
+        log('SupabaseAssetLoader: Successfully merged ${rows.length} remote translations for [$langCode]');
+      }).catchError((e) {
+        log('SupabaseAssetLoader: Background fetch note (using local fallbacks): $e');
+      });
     } catch (e) {
-      log('SupabaseAssetLoader: Supabase fetch note (using local fallbacks): $e');
+      log('SupabaseAssetLoader: Background init note: $e');
     }
-
-    return translations;
   }
 }
