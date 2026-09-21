@@ -10,12 +10,10 @@ import 'package:my_protfolio/features/home/presentation/footer_section.dart';
 import 'package:my_protfolio/core/presentation/widgets/nav_bar.dart';
 import 'package:my_protfolio/features/testimonials/presentation/testimonials_section.dart';
 import 'package:my_protfolio/core/presentation/widgets/custom_cursor.dart';
-import 'package:provider/provider.dart';
-import 'package:my_protfolio/core/theme/app_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:my_protfolio/core/constants/app_texts.dart';
 import 'package:my_protfolio/core/constants/colors.dart';
 import 'package:my_protfolio/core/constants/app_assets.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,13 +22,11 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
   late final List<GlobalKey> _sectionKeys;
 
   int _currentIndex = 0;
-  late AnimationController _chainController;
-  late Animation<double> _chainAnimation;
   bool _isDarkMode = false;
   bool _showScrollToTop = false;
   double _lastCheckedScrollPosition = 0;
@@ -38,14 +34,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Initialize the theme state based on the current theme mode
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-    setState(() {
-      _isDarkMode =
-          themeProvider.themeMode == ThemeMode.dark ||
-          (themeProvider.themeMode == ThemeMode.system &&
-              MediaQuery.of(context).platformBrightness == Brightness.dark);
-    });
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    if (_isDarkMode != isDark) {
+      setState(() {
+        _isDarkMode = isDark;
+      });
+    }
   }
 
   @override
@@ -53,22 +47,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
     _sectionKeys = List.generate(8, (index) => GlobalKey());
     _scrollController.addListener(_scrollListener);
-
-    // Initialize animation controller for the chain
-    _chainController = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-    _chainAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _chainController, curve: Curves.easeInOut),
-    );
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
-    _chainController.dispose();
     super.dispose();
   }
 
@@ -139,26 +123,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     }
   }
 
-  void _toggleTheme() {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-
-    // Animate the chain pull
-    if (_chainController.isCompleted) {
-      _chainController.reverse();
-    } else {
-      _chainController.forward();
-    }
-
-    // Toggle theme after a short delay to simulate the pull action
-    Future.delayed(const Duration(milliseconds: 300), () {
-      final newThemeMode = !_isDarkMode;
-      themeProvider.toggleTheme(newThemeMode);
-      setState(() {
-        _isDarkMode = newThemeMode;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -202,8 +166,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              // Light bulb pull chain mechanism
-              Positioned(top: 100, right: 20, child: _buildLightBulbChain()),
               // Scroll to top button
               if (_showScrollToTop)
                 Positioned(
@@ -330,62 +292,4 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
     );
   }
-
-  Widget _buildLightBulbChain() {
-    return GestureDetector(
-      onTap: _toggleTheme,
-      child: Column(
-        children: [
-          // Light bulb
-          Icon(
-            Icons.lightbulb,
-            size: 40,
-            color: _isDarkMode ? Colors.amber : Colors.grey,
-          ),
-          // Chain with zigzag needle
-          AnimatedBuilder(
-            animation: _chainAnimation,
-            builder: (context, child) {
-              return Transform.translate(
-                offset: Offset(0, 30 * _chainAnimation.value),
-                child: CustomPaint(
-                  size: const Size(20, 80),
-                  painter: ZigzagChainPainter(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ZigzagChainPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.grey
-      ..strokeWidth = 2
-      ..style = PaintingStyle.stroke;
-
-    final path = Path();
-
-    // Draw the chain line
-    path.moveTo(size.width / 2, 0);
-    path.lineTo(size.width / 2, size.height - 20);
-
-    // Draw the zigzag needle at the bottom
-    final needleY = size.height - 20;
-    path.moveTo(size.width / 2, needleY);
-    path.lineTo(size.width / 2 - 5, needleY + 5);
-    path.lineTo(size.width / 2 + 5, needleY + 10);
-    path.lineTo(size.width / 2 - 5, needleY + 15);
-    path.lineTo(size.width / 2 + 5, needleY + 20);
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

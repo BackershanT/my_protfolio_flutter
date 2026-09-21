@@ -94,8 +94,8 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-        horizontal: screenWidth < 850 ? 20 : (screenWidth < 1200 ? 40 : 100),
-        vertical: screenWidth < 850 ? 60 : 100,
+        horizontal: screenWidth < 850 ? 16 : (screenWidth < 1200 ? 24 : 40),
+        vertical: screenWidth < 850 ? 40 : 80,
       ),
       child: Column(
         children: [
@@ -222,6 +222,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
         SizedBox(height: isMobile ? 12 : 16),
         // Horizontal scrollable list of cards
         SizedBox(
+          width: double.infinity,
           height: isMobile ? 550 : 590,
           child: Scrollbar(
             controller: _scrollController,
