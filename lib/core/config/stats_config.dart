@@ -7,7 +7,7 @@ class StatsConfig {
   static const String linkedinConnections = "500+";
   static const String linkedinFollowers = "600+";
   static const String linkedinHeadline =
-      "Flutter Developer | Sharing Real-World Flutter Performance & Architecture Insights | Mobile & Frontend";
+      "Software Development Engineer | Specializing in Flutter, React & Next.js | UAE";
   static const String linkedinImage = "assets/images/dp.jpeg";
 
   // --- Instagram Stats ---
