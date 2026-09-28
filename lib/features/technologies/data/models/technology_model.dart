@@ -122,10 +122,6 @@ class TechnologyData {
         name: 'REST API',
         color: Color(0xFFE44D26),
       ),
-      TechnologyModel(
-        name: 'GraphQL',
-        color: Color(0xFFE10098),
-      ),
     ],
   );
 
