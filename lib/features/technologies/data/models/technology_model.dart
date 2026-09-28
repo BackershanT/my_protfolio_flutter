@@ -96,44 +96,44 @@ class TechnologyData {
     ],
   );
 
-  // static TechnologySection get mernSection => TechnologySection(
-  //   name: AppTexts.techMernName,
-  //   subtitle: AppTexts.techMernSubtitle,
-  //   headline: AppTexts.techMernHeadline,
-  //   description: AppTexts.techMernDescription,
-  //   centerAsset: AppAssets.skillsMern,
-  //   technologies: const [
-  //     TechnologyModel(
-  //       assetPath: AppAssets.skillsMongoDb,
-  //       name: 'MongoDB',
-  //       color: Color(0xFF47A248),
-  //     ),
-  //     TechnologyModel(
-  //       assetPath: AppAssets.skillsExpressJs,
-  //       name: 'Express.js',
-  //       color: Colors.black,
-  //     ),
-  //     TechnologyModel(
-  //       assetPath: AppAssets.skillsReact,
-  //       name: 'React',
-  //       color: Color(0xFF61DAFB),
-  //     ),
-  //     TechnologyModel(
-  //       assetPath: AppAssets.skillsNodejs,
-  //       name: 'Node.js',
-  //       color: Color(0xFF339933),
-  //     ),
-  //     TechnologyModel(
-  //       assetPath: AppAssets.skillsAws,
-  //       name: 'AWS',
-  //       color: Color(0xFFFF6B35),
-  //     ),
-  //   ],
-  // );
+  static TechnologySection get mernSection => TechnologySection(
+    name: AppTexts.techMernName,
+    subtitle: AppTexts.techMernSubtitle,
+    headline: AppTexts.techMernHeadline,
+    description: AppTexts.techMernDescription,
+    technologies: const [
+      TechnologyModel(
+        name: 'Node.js',
+        color: Color(0xFF339933),
+      ),
+      TechnologyModel(
+        name: 'Express.js',
+        color: Colors.black,
+      ),
+      TechnologyModel(
+        name: 'MongoDB',
+        color: Color(0xFF47A248),
+      ),
+      TechnologyModel(
+        name: 'Supabase',
+        color: Color(0xFF3ECF8E),
+      ),
+      TechnologyModel(
+        name: 'REST API',
+        color: Color(0xFFE44D26),
+      ),
+      TechnologyModel(
+        name: 'GraphQL',
+        color: Color(0xFFE10098),
+      ),
+    ],
+  );
 
   static List<TechnologySection> getAllSections() {
-    return [flutterSection, reactSection, 
-    // mernSection
+    return [
+      flutterSection,
+      reactSection,
+      mernSection,
     ];
   }
 }
