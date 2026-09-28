@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_protfolio/core/constants/app_assets.dart';
 import 'package:my_protfolio/core/constants/app_texts.dart';
 
 class TechnologyModel {
@@ -39,6 +40,7 @@ class TechnologyData {
     subtitle: AppTexts.techFlutterSubtitle,
     headline: AppTexts.techFlutterHeadline,
     description: AppTexts.techFlutterDescription,
+    centerAsset: AppAssets.favLogo,
     technologies: const [
       TechnologyModel(
         name: 'Firebase',
@@ -72,6 +74,7 @@ class TechnologyData {
     subtitle: AppTexts.techReactSubtitle,
     headline: AppTexts.techReactHeadline,
     description: AppTexts.techReactDescription,
+    centerAsset: AppAssets.favLogo,
     technologies: const [
       TechnologyModel(
         name: 'JavaScript',
@@ -101,6 +104,7 @@ class TechnologyData {
     subtitle: AppTexts.techMernSubtitle,
     headline: AppTexts.techMernHeadline,
     description: AppTexts.techMernDescription,
+    centerAsset: AppAssets.favLogo,
     technologies: const [
       TechnologyModel(
         name: 'Node.js',

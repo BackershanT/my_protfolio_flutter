@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
+import 'package:my_protfolio/core/constants/app_assets.dart';
 import 'package:my_protfolio/core/constants/colors.dart';
 import 'package:my_protfolio/core/utils/threed_effects.dart';
 import 'package:my_protfolio/features/technologies/data/models/technology_model.dart';
@@ -99,12 +100,9 @@ class _TechOrbitCircleWidgetState extends State<TechOrbitCircleWidget> {
                     child: TechImageHelper.buildDynamicImage(
                       centerAsset,
                       fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) => Icon(
-                        Icons.flutter_dash,
-                        size: centerIconSize * 0.6,
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? AppColors.primaryLight
-                            : AppColors.primaryDark,
+                      errorBuilder: (context, error, stackTrace) => Image.asset(
+                        AppAssets.favLogo,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),
