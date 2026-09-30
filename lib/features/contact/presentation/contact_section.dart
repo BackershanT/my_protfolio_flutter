@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:my_protfolio/core/config/whatsapp_config.dart';
 import 'package:my_protfolio/core/constants/app_texts.dart';
 import 'package:my_protfolio/core/constants/colors.dart';
 import 'package:my_protfolio/core/utils/responsive.dart';
@@ -265,8 +266,12 @@ class _ContactSectionState extends State<ContactSection> {
   Widget _buildSocialLinks(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 850;
-
     final socialLinks = [
+      SocialLink(
+        icon: FontAwesomeIcons.whatsapp,
+        color: const Color(0xFF25D366),
+        url: 'https://wa.me/${WhatsAppConfig.phoneNumber}?text=${Uri.encodeComponent(WhatsAppConfig.defaultMessage)}',
+      ),
       SocialLink(
         icon: FontAwesomeIcons.linkedin,
         color: AppColors.linkedIn,
@@ -279,7 +284,7 @@ class _ContactSectionState extends State<ContactSection> {
       ),
       SocialLink(
         icon: FontAwesomeIcons.instagram,
-        color: Color(0xFFE1306C),
+        color: const Color(0xFFE1306C),
         url: 'https://www.instagram.com/backershan.t.2025/',
       ),
     ];

@@ -10,6 +10,7 @@ import 'package:my_protfolio/features/home/presentation/footer_section.dart';
 import 'package:my_protfolio/core/presentation/widgets/nav_bar.dart';
 import 'package:my_protfolio/features/testimonials/presentation/testimonials_section.dart';
 import 'package:my_protfolio/core/presentation/widgets/custom_cursor.dart';
+import 'package:my_protfolio/core/presentation/widgets/whatsapp_fab_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:my_protfolio/core/constants/app_texts.dart';
 import 'package:my_protfolio/core/constants/colors.dart';
@@ -28,7 +29,6 @@ class _HomePageState extends State<HomePage> {
 
   int _currentIndex = 0;
   bool _isDarkMode = false;
-  bool _showScrollToTop = false;
   double _lastCheckedScrollPosition = 0;
 
   @override
@@ -60,17 +60,6 @@ class _HomePageState extends State<HomePage> {
     // Determine which section is currently visible
     final scrollPosition = _scrollController.position.pixels;
     final screenHeight = _scrollController.position.viewportDimension;
-
-    // Show/hide scroll to top button
-    if (scrollPosition > 300 && !_showScrollToTop) {
-      setState(() {
-        _showScrollToTop = true;
-      });
-    } else if (scrollPosition <= 300 && _showScrollToTop) {
-      setState(() {
-        _showScrollToTop = false;
-      });
-    }
 
     // Throttle section visibility calculation to avoid heavy tree traversals on every pixel
     if ((scrollPosition - _lastCheckedScrollPosition).abs() < 30) {
@@ -166,31 +155,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              // Scroll to top button
-              if (_showScrollToTop)
-                Positioned(
-                  bottom: 30,
-                  right: 30,
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      _scrollController.animateTo(
-                        0,
-                        duration: const Duration(milliseconds: 800),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    backgroundColor:
-                        Theme.of(context).brightness == Brightness.dark
-                        ? AppColors.primaryLight
-                        : AppColors.primaryDark,
-                    child: Icon(
-                      Icons.arrow_upward,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? AppColors.darkBackground
-                          : Colors.white,
-                    ),
-                  ).withCursorHover(context),
-                ),
+              // WhatsApp floating button
+              const Positioned(
+                bottom: 30,
+                right: 30,
+                child: WhatsAppFabWidget(),
+              ),
+
             ],
           ),
         ),
