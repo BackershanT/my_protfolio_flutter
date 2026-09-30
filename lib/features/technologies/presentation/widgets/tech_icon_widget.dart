@@ -22,7 +22,7 @@ class TechIconWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final skills = context.watch<SkillProvider>().skills;
+    final skills = context.watch<SkillProvider>().allSkills;
     final resolvedTechPath = TechImageHelper.resolveImagePath(tech.name, tech.assetPath, skills);
 
     final iconWidget = AnimatedContainer(

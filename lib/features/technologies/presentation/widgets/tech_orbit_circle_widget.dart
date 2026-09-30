@@ -34,7 +34,7 @@ class _TechOrbitCircleWidgetState extends State<TechOrbitCircleWidget> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = screenWidth >= 850 && screenWidth < 1200;
-    final skills = context.watch<SkillProvider>().skills;
+    final skills = context.watch<SkillProvider>().allSkills;
 
     final centerAsset = TechImageHelper.resolveImagePath(
       widget.section.name,

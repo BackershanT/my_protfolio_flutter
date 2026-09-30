@@ -59,7 +59,7 @@ class TechnologyData {
         color: Color(0xFF5E5CE6),
       ),
       TechnologyModel(
-        name: 'Fastline',
+        name: 'Fastlane',
         color: Color(0xFF00A6ED),
       ),
       TechnologyModel(
@@ -123,8 +123,8 @@ class TechnologyData {
         color: Color(0xFF3ECF8E),
       ),
       TechnologyModel(
-        name: 'REST API',
-        color: Color(0xFFE44D26),
+        name: 'React',
+        color: Color(0xFF61DAFB),
       ),
     ],
   );
