@@ -1,11 +1,11 @@
 {
-    "name": "my_protfolio",
-    "short_name": "my_protfolio",
+    "name": "Backershan T - Software Engineer Portfolio",
+    "short_name": "Backershan T",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "SDE protfolio.",
+    "background_color": "#0A192F",
+    "theme_color": "#64FFDA",
+    "description": "Backershan T - Software Development Engineer Portfolio",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
