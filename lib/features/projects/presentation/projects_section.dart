@@ -30,6 +30,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     'Flutter',
     'React',
     'Next.js',
+    'Angular',
   ];
 
   @override
@@ -75,6 +76,10 @@ class _ProjectsSectionState extends State<ProjectsSection> {
         return p.types.contains(ProjectType.nextjs) ||
             p.typeNames.any((t) => t.toLowerCase().contains('next')) ||
             p.technologies.any((t) => t.toLowerCase().contains('next'));
+      } else if (cat == 'angular') {
+        return p.types.contains(ProjectType.angular) ||
+            p.typeNames.any((t) => t.toLowerCase().contains('angular')) ||
+            p.technologies.any((t) => t.toLowerCase().contains('angular'));
       }
       return p.technologies.any((tech) => tech.toLowerCase() == cat) ||
           p.typeNames.any((t) => t.toLowerCase() == cat);
@@ -130,6 +135,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                   if (s.contains('flutter')) return ProjectType.flutter;
                   if (s.contains('react')) return ProjectType.react;
                   if (s.contains('next')) return ProjectType.nextjs;
+                  if (s.contains('angular')) return ProjectType.angular;
                   return ProjectType.website;
                 }).toSet().toList();
 

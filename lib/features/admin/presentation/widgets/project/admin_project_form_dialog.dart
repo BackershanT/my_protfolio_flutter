@@ -78,6 +78,7 @@ class _AdminProjectFormDialogState extends State<AdminProjectFormDialog> {
     'Flutter',
     'React',
     'Next.js',
+    'Angular',
   ];
 
   bool get _isEditing => widget.project != null;

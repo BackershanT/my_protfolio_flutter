@@ -48,7 +48,10 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
   }
 
   Future<void> _launchUrl(String url) async {
-    final Uri uri = Uri.parse(url);
+    final formatted = url.startsWith('http://') || url.startsWith('https://')
+        ? url
+        : 'https://$url';
+    final Uri uri = Uri.parse(formatted);
     if (!await launchUrl(uri)) {
       throw Exception('Could not launch $url');
     }

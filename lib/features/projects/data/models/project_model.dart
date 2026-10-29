@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart' show rootBundle;
 
-enum ProjectType { mobile, website, fullstack, flutter, react, nextjs }
+enum ProjectType { mobile, website, fullstack, flutter, react, nextjs, angular }
 
 class Project {
   final String id;
@@ -51,6 +51,8 @@ class Project {
               return 'React';
             case ProjectType.nextjs:
               return 'Next.js';
+            case ProjectType.angular:
+              return 'Angular';
           }
         }).toList();
 
@@ -85,6 +87,7 @@ class Project {
       if (s.contains('flutter')) return ProjectType.flutter;
       if (s.contains('react')) return ProjectType.react;
       if (s.contains('next')) return ProjectType.nextjs;
+      if (s.contains('angular')) return ProjectType.angular;
       return ProjectType.website;
     }).toSet().toList();
 
