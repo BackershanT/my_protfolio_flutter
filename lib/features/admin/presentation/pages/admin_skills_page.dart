@@ -6,6 +6,7 @@ import 'package:my_protfolio/features/admin/presentation/widgets/skill/skill_for
 import 'package:my_protfolio/features/admin/presentation/widgets/skill/skill_delete_dialog.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/skill/skill_empty_state.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/skill/admin_skill_card.dart';
+import 'package:my_protfolio/features/admin/presentation/widgets/skill/admin_skill_search_bar.dart';
 import 'package:my_protfolio/features/admin/presentation/widgets/custom_snackbar.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -179,31 +180,14 @@ class _AdminSkillsPageState extends State<AdminSkillsPage> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                // Status Filter Chips
-                Wrap(
-                  spacing: 8,
-                  children: [
-                    _buildFilterChip(
-                      label: 'All (${provider.totalCount})',
-                      filterValue: 'all',
-                      currentFilter: provider.statusFilter,
-                      onSelected: () => provider.setStatusFilter('all'),
-                    ),
-                    _buildFilterChip(
-                      label: 'Active (${provider.activeCount})',
-                      filterValue: 'active',
-                      currentFilter: provider.statusFilter,
-                      onSelected: () => provider.setStatusFilter('active'),
-                      color: Colors.green,
-                    ),
-                    _buildFilterChip(
-                      label: 'Inactive (${provider.inactiveCount})',
-                      filterValue: 'inactive',
-                      currentFilter: provider.statusFilter,
-                      onSelected: () => provider.setStatusFilter('inactive'),
-                      color: Colors.amber,
-                    ),
-                  ],
+                AdminSkillSearchBar(
+                  onSearchChanged: provider.setSearchQuery,
+                  onFilterChanged: provider.setStatusFilter,
+                  initialSearch: provider.searchQuery,
+                  currentFilter: provider.statusFilter,
+                  totalCount: provider.totalCount,
+                  activeCount: provider.activeCount,
+                  inactiveCount: provider.inactiveCount,
                 ),
               ],
             ),
@@ -251,7 +235,46 @@ class _AdminSkillsPageState extends State<AdminSkillsPage> {
         else if (!provider.isLoading && skills.isEmpty)
           SliverFillRemaining(
             hasScrollBody: false,
-            child: SkillEmptyState(onAddFirst: _handleAdd),
+            child: provider.searchQuery.isNotEmpty || provider.statusFilter != 'all'
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(48),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.search_off_rounded,
+                            size: 56,
+                            color: theme.hintColor.withValues(alpha: 0.4),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No skills found',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Try adjusting your search query or filter',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.hintColor,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          TextButton.icon(
+                            onPressed: () {
+                              provider.setSearchQuery('');
+                              provider.setStatusFilter('all');
+                            },
+                            icon: const Icon(Icons.clear_rounded, size: 18),
+                            label: const Text('Clear Filters'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : SkillEmptyState(onAddFirst: _handleAdd),
           )
         else
           SliverPadding(
@@ -282,29 +305,5 @@ class _AdminSkillsPageState extends State<AdminSkillsPage> {
     );
   }
 
-  Widget _buildFilterChip({
-    required String label,
-    required String filterValue,
-    required String currentFilter,
-    required VoidCallback onSelected,
-    Color? color,
-  }) {
-    final isSelected = currentFilter == filterValue;
-    final theme = Theme.of(context);
 
-    return FilterChip(
-      selected: isSelected,
-      label: Text(
-        label,
-        style: TextStyle(
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          color: isSelected ? Colors.white : null,
-          fontSize: 12,
-        ),
-      ),
-      selectedColor: color ?? theme.colorScheme.primary,
-      checkmarkColor: Colors.white,
-      onSelected: (_) => onSelected(),
-    );
-  }
 }
