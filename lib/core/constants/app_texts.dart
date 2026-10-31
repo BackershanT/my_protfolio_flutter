@@ -46,6 +46,18 @@ class AppTexts {
   static String get techMernHeadline => 'techMernHeadline'.tr();
   static String get techMernDescription => 'techMernDescription'.tr();
 
+  // Angular Technology Section
+  static String get techAngularName => 'techAngularName'.tr();
+  static String get techAngularSubtitle => 'techAngularSubtitle'.tr();
+  static String get techAngularHeadline => 'techAngularHeadline'.tr();
+  static String get techAngularDescription => 'techAngularDescription'.tr();
+
+  // .NET Technology Section
+  static String get techDotnetName => 'techDotnetName'.tr();
+  static String get techDotnetSubtitle => 'techDotnetSubtitle'.tr();
+  static String get techDotnetHeadline => 'techDotnetHeadline'.tr();
+  static String get techDotnetDescription => 'techDotnetDescription'.tr();
+
 
   // Projects section
   static String get projectsTitle => 'projectsTitle'.tr();

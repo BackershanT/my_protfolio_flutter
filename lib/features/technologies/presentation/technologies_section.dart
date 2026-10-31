@@ -62,7 +62,7 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
                 _buildTechnologySubsection(
                   context,
                   sections[index],
-                  isFirst: index == 0,
+                  index: index,
                 ),
                 if (index < sections.length - 1)
                   SizedBox(height: screenWidth < 850 ? 80 : 100),
@@ -77,11 +77,11 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
   Widget _buildTechnologySubsection(
     BuildContext context,
     TechnologySection section, {
-    required bool isFirst,
+    required int index,
   }) {
     return Responsive(
       mobile: _buildMobileLayout(context, section),
-      desktop: _buildDesktopLayout(context, section, isFirst: isFirst),
+      desktop: _buildDesktopLayout(context, section, index: index),
     );
   }
 
@@ -106,7 +106,7 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
   Widget _buildDesktopLayout(
     BuildContext context,
     TechnologySection section, {
-    required bool isFirst,
+    required int index,
   }) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = screenWidth >= 850 && screenWidth < 1200;
@@ -135,7 +135,7 @@ class _TechnologiesSectionState extends State<TechnologiesSection>
       ),
     );
 
-    final bool showIconOnLeft = isFirst || section.name.contains('MERN');
+    final bool showIconOnLeft = index.isEven;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,

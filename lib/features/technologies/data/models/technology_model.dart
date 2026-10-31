@@ -129,11 +129,73 @@ class TechnologyData {
     ],
   );
 
+  static TechnologySection get angularSection => TechnologySection(
+    name: AppTexts.techAngularName,
+    subtitle: AppTexts.techAngularSubtitle,
+    headline: AppTexts.techAngularHeadline,
+    description: AppTexts.techAngularDescription,
+    centerAsset: AppAssets.favLogo,
+    technologies: const [
+      TechnologyModel(
+        name: 'TypeScript',
+        color: Color(0xFF3178C6),
+      ),
+      TechnologyModel(
+        name: 'RxJS',
+        color: Color(0xFFB7178C),
+      ),
+      TechnologyModel(
+        name: 'Angular Material',
+        color: Color(0xFFFF5722),
+      ),
+      TechnologyModel(
+        name: 'NgRx',
+        color: Color(0xFFBA2BD2),
+      ),
+      TechnologyModel(
+        name: 'REST API',
+        color: Color(0xFF009688),
+      ),
+    ],
+  );
+
+  static TechnologySection get dotnetSection => TechnologySection(
+    name: AppTexts.techDotnetName,
+    subtitle: AppTexts.techDotnetSubtitle,
+    headline: AppTexts.techDotnetHeadline,
+    description: AppTexts.techDotnetDescription,
+    centerAsset: AppAssets.favLogo,
+    technologies: const [
+      TechnologyModel(
+        name: 'C#',
+        color: Color(0xFF239120),
+      ),
+      TechnologyModel(
+        name: 'ASP.NET Core',
+        color: Color(0xFF512BD4),
+      ),
+      TechnologyModel(
+        name: 'EF Core',
+        color: Color(0xFF68217A),
+      ),
+      TechnologyModel(
+        name: 'REST API',
+        color: Color(0xFF009688),
+      ),
+      TechnologyModel(
+        name: 'SQL Server',
+        color: Color(0xFFCC292B),
+      ),
+    ],
+  );
+
   static List<TechnologySection> getAllSections() {
     return [
       flutterSection,
       reactSection,
       mernSection,
+      angularSection,
+      dotnetSection,
     ];
   }
 }
