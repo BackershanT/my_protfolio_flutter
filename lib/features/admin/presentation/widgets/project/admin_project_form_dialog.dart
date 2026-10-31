@@ -79,6 +79,7 @@ class _AdminProjectFormDialogState extends State<AdminProjectFormDialog> {
     'React',
     'Next.js',
     'Angular',
+    '.NET',
   ];
 
   bool get _isEditing => widget.project != null;

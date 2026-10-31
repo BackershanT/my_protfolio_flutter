@@ -31,6 +31,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     'React',
     'Next.js',
     'Angular',
+    '.NET',
   ];
 
   @override
@@ -80,6 +81,10 @@ class _ProjectsSectionState extends State<ProjectsSection> {
         return p.types.contains(ProjectType.angular) ||
             p.typeNames.any((t) => t.toLowerCase().contains('angular')) ||
             p.technologies.any((t) => t.toLowerCase().contains('angular'));
+      } else if (cat == '.net' || cat == 'dotnet' || cat == 'net') {
+        return p.types.contains(ProjectType.dotnet) ||
+            p.typeNames.any((t) => t.toLowerCase().contains('.net') || t.toLowerCase().contains('dotnet')) ||
+            p.technologies.any((t) => t.toLowerCase().contains('.net') || t.toLowerCase().contains('dotnet') || t.toLowerCase().contains('asp.net'));
       }
       return p.technologies.any((tech) => tech.toLowerCase() == cat) ||
           p.typeNames.any((t) => t.toLowerCase() == cat);
@@ -136,6 +141,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                   if (s.contains('react')) return ProjectType.react;
                   if (s.contains('next')) return ProjectType.nextjs;
                   if (s.contains('angular')) return ProjectType.angular;
+                  if (s.contains('dotnet') || s == 'net' || s.contains('aspnet')) return ProjectType.dotnet;
                   return ProjectType.website;
                 }).toSet().toList();
 
