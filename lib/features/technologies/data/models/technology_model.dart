@@ -171,7 +171,11 @@ class TechnologyData {
         color: Color(0xFF239120),
       ),
       TechnologyModel(
-        name: 'ASP.NET Core',
+        name: 'ASP.NET',
+        color: Color(0xFF512BD4),
+      ),
+      TechnologyModel(
+        name: '.NET Core',
         color: Color(0xFF512BD4),
       ),
       TechnologyModel(
