@@ -137,24 +137,24 @@ class TechnologyData {
     centerAsset: AppAssets.favLogo,
     technologies: const [
       TechnologyModel(
-        name: 'TypeScript',
-        color: Color(0xFF3178C6),
-      ),
-      TechnologyModel(
-        name: 'RxJS',
-        color: Color(0xFFB7178C),
-      ),
-      TechnologyModel(
-        name: 'Angular Material',
-        color: Color(0xFFFF5722),
+        name: 'PrimeNG',
+        color: Color(0xFFE23237),
       ),
       TechnologyModel(
         name: 'NgRx',
         color: Color(0xFFBA2BD2),
       ),
       TechnologyModel(
-        name: 'REST API',
-        color: Color(0xFF009688),
+        name: 'HTML',
+        color: Color(0xFFE34F26),
+      ),
+      TechnologyModel(
+        name: 'Tailwind',
+        color: Color(0xFF06B6D4),
+      ),
+      TechnologyModel(
+        name: 'JavaScript',
+        color: Color(0xFFF7DF1E),
       ),
     ],
   );
