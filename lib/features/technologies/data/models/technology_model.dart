@@ -175,20 +175,12 @@ class TechnologyData {
         color: Color(0xFF512BD4),
       ),
       TechnologyModel(
-        name: '.NET Core',
-        color: Color(0xFF512BD4),
-      ),
-      TechnologyModel(
         name: 'EF Core',
         color: Color(0xFF68217A),
       ),
       TechnologyModel(
-        name: 'REST API',
+        name: 'REST APIs',
         color: Color(0xFF009688),
-      ),
-      TechnologyModel(
-        name: 'SQL Server',
-        color: Color(0xFFCC292B),
       ),
     ],
   );
